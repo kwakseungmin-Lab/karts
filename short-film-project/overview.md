@@ -206,12 +206,11 @@
 
 | 역할 | 도구 |
 |------|------|
-| 이미지 생성 | Midjourney v6 |
-| 영상 변환 | Runway Gen-3 Alpha / Kling AI |
-| 슬로우모션 | Topaz Video AI |
+| 이미지 생성 | image2 |
+| 영상 생성 | Seedance 2.0 |
 | BGM | Suno AI |
 | 음성/SFX | ElevenLabs |
-| 편집/그레이딩 | DaVinci Resolve |
+| 편집/그레이딩 | Premiere Pro |
 
 ---
 
