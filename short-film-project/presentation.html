@@ -835,6 +835,82 @@ html, body {
 .wrap { width: 100%; max-width: 1500px; }
 .wrap-narrow { width: 100%; max-width: 1100px; }
 
+/* ---- THREE FACTIONS ---- */
+.factions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2vw;
+  margin-top: 3vh;
+}
+.faction {
+  padding: 4vh 2vw;
+  border: 1px solid var(--rule);
+  background: rgba(255,255,255,0.025);
+  position: relative;
+}
+.faction::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 40px;
+  height: 2px;
+  background: var(--blood);
+}
+.faction-num {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.5em;
+  color: var(--blood);
+  margin-bottom: 1.5vh;
+}
+.faction-en {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(18px, 1.5vw, 24px);
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5vh;
+  text-transform: uppercase;
+}
+.faction-name {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(22px, 2vw, 30px);
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 2.5vh;
+}
+.faction-row {
+  padding: 1.6vh 0;
+  border-top: 1px solid var(--rule);
+}
+.faction-lbl {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.4em;
+  color: var(--ink-faint);
+  margin-bottom: 0.5vh;
+  text-transform: uppercase;
+}
+.faction-txt {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(13px, 1vw, 15px);
+  font-weight: 300;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+.faction-txt strong { color: var(--ink); font-weight: 600; }
+.faction-summary {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(15px, 1.15vw, 18px);
+  color: var(--ink-soft);
+  line-height: 1.85;
+  max-width: 1100px;
+  margin-top: 5vh;
+  font-weight: 300;
+}
+.faction-summary strong { color: var(--ink); font-weight: 600; }
+.faction-summary em { color: var(--gold); font-style: normal; font-weight: 500; }
+
 @media (max-width: 1100px) {
   .acts { grid-template-columns: 1fr; gap: 2vh; }
   .tools { grid-template-columns: repeat(2, 1fr); }
@@ -842,6 +918,7 @@ html, body {
   .curve-row, .s-srow { grid-template-columns: 1fr; gap: 8px; }
   .split { flex-direction: column; }
   .split-img { min-height: 40vh; }
+  .factions { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -960,24 +1037,93 @@ html, body {
           <div class="scene-h-en">Heathmoor</div>
           <h2 class="scene-h">대재앙 이후의 대륙<br>히스무어</h2>
           <p class="scene-body">
-            천 년 전, <strong>대재앙(The Cataclysm)</strong>이 문명을 초토화했다.
-            살아남은 세 세력 — <strong>나이트, 바이킹, 사무라이</strong> —
-            가 하나의 대륙에서 자원과 영토를 놓고 끝없이 싸운다.
+            약 1000년 전, <strong>대재앙(The Cataclysm)</strong>이 세계를 덮쳤다.
+            토네이도, 쓰나미, 지진의 연쇄가 문명을 초토화하고
+            대륙의 지도를 새로 그렸다.
           </p>
           <p class="scene-body">
-            전쟁의 이유는 세월 속에 잊혔지만, <em>싸움은 계속된다.</em>
+            살아남은 세 민족 — <strong>나이트, 바이킹, 사무라이</strong> —
+            는 각자의 고향을 잃고 살아남은 한 대륙
+            <strong>"히스무어(Heathmoor)"</strong>에 모여 정착했다.
           </p>
-          <div class="scene-quote">
-            아폴리온은 죽었지만, 그녀가 뿌린 증오의 씨앗은 살아남았다.
-            늑대는 여전히 사냥하고, 양은 여전히 죽는다.
-            <div class="scene-quote-attr">— 검은 군단의 유산</div>
-          </div>
+          <p class="scene-body">
+            한정된 자원과 영토를 두고 시작된 전쟁은 <em>천 년 동안 멈추지 않았다.</em>
+          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 05. BRIDGE -->
+  <!-- 05. THREE FACTIONS -->
+  <section class="slide">
+    <div class="center">
+      <div class="wrap">
+        <div class="eyebrow">The Three Peoples</div>
+        <div class="h-en">Refugees of Three Worlds</div>
+        <h2 class="h-kr" style="font-size:clamp(30px,3.8vw,48px);">고향을 잃은 세 민족</h2>
+        <div class="rule"></div>
+        <div class="factions">
+          <div class="faction">
+            <div class="faction-num">— I —</div>
+            <div class="faction-en">Knights</div>
+            <div class="faction-name">나이트</div>
+            <div class="faction-row">
+              <div class="faction-lbl">Lost Home</div>
+              <div class="faction-txt">옛 <strong>대제국(Great Empire)</strong>의 잔존 세력</div>
+            </div>
+            <div class="faction-row">
+              <div class="faction-lbl">New Land</div>
+              <div class="faction-txt"><strong>애쉬펠드(Ashfeld)</strong> · 온화한 기후, 고딕 성채와 대성당</div>
+            </div>
+            <div class="faction-row">
+              <div class="faction-lbl">Class</div>
+              <div class="faction-txt">에이든은 양손 롱소드를 쓰는 <strong>워든(Warden)</strong></div>
+            </div>
+          </div>
+          <div class="faction">
+            <div class="faction-num">— II —</div>
+            <div class="faction-en">Vikings</div>
+            <div class="faction-name">바이킹</div>
+            <div class="faction-row">
+              <div class="faction-lbl">Lost Home</div>
+              <div class="faction-txt">옛 발켄하임이 <strong>지진으로 붕괴</strong></div>
+            </div>
+            <div class="faction-row">
+              <div class="faction-lbl">New Land</div>
+              <div class="faction-txt"><strong>발켄하임(Valkenheim)</strong> · 바다 건너 귀환, 눈 덮인 산맥</div>
+            </div>
+            <div class="faction-row">
+              <div class="faction-lbl">Note</div>
+              <div class="faction-txt">단편영화에서는 카게마사의 부하를 전멸시킨 적으로 등장</div>
+            </div>
+          </div>
+          <div class="faction">
+            <div class="faction-num">— III —</div>
+            <div class="faction-en">Samurai</div>
+            <div class="faction-name">사무라이</div>
+            <div class="faction-row">
+              <div class="faction-lbl">Lost Home</div>
+              <div class="faction-txt">옛 고향(일본 모티프)이 <strong>바다와 불에 소멸</strong></div>
+            </div>
+            <div class="faction-row">
+              <div class="faction-lbl">New Land</div>
+              <div class="faction-txt"><strong>마이어(The Myre)</strong> · 500년에 걸쳐 습지를 개간하며 정착</div>
+            </div>
+            <div class="faction-row">
+              <div class="faction-lbl">Class</div>
+              <div class="faction-txt">카게마사는 노다치를 쓰는 <strong>켄세이(Kensei, 劍聖)</strong></div>
+            </div>
+          </div>
+        </div>
+        <p class="faction-summary">
+          세 민족 모두 <strong>고향을 잃은 난민이다.</strong> 살아남은 사람들이 한 대륙으로 모여들어 한정된 자원을 두고 싸우기 시작했고,
+          <em>천 년이 지난 지금 — 전쟁의 원래 이유는 잊혔지만 싸움은 관성처럼 계속된다.</em>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06. BRIDGE -->
   <section class="slide">
     <div class="scene">
       <div class="scene-bg" style="background-image:url('references/img08_bridge_of_borders.png');"></div>
