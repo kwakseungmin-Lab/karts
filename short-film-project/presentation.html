@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Weight of Honor — 명예의 무게</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Noto+Serif+KR:wght@300;400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0c0a08;
+  --ink: #f2ede0;
+  --ink-soft: #cfc6b3;
+  --ink-dim: #8a8170;
+  --ink-faint: #5a5448;
+  --gold: #d4af6a;
+  --blood: #b22a2a;
+  --rule: rgba(212, 175, 106, 0.2);
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Noto Serif KR', serif;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.deck {
+  position: fixed;
+  inset: 0;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: none;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.slide.active {
+  display: flex;
+  animation: fade 0.6s ease both;
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slowZoom {
+  from { transform: scale(1.03); }
+  to { transform: scale(1.13); }
+}
+
+/* ---- LAYOUT ---- */
+.center {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5vh 6vw;
+}
+
+/* ---- HUD ---- */
+.hud {
+  position: fixed;
+  top: 2.5vh;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 4vw;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--ink-faint);
+  z-index: 50;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.progress {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: rgba(255,255,255,0.04);
+  z-index: 50;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--gold);
+  transition: width 0.5s ease;
+}
+
+/* ---- TITLE ---- */
+.title {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.title-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.45);
+}
+.slide.active .title-bg { animation: slowZoom 22s ease-out forwards; }
+.title-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%),
+    linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 25%, transparent 70%, rgba(0,0,0,0.7) 100%);
+}
+.title-inner {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6vh 6vw;
+  text-align: center;
+}
+.title-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.7em;
+  color: var(--gold);
+  margin-bottom: 4vh;
+  padding-left: 0.7em;
+  text-transform: uppercase;
+}
+.title-en {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(48px, 8vw, 130px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 0.95;
+  margin-bottom: 3.5vh;
+  text-shadow: 0 4px 30px rgba(0,0,0,0.9);
+  text-transform: uppercase;
+}
+.title-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 3.5vh;
+}
+.title-divider span {
+  height: 1px;
+  width: 90px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.title-divider .dia {
+  width: 8px; height: 8px;
+  background: var(--gold);
+  transform: rotate(45deg);
+}
+.title-kr {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(28px, 3.5vw, 52px);
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: 0.15em;
+  margin-bottom: 5vh;
+}
+.title-tag {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(15px, 1.3vw, 19px);
+  font-weight: 300;
+  color: var(--ink-soft);
+  letter-spacing: 0.2em;
+  margin-bottom: 5vh;
+}
+.title-meta {
+  display: flex;
+  gap: 4vw;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.title-meta-item {
+  text-align: center;
+}
+.title-meta-item .num {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(16px, 1.5vw, 22px);
+  color: var(--gold);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
+.title-meta-item .lbl {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12px;
+  color: var(--ink-dim);
+  letter-spacing: 0.25em;
+}
+
+/* ---- SECTION HEADERS ---- */
+.eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.5em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 2.5vh;
+}
+.eyebrow::before {
+  content: '— ';
+  color: var(--blood);
+  margin-right: 8px;
+}
+.h-en {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(20px, 1.8vw, 26px);
+  font-weight: 500;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  margin-bottom: 1.5vh;
+  text-transform: uppercase;
+}
+.h-kr {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(38px, 5vw, 72px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin-bottom: 2vh;
+}
+.rule {
+  width: 60px;
+  height: 2px;
+  background: var(--blood);
+  margin-bottom: 4vh;
+}
+
+/* ---- SCENE (FULL IMAGE) ---- */
+.scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.scene-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.55);
+}
+.slide.active .scene-bg { animation: slowZoom 28s ease-out forwards; }
+.scene-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0,0,0,0.93) 0%, rgba(0,0,0,0.75) 35%, rgba(0,0,0,0.25) 70%, rgba(0,0,0,0.5) 100%);
+}
+.scene-veil.right {
+  background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.75) 65%, rgba(0,0,0,0.93) 100%);
+}
+.scene-inner {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 8vh 6vw;
+}
+.scene-inner.right { justify-content: flex-end; }
+.scene-text {
+  max-width: 620px;
+}
+.scene-text.right { text-align: right; }
+.scene-meta {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  text-transform: uppercase;
+  padding-bottom: 1.5vh;
+  margin-bottom: 2vh;
+  border-bottom: 1px solid var(--rule);
+  display: inline-block;
+}
+.scene-h-en {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(16px, 1.4vw, 22px);
+  font-weight: 500;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  margin-bottom: 1vh;
+  text-transform: uppercase;
+}
+.scene-h {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(34px, 4.5vw, 64px);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 3.5vh;
+  color: var(--ink);
+}
+.scene-body {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(15px, 1.15vw, 18px);
+  line-height: 1.85;
+  font-weight: 300;
+  color: var(--ink-soft);
+  margin-bottom: 2vh;
+}
+.scene-body strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.scene-body em {
+  color: var(--gold);
+  font-style: normal;
+  font-weight: 500;
+}
+.scene-quote {
+  border-left: 2px solid var(--blood);
+  padding: 1vh 0 1vh 1.5vw;
+  margin-top: 2.5vh;
+  font-family: 'Noto Serif KR', serif;
+  font-style: italic;
+  font-size: clamp(15px, 1.25vw, 20px);
+  color: var(--ink);
+  line-height: 1.6;
+  font-weight: 400;
+}
+.scene-quote-attr {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--ink-dim);
+  margin-top: 1vh;
+  font-style: normal;
+  text-transform: uppercase;
+}
+.scene-text.right .scene-meta { padding-right: 0; padding-left: 0; }
+.scene-text.right .scene-quote {
+  border-left: none;
+  border-right: 2px solid var(--blood);
+  padding: 1vh 1.5vw 1vh 0;
+}
+
+/* ---- SPLIT (CHARACTER) ---- */
+.split {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+.split-img {
+  flex: 1;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.split-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0,0,0,0.2) 0%, transparent 30%, transparent 70%, rgba(12,10,8,0.9) 100%);
+}
+.split-img.left::after {
+  background: linear-gradient(90deg, rgba(12,10,8,0.9) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.2) 100%);
+}
+.split-text-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 8vh 5vw;
+}
+.split-text-inner {
+  max-width: 560px;
+}
+
+/* ---- DETAIL LIST ---- */
+.detail {
+  list-style: none;
+  margin-top: 3vh;
+}
+.detail li {
+  padding: 2vh 0;
+  border-bottom: 1px solid var(--rule);
+}
+.detail .lbl {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--blood);
+  margin-bottom: 0.8vh;
+  text-transform: uppercase;
+}
+.detail .txt {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(14px, 1.05vw, 17px);
+  font-weight: 300;
+  color: var(--ink-soft);
+  line-height: 1.65;
+}
+.detail .txt strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* ---- OVERVIEW ---- */
+.over-wrap { width: 100%; max-width: 1100px; }
+.over-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 3vh;
+  border-top: 1px solid var(--rule);
+}
+.over-item {
+  padding: 3.5vh 3vw;
+  border-bottom: 1px solid var(--rule);
+}
+.over-item:nth-child(odd) { border-right: 1px solid var(--rule); }
+.over-lbl {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  margin-bottom: 1.2vh;
+  text-transform: uppercase;
+}
+.over-val {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(20px, 1.7vw, 26px);
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 0.4vh;
+}
+.over-en {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  color: var(--ink-dim);
+  letter-spacing: 0.15em;
+}
+
+/* ---- LOGLINE ---- */
+.log {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.log-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.22) blur(2px);
+}
+.log-inner {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8vh 6vw;
+  text-align: center;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.log-text {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(24px, 3.2vw, 44px);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.log-text strong { color: var(--gold); font-weight: 600; }
+.log-text em { color: var(--ink); font-weight: 500; font-style: normal; }
+.log-en {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(13px, 1.05vw, 17px);
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  color: var(--ink-dim);
+  margin-top: 5vh;
+  font-style: italic;
+  line-height: 1.7;
+  text-transform: none;
+  max-width: 900px;
+}
+
+/* ---- THEME ---- */
+.theme-text {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(28px, 3.8vw, 56px);
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--ink);
+  margin: 4vh 0;
+}
+.theme-text::before, .theme-text::after {
+  content: '"';
+  color: var(--blood);
+  font-family: 'Cinzel', serif;
+}
+.theme-attr {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 0.5em;
+  color: var(--gold);
+  margin-bottom: 6vh;
+  text-transform: uppercase;
+}
+.theme-conc {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(17px, 1.5vw, 24px);
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.7;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.theme-conc strong { color: var(--blood); font-weight: 600; }
+
+/* ---- ACTS ---- */
+.acts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3vw;
+  margin-top: 3vh;
+}
+.act {
+  padding-top: 2.5vh;
+  border-top: 2px solid var(--blood);
+}
+.act-num {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.5em;
+  color: var(--gold);
+  margin-bottom: 1vh;
+}
+.act-time {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  color: var(--ink-faint);
+  margin-bottom: 1.5vh;
+  letter-spacing: 0.15em;
+}
+.act-name {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(20px, 1.8vw, 28px);
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.5vh;
+}
+.act-en {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  color: var(--ink-dim);
+  letter-spacing: 0.2em;
+  margin-bottom: 2.5vh;
+}
+.s-row {
+  font-size: 13px;
+  line-height: 1.55;
+  padding: 1.3vh 0;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  color: var(--ink-soft);
+  font-weight: 300;
+}
+.s-id {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  padding-top: 2px;
+}
+.s-row.peak { color: var(--gold); font-weight: 500; }
+.s-row.peak .s-id { color: var(--blood); }
+
+/* ---- COLOR CURVE ---- */
+.curve {
+  margin-top: 3vh;
+}
+.curve-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 280px;
+  gap: 3vw;
+  align-items: center;
+  padding: 2.5vh 0;
+  border-bottom: 1px solid var(--rule);
+}
+.curve-sc {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  color: var(--gold);
+  letter-spacing: 0.25em;
+}
+.curve-bar {
+  height: 14px;
+  background: rgba(255,255,255,0.05);
+  position: relative;
+  overflow: hidden;
+}
+.curve-fill {
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.curve-desc {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(14px, 1.15vw, 18px);
+  color: var(--ink);
+  text-align: right;
+  line-height: 1.45;
+}
+
+/* ---- SOUND ---- */
+.sound {
+  margin-top: 3vh;
+}
+.s-srow {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 4vw;
+  align-items: center;
+  padding: 2.4vh 0;
+  border-bottom: 1px solid var(--rule);
+}
+.s-seg {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.s-mus {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(15px, 1.2vw, 19px);
+  color: var(--ink);
+  font-weight: 400;
+}
+.s-mus.peak { color: var(--gold); font-weight: 600; }
+.s-call {
+  margin-top: 4vh;
+  padding: 3vh 3vw;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--blood);
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(16px, 1.4vw, 22px);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* ---- TOOLS ---- */
+.tools {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5vw;
+  margin-top: 4vh;
+}
+.tool {
+  padding: 4.5vh 1.2vw;
+  border: 1px solid var(--rule);
+  text-align: center;
+  background: rgba(255,255,255,0.02);
+  position: relative;
+  transition: all 0.3s ease;
+}
+.tool:hover {
+  border-color: var(--gold);
+  transform: translateY(-3px);
+}
+.tool-num {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--blood);
+  position: absolute;
+  top: 1.5vh;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.tool-role {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--ink-faint);
+  margin-bottom: 1.5vh;
+  margin-top: 1.5vh;
+  text-transform: uppercase;
+}
+.tool-name {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(18px, 1.7vw, 26px);
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 1.2vh;
+  letter-spacing: 0.02em;
+}
+.tool-rule {
+  width: 24px;
+  height: 1px;
+  background: var(--gold);
+  margin: 0 auto 1.5vh;
+}
+.tool-kr {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 11px;
+  color: var(--ink-dim);
+  letter-spacing: 0.15em;
+}
+
+/* ---- END ---- */
+.end {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.end-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.22) blur(3px);
+}
+.end-inner {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8vh 6vw;
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.end-q {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(20px, 2.4vw, 34px);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--ink);
+  margin-bottom: 3vh;
+}
+.end-attr {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.5em;
+  color: var(--gold);
+  margin-bottom: 5vh;
+  text-transform: uppercase;
+}
+.end-rule {
+  width: 1px;
+  height: 70px;
+  background: linear-gradient(180deg, transparent, var(--gold), transparent);
+  margin: 4vh auto;
+}
+.end-en {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(24px, 2.8vw, 40px);
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  margin-bottom: 2vh;
+}
+.end-kr {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(16px, 1.4vw, 22px);
+  color: var(--gold);
+  letter-spacing: 0.3em;
+  margin-bottom: 3vh;
+}
+.end-fin {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.7em;
+  color: var(--ink-dim);
+  text-transform: uppercase;
+}
+
+/* ---- CONTROLS ---- */
+.ctrls {
+  position: fixed;
+  bottom: 2vh;
+  right: 2vw;
+  display: flex;
+  gap: 8px;
+  z-index: 60;
+}
+.ctrl-btn {
+  width: 38px; height: 38px;
+  border: 1px solid var(--rule);
+  background: rgba(0,0,0,0.6);
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+.ctrl-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.hint {
+  position: fixed;
+  bottom: 2.3vh;
+  left: 2vw;
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.4em;
+  color: var(--ink-faint);
+  z-index: 60;
+}
+
+/* ---- WRAPPERS ---- */
+.wrap { width: 100%; max-width: 1500px; }
+.wrap-narrow { width: 100%; max-width: 1100px; }
+
+@media (max-width: 1100px) {
+  .acts { grid-template-columns: 1fr; gap: 2vh; }
+  .tools { grid-template-columns: repeat(2, 1fr); }
+  .over-grid { grid-template-columns: 1fr; }
+  .curve-row, .s-srow { grid-template-columns: 1fr; gap: 8px; }
+  .split { flex-direction: column; }
+  .split-img { min-height: 40vh; }
+}
+</style>
+</head>
+<body>
+
+<div class="hud">
+  <span>The Weight of Honor</span>
+  <span id="hudR">01 / 18</span>
+</div>
+<div class="progress"><div class="progress-fill" id="pFill"></div></div>
+<div class="hint">← →   F : 전체화면</div>
+<div class="ctrls">
+  <button class="ctrl-btn" onclick="prev()">‹</button>
+  <button class="ctrl-btn" onclick="next()">›</button>
+</div>
+
+<div class="deck">
+
+  <!-- 01. TITLE -->
+  <section class="slide active">
+    <div class="title">
+      <div class="title-bg" style="background-image:url('references/img01_key_visual.png');"></div>
+      <div class="title-veil"></div>
+      <div class="title-inner">
+        <div class="title-eyebrow">A 10-Minute AI Short Film</div>
+        <h1 class="title-en">The Weight<br>of Honor</h1>
+        <div class="title-divider">
+          <span></span><div class="dia"></div><span></span>
+        </div>
+        <div class="title-kr">명예의 무게</div>
+        <div class="title-tag">중세 판타지 액션 드라마 · 10분 단편</div>
+        <div class="title-meta">
+          <div class="title-meta-item"><div class="num">10 MIN</div><div class="lbl">러닝타임</div></div>
+          <div class="title-meta-item"><div class="num">2.39:1</div><div class="lbl">시네마스코프</div></div>
+          <div class="title-meta-item"><div class="num">3 LINES</div><div class="lbl">전체 대사</div></div>
+          <div class="title-meta-item"><div class="num">100% AI</div><div class="lbl">제작 방식</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02. OVERVIEW -->
+  <section class="slide">
+    <div class="center">
+      <div class="over-wrap">
+        <div class="eyebrow">Overview</div>
+        <div class="h-en">At a Glance</div>
+        <div class="h-kr">한눈에 보기</div>
+        <div class="rule"></div>
+        <div class="over-grid">
+          <div class="over-item">
+            <div class="over-lbl">장르</div>
+            <div class="over-val">중세 판타지 액션 드라마</div>
+            <div class="over-en">Medieval Fantasy Action Drama</div>
+          </div>
+          <div class="over-item">
+            <div class="over-lbl">러닝타임</div>
+            <div class="over-val">10분 · 12개 씬 · 3막</div>
+            <div class="over-en">10 min · 12 scenes · 3 acts</div>
+          </div>
+          <div class="over-item">
+            <div class="over-lbl">톤</div>
+            <div class="over-val">어둡고 장엄한 — 명예의 의미를 묻는</div>
+            <div class="over-en">Dark · Solemn · Contemplative</div>
+          </div>
+          <div class="over-item">
+            <div class="over-lbl">화면비</div>
+            <div class="over-val">2.39:1 시네마스코프</div>
+            <div class="over-en">CinemaScope Widescreen</div>
+          </div>
+          <div class="over-item">
+            <div class="over-lbl">대사</div>
+            <div class="over-val">사실상 무대사 — 보이스오버 3줄뿐</div>
+            <div class="over-en">Effectively Wordless</div>
+          </div>
+          <div class="over-item">
+            <div class="over-lbl">제작</div>
+            <div class="over-val">전 공정 AI 생성</div>
+            <div class="over-en">image2 · Seedance · Suno · ElevenLabs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03. LOGLINE -->
+  <section class="slide">
+    <div class="log">
+      <div class="log-bg" style="background-image:url('references/img08_bridge_of_borders.png');"></div>
+      <div class="log-inner">
+        <div class="eyebrow" style="margin-bottom:5vh;">Logline · 로그라인</div>
+        <p class="log-text">
+          천 년간 이어진 전쟁의 끝자락,<br>
+          <strong>명예를 잃은 나이트 워든</strong>과<br>
+          <strong>고국을 잃은 사무라이 켄세이</strong>가<br>
+          안개 낀 전장에서 마주쳐 —<br>
+          <em>서로를 죽여야 할 이유를 묻는다.</em>
+        </p>
+        <p class="log-en">
+          At the end of a thousand-year war, a dishonored knight<br>
+          and a samurai who lost his country meet on a fog-veiled battlefield —<br>
+          and ask why they must kill each other.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04. WORLD -->
+  <section class="slide">
+    <div class="scene">
+      <div class="scene-bg" style="background-image:url('references/img04_battlefield_ruins.png');"></div>
+      <div class="scene-veil"></div>
+      <div class="scene-inner">
+        <div class="scene-text">
+          <div class="scene-meta">The World · 세계관</div>
+          <div class="scene-h-en">Heathmoor</div>
+          <h2 class="scene-h">대재앙 이후의 대륙<br>히스무어</h2>
+          <p class="scene-body">
+            천 년 전, <strong>대재앙(The Cataclysm)</strong>이 문명을 초토화했다.
+            살아남은 세 세력 — <strong>나이트, 바이킹, 사무라이</strong> —
+            가 하나의 대륙에서 자원과 영토를 놓고 끝없이 싸운다.
+          </p>
+          <p class="scene-body">
+            전쟁의 이유는 세월 속에 잊혔지만, <em>싸움은 계속된다.</em>
+          </p>
+          <div class="scene-quote">
+            아폴리온은 죽었지만, 그녀가 뿌린 증오의 씨앗은 살아남았다.
+            늑대는 여전히 사냥하고, 양은 여전히 죽는다.
+            <div class="scene-quote-attr">— 검은 군단의 유산</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05. BRIDGE -->
+  <section class="slide">
+    <div class="scene">
+      <div class="scene-bg" style="background-image:url('references/img08_bridge_of_borders.png');"></div>
+      <div class="scene-veil right"></div>
+      <div class="scene-inner right">
+        <div class="scene-text right">
+          <div class="scene-meta">The Stage · 무대</div>
+          <div class="scene-h-en">Bridge of Borders</div>
+          <h2 class="scene-h">경계의 다리</h2>
+          <p class="scene-body">
+            <strong>애쉬펠드와 마이어가 맞닿는</strong> 폐허의 석조 아치.
+            한때 웅장했으나 지금은 난간이 무너지고 이끼가 덮였다.
+            다리 아래의 강은 안개 속으로 사라져 심연처럼 보인다.
+          </p>
+          <p class="scene-body">
+            <em>두 문명이 물리적으로 만나는 중립지대.</em>
+            영화 전체가 이 다리 위에서 펼쳐진다 —
+            두 번의 회상을 제외하고.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06. AIDEN -->
+  <section class="slide">
+    <div class="split">
+      <div class="split-img" style="background-image:url('references/img02_aiden_concept.png'); background-size:contain; background-repeat:no-repeat; background-position:center; background-color:#0c0a08;"></div>
+      <div class="split-text-wrap">
+        <div class="split-text-inner">
+          <div class="eyebrow">Protagonist · I</div>
+          <div class="h-en">Aiden</div>
+          <h2 class="h-kr" style="font-size:clamp(36px,4.5vw,60px);">에이든</h2>
+          <div style="font-family:'Cinzel',serif; font-size:13px; letter-spacing:0.3em; color:var(--ink-dim); margin-bottom:0;">KNIGHT WARDEN · 30대 중반</div>
+          <div class="rule" style="margin-top:3vh;"></div>
+          <ul class="detail">
+            <li>
+              <div class="lbl">외형</div>
+              <div class="txt">낡은 강철 판금갑 + 체인메일. 짧은 갈색 머리, 왼쪽 눈 위 칼자국. <strong>왼쪽 어깨갑의 블랙스톤 문장은 자신의 칼로 긁어 지웠다.</strong></div>
+            </li>
+            <li>
+              <div class="lbl">과거</div>
+              <div class="txt">한때 아이언 리전의 정예 기사. 지휘관이 마을 학살을 명령하자 거부하고 등을 돌렸다. <strong>명예를 잃은 탈영병.</strong></div>
+            </li>
+            <li>
+              <div class="lbl">상처</div>
+              <div class="txt">목적 없이 떠도는 방랑자. 검을 놓지는 못하지만, 왜 검을 들고 있는지조차 잊었다.</div>
+            </li>
+            <li>
+              <div class="lbl">아크</div>
+              <div class="txt"><em>"검을 거두는 것도 명예일 수 있는가"</em>를 시험한다.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07. KAGEMASA -->
+  <section class="slide">
+    <div class="split">
+      <div class="split-text-wrap">
+        <div class="split-text-inner" style="margin-left:auto;">
+          <div class="eyebrow">Protagonist · II</div>
+          <div class="h-en">Kagemasa</div>
+          <h2 class="h-kr" style="font-size:clamp(36px,4.5vw,60px);">카게마사</h2>
+          <div style="font-family:'Cinzel',serif; font-size:13px; letter-spacing:0.3em; color:var(--ink-dim); margin-bottom:0;">SAMURAI KENSEI · 40대 초반</div>
+          <div class="rule" style="margin-top:3vh;"></div>
+          <ul class="detail">
+            <li>
+              <div class="lbl">외형</div>
+              <div class="txt">진한 남색 오요로이(大鎧). 넓은 소데, 가슴에 금박 황실 문양(전투로 일부 벗겨짐). <strong>귀신 얼굴 형상의 멘포(面頬) 가면.</strong></div>
+            </li>
+            <li>
+              <div class="lbl">과거</div>
+              <div class="txt">황제의 칙명으로 정찰대를 이끌었으나, <strong>바이킹 기습에 부하 전원이 전사.</strong> 그 혼자만 살아남았다.</div>
+            </li>
+            <li>
+              <div class="lbl">상처</div>
+              <div class="txt">무사도(武士道)를 체화한 전사. 그러나 부하의 빈 무덤 앞에서 "명예로운 죽음"의 의미를 의심하기 시작했다.</div>
+            </li>
+            <li>
+              <div class="lbl">아크</div>
+              <div class="txt"><em>멘포가 떨어져 맨 얼굴이 드러나는 순간</em> — 영화의 감정적 전환점이 된다.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="split-img left" style="background-image:url('references/img03_kagemasa_concept.png'); background-size:contain; background-repeat:no-repeat; background-position:center; background-color:#0c0a08;"></div>
+    </div>
+  </section>
+
+  <!-- 08. ACT I - AIDEN MEMORY -->
+  <section class="slide">
+    <div class="scene">
+      <div class="scene-bg" style="background-image:url('references/img09_blackstone_camp.png');"></div>
+      <div class="scene-veil"></div>
+      <div class="scene-inner">
+        <div class="scene-text">
+          <div class="scene-meta">Act I · S2 · 1:10</div>
+          <div class="scene-h-en">The Order</div>
+          <h2 class="scene-h">에이든의 기억<br>학살의 명령</h2>
+          <p class="scene-body">
+            비 내리는 밤, 블랙스톤 군단 야영지.
+            지휘관이 지도 위의 마을을 가리키며 학살 명령을 내린다.
+            횃불이 녹슨 갑옷에 일렁인다.
+          </p>
+          <div class="scene-quote">
+            양은 베어라. 그것이 늑대의 법이다.
+            <div class="scene-quote-attr">— 블랙스톤 지휘관</div>
+          </div>
+          <p class="scene-body" style="margin-top:2.5vh;">
+            에이든은 눈을 감는다. 돌아선다.
+            등 뒤에서 검 뽑는 소리가 들리지만 멈추지 않는다.
+            <em>성문이 닫히고, 그는 어둠 속으로 걸어 나간다.</em>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09. ACT I - KAGEMASA MEMORY -->
+  <section class="slide">
+    <div class="scene">
+      <div class="scene-bg" style="background-image:url('references/img10_snow_battle.png');"></div>
+      <div class="scene-veil right"></div>
+      <div class="scene-inner right">
+        <div class="scene-text right">
+          <div class="scene-meta">Act I · S3 · 2:20</div>
+          <div class="scene-h-en">The Last Survivor</div>
+          <h2 class="scene-h">카게마사의 기억<br>전우의 전멸</h2>
+          <p class="scene-body">
+            눈보라 치는 산간 계곡. 바위 위에서 바이킹 버서커들이 뛰어내린다.
+            짧고 잔혹한 전투 — <strong>부하 전원이 쓰러지는 것을 그는 두 눈으로 본다.</strong>
+          </p>
+          <p class="scene-body">
+            폭풍이 잦아들고, 그 혼자 남았다.
+            피 묻은 노다치를 눈에 꽂고, 두 손을 얹은 채 무릎을 꿇는다.
+          </p>
+          <p class="scene-body" style="color:var(--gold); font-weight:500; margin-top:2.5vh; font-style:italic;">
+            살아남았다는 불명예에 대한 묵념.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. ACT II - STANCE -->
+  <section class="slide">
+    <div class="scene">
+      <div class="scene-bg" style="background-image:url('references/img11_stance_dialogue.png');"></div>
+      <div class="scene-veil"></div>
+      <div class="scene-inner">
+        <div class="scene-text">
+          <div class="scene-meta">Act II · S5 · 4:00</div>
+          <div class="scene-h-en">Conversation of the Blade</div>
+          <h2 class="scene-h">검의 대화</h2>
+          <p class="scene-body">
+            언어도, 진영도, 역사도 다르다.<br>
+            두 사람에게 남은 공통어는 단 하나 — <strong>검.</strong>
+          </p>
+          <p class="scene-body">
+            5미터 거리에서 두 전사는 스탠스를 바꾸며 서로를 읽는다.
+            손가락이 조여진다. 발이 미세하게 회전한다. 눈이 고정된다.
+          </p>
+          <p class="scene-body" style="color:var(--gold); font-weight:500; font-style:italic;">
+            공격이 시작되기 전에, 결투는 이미 시작됐다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. ACT II - FIRST CLASH -->
+  <section class="slide">
+    <div class="scene">
+      <div class="scene-bg" style="background-image:url('references/img05_first_clash.png');"></div>
+      <div class="scene-veil right"></div>
+      <div class="scene-inner right">
+        <div class="scene-text right">
+          <div class="scene-meta">Act II · S6 · 5:00</div>
+          <div class="scene-h-en">First Clash</div>
+          <h2 class="scene-h">강철의 충돌<br>첫 피</h2>
+          <p class="scene-body">
+            카게마사의 노다치가 상단에서 내려친다.
+            에이든이 롱소드로 받아낸다.
+            <strong>두 검날이 X자로 부딪히며 슬로우모션 속에 불꽃이 튄다.</strong>
+          </p>
+          <p class="scene-body">
+            빠른 교환. 가드 브레이크. 페인트.
+            에이든의 칼끝이 카게마사의 허벅지를 스친다.
+            <em>젖은 돌 위에 그날 아침의 첫 피가 떨어진다.</em>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. ACT II - HALTED BLADE (CLIMAX) -->
+  <section class="slide">
+    <div class="scene">
+      <div class="scene-bg" style="background-image:url('references/img06_halted_blade.png'); filter:brightness(0.6);"></div>
+      <div class="scene-veil" style="background:linear-gradient(90deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.65) 50%, rgba(0,0,0,0.3) 100%);"></div>
+      <div class="scene-inner">
+        <div class="scene-text" style="max-width:680px;">
+          <div class="scene-meta" style="color:var(--blood); border-color:var(--blood);">★ The Climax · S9</div>
+          <div class="scene-h-en" style="color:var(--gold);">The Halted Blade</div>
+          <h2 class="scene-h" style="color:var(--gold);">멈춘 검<br>영화의 정점</h2>
+          <p class="scene-body">
+            에이든이 무릎 꿇은 카게마사 위로 롱소드를 높이 든다. <strong>처형 자세.</strong>
+          </p>
+          <p class="scene-body">
+            <strong>그 순간 — 멘포가 미끄러진다. 떨어진다. 돌바닥에 부딪혀 금이 간다.</strong>
+            드러난 맨 얼굴은 지치고 슬프지만, 두려워하지 않는다.
+            눈을 감지 않는다.
+          </p>
+          <p class="scene-body" style="color:var(--gold); font-weight:500; font-style:italic;">
+            에이든은 그 얼굴에서 자신의 지침(疲憊)을 본다.
+            검이 머리 위에서 멈춘다. 길고, 완전한 정적.
+          </p>
+          <p class="scene-body" style="margin-top:2.5vh;">
+            그가 검을 천천히 내린다. 칼끝이 돌에 닿는 단 한 번의 금속음 —
+            <em>이 영화에서 가장 큰 소리.</em>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. ACT III - SALUTE -->
+  <section class="slide">
+    <div class="scene">
+      <div class="scene-bg" style="background-image:url('references/img12_salute.png');"></div>
+      <div class="scene-veil right"></div>
+      <div class="scene-inner right">
+        <div class="scene-text right">
+          <div class="scene-meta">Act III · S10 · 8:50</div>
+          <div class="scene-h-en">A Wordless Salute</div>
+          <h2 class="scene-h">무언의 경례</h2>
+          <p class="scene-body">
+            카게마사가 천천히 일어난다. 노다치를 칼집에 넣는다. 가볍게 목례.<br>
+            에이든이 오른 주먹을 왼쪽 가슴에 대는 <strong>나이트식 경례</strong>로 답한다.
+          </p>
+          <p class="scene-body" style="color:var(--gold); font-weight:500; font-style:italic;">
+            영화 처음으로 샤쿠하치와 첼로가 화음을 이룬다.
+            짧지만 완벽한 평화.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14. ACT III - INTO THE FOG -->
+  <section class="slide">
+    <div class="scene">
+      <div class="scene-bg" style="background-image:url('references/img07_into_the_fog.png');"></div>
+      <div class="scene-veil"></div>
+      <div class="scene-inner">
+        <div class="scene-text">
+          <div class="scene-meta">Act III · Epilogue · 9:50</div>
+          <div class="scene-h-en">Into the Fog</div>
+          <h2 class="scene-h">에필로그<br>다시, 안개 속으로</h2>
+          <p class="scene-body">
+            언덕 너머에서 나이트의 호른이 울린다.
+            반대편에서 사무라이의 타이코 드럼이 응답한다.
+            <strong>두 전사 모두 듣는다. 두 사람 모두 그것이 무엇인지 안다.</strong>
+          </p>
+          <p class="scene-body">
+            서로 등을 돌려 반대편으로 걷는다. 다리 중앙쯤에서 —
+            동시에 한 번 뒤를 돌아본다. 짧은 눈맞춤. 그리고 다시 걷는다.
+          </p>
+          <p class="scene-body" style="color:var(--gold); font-weight:500; font-style:italic;">
+            크레인이 올라간다. 빈 다리 위엔 피, 부서진 강철, 깨진 멘포.
+            양쪽 언덕에는 행군하는 두 군대.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15. THEME -->
+  <section class="slide">
+    <div class="center">
+      <div style="text-align:center; max-width:1200px;">
+        <div class="eyebrow" style="margin-bottom:5vh;">The Core Theme · 핵심 테마</div>
+        <p class="theme-text">
+          늑대는 양을 잡아먹는다.<br>
+          그렇다면 칼을 든 자는 모두 늑대인가?
+        </p>
+        <div class="theme-attr">— 아폴리온, 검은 늑대</div>
+        <div style="display:flex; justify-content:center; align-items:center; gap:18px; margin:5vh 0;">
+          <span style="height:1px; width:60px; background:var(--gold);"></span>
+          <div style="width:6px; height:6px; background:var(--gold); transform:rotate(45deg);"></div>
+          <span style="height:1px; width:60px; background:var(--gold);"></span>
+        </div>
+        <p class="theme-conc">
+          에이든과 카게마사는 아폴리온의 이분법에 <strong>제3의 응답</strong>을 내놓는다.<br>
+          <em>늑대이되, 서로를 물지 않기를 선택한다.</em>
+        </p>
+        <p style="font-family:'Cinzel',serif; font-size:13px; color:var(--ink-dim); margin-top:3vh; letter-spacing:0.2em; font-style:italic;">
+          They are wolves — and they choose not to bite.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16. ACT STRUCTURE -->
+  <section class="slide">
+    <div class="center">
+      <div class="wrap">
+        <div class="eyebrow">Three-Act Structure</div>
+        <div class="h-en">12 Scenes</div>
+        <h2 class="h-kr" style="font-size:clamp(32px,4vw,52px);">3막 12씬 구조</h2>
+        <div class="rule"></div>
+        <div class="acts">
+          <div class="act">
+            <div class="act-num">Act 1</div>
+            <div class="act-time">0:00 – 3:00</div>
+            <div class="act-name">늑대와 양</div>
+            <div class="act-en">Wolves & Sheep</div>
+            <div class="s-row"><span class="s-id">S1</span><span>전장 폐허 · 아폴리온 내레이션</span></div>
+            <div class="s-row"><span class="s-id">S2</span><span>에이든 · 학살 명령, 탈영</span></div>
+            <div class="s-row"><span class="s-id">S3</span><span>카게마사 · 바이킹 기습, 전우 전멸</span></div>
+            <div class="s-row"><span class="s-id">S4</span><span>경계의 다리 · 안개 속 조우</span></div>
+          </div>
+          <div class="act">
+            <div class="act-num">Act 2</div>
+            <div class="act-time">3:00 – 8:20</div>
+            <div class="act-name">검의 대화</div>
+            <div class="act-en">Conversation of the Blade</div>
+            <div class="s-row"><span class="s-id">S5</span><span>대치 · 스탠스의 심리전</span></div>
+            <div class="s-row"><span class="s-id">S6</span><span>1차 교전 · 강철의 충돌, 첫 피</span></div>
+            <div class="s-row"><span class="s-id">S7</span><span>소강 · 적의 문장을 알아본다</span></div>
+            <div class="s-row"><span class="s-id">S8</span><span>2차 교전 · 분노와 슬픔의 분출</span></div>
+            <div class="s-row peak"><span class="s-id">S9</span><span>★ 멘포가 떨어지고 검이 멈춘다</span></div>
+          </div>
+          <div class="act">
+            <div class="act-num">Act 3</div>
+            <div class="act-time">8:20 – 10:40</div>
+            <div class="act-name">명예의 선택</div>
+            <div class="act-en">The Choice of Honor</div>
+            <div class="s-row"><span class="s-id">S10</span><span>칼을 거두다 · 무언의 경례</span></div>
+            <div class="s-row"><span class="s-id">S11</span><span>전쟁의 부름 · 각자의 길로</span></div>
+            <div class="s-row"><span class="s-id">S12</span><span>빈 다리 · 아폴리온의 마지막 목소리</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17. COLOR CURVE -->
+  <section class="slide">
+    <div class="center">
+      <div class="wrap">
+        <div class="eyebrow">Visual Tone</div>
+        <div class="h-en">Color Curve</div>
+        <h2 class="h-kr" style="font-size:clamp(32px,4vw,52px);">색감이 곧 감정의 궤적</h2>
+        <div class="rule"></div>
+        <div class="curve">
+          <div class="curve-row">
+            <div class="curve-sc">씬 1 — 4</div>
+            <div class="curve-bar"><div class="curve-fill" style="width:25%; background:linear-gradient(90deg,#3a3a3a,#5a5a5a);"></div></div>
+            <div class="curve-desc">극도의 탈색 · 회색 세계, 전쟁의 황폐함</div>
+          </div>
+          <div class="curve-row">
+            <div class="curve-sc">씬 5 — 8</div>
+            <div class="curve-bar"><div class="curve-fill" style="width:55%; background:linear-gradient(90deg,#5a5a5a,#8a5a40);"></div></div>
+            <div class="curve-desc">서서히 채도 회복 · 전투의 에너지</div>
+          </div>
+          <div class="curve-row">
+            <div class="curve-sc">씬 9 — 10</div>
+            <div class="curve-bar"><div class="curve-fill" style="width:90%; background:linear-gradient(90deg,#8a5a40,#d4af6a);"></div></div>
+            <div class="curve-desc">가장 밝고 자연스러움 · 깨달음의 짧은 평화</div>
+          </div>
+          <div class="curve-row">
+            <div class="curve-sc">씬 11 — 12</div>
+            <div class="curve-bar"><div class="curve-fill" style="width:30%; background:linear-gradient(90deg,#d4af6a,#3a3a3a);"></div></div>
+            <div class="curve-desc">다시 탈색 · 전쟁의 순환, 원점 복귀</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18. SOUND -->
+  <section class="slide">
+    <div class="center">
+      <div class="wrap-narrow">
+        <div class="eyebrow">Sound Design</div>
+        <div class="h-en">Silence as Weapon</div>
+        <h2 class="h-kr" style="font-size:clamp(32px,4vw,52px);">정적이라는 무기</h2>
+        <div class="rule"></div>
+        <div class="sound">
+          <div class="s-srow"><div class="s-seg">씬 1 — 4 / 도입</div><div class="s-mus">솔로 첼로 드론 · 극도의 미니멀</div></div>
+          <div class="s-srow"><div class="s-seg">씬 5 — 8 / 전투</div><div class="s-mus">타이코 + 합창 + 오케스트라 크레셴도</div></div>
+          <div class="s-srow"><div class="s-seg">씬 9 / 정점</div><div class="s-mus peak">★ 완전한 정적 → 솔로 첼로의 단일 음</div></div>
+          <div class="s-srow"><div class="s-seg">씬 10 / 화해</div><div class="s-mus">샤쿠하치와 첼로가 처음으로 화음을 이룸</div></div>
+          <div class="s-srow"><div class="s-seg">씬 11 — 12 / 결말</div><div class="s-mus">풀 오케스트라 → 페이드 → 무음</div></div>
+        </div>
+        <div class="s-call">
+          정적(Silence)이 가장 강력한 사운드 디자인 도구 —<br>
+          소리 없는 순간이 소리 있는 순간보다 강렬해야 한다.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 19. AI PIPELINE -->
+  <section class="slide">
+    <div class="center">
+      <div class="wrap">
+        <div class="eyebrow">Production Pipeline</div>
+        <div class="h-en">100% AI-Generated</div>
+        <h2 class="h-kr" style="font-size:clamp(32px,4vw,52px);">전 공정 AI 생성 파이프라인</h2>
+        <div class="rule"></div>
+        <div class="tools">
+          <div class="tool">
+            <div class="tool-num">01</div>
+            <div class="tool-role">Image</div>
+            <div class="tool-name">image2</div>
+            <div class="tool-rule"></div>
+            <div class="tool-kr">컨셉 · 키프레임</div>
+          </div>
+          <div class="tool">
+            <div class="tool-num">02</div>
+            <div class="tool-role">Video</div>
+            <div class="tool-name">Seedance 2.0</div>
+            <div class="tool-rule"></div>
+            <div class="tool-kr">모션 · 전투 안무</div>
+          </div>
+          <div class="tool">
+            <div class="tool-num">03</div>
+            <div class="tool-role">Music</div>
+            <div class="tool-name">Suno AI</div>
+            <div class="tool-rule"></div>
+            <div class="tool-kr">스코어 · 테마</div>
+          </div>
+          <div class="tool">
+            <div class="tool-num">04</div>
+            <div class="tool-role">Voice & SFX</div>
+            <div class="tool-name">ElevenLabs</div>
+            <div class="tool-rule"></div>
+            <div class="tool-kr">내레이션 · 효과음</div>
+          </div>
+          <div class="tool">
+            <div class="tool-num">05</div>
+            <div class="tool-role">Edit & Grade</div>
+            <div class="tool-name">Premiere Pro</div>
+            <div class="tool-rule"></div>
+            <div class="tool-kr">편집 · LUT · 마스터</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 20. END / FIN -->
+  <section class="slide">
+    <div class="end">
+      <div class="end-bg" style="background-image:url('references/img07_into_the_fog.png');"></div>
+      <div class="end-inner">
+        <div class="eyebrow" style="margin-bottom:5vh;">Final Voiceover · 마지막 보이스오버</div>
+        <p class="end-q">
+          "전쟁은 끝나지 않는다.<br>
+          그러나 오늘, 두 마리 늑대가 서로를 물지 않았다.<br>
+          그것이 약함인가, 강함인가...<br>
+          그건 아직 모른다."
+        </p>
+        <div class="end-attr">— 아폴리온</div>
+        <div class="end-rule"></div>
+        <div class="end-en">The Weight of Honor</div>
+        <div class="end-kr">명예의 무게</div>
+        <div class="end-fin">Fin.</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const pFill = document.getElementById('pFill');
+const hudR = document.getElementById('hudR');
+let cur = 0;
+const total = slides.length;
+
+function pad(n){return String(n).padStart(2,'0');}
+function show(i){
+  if(i<0||i>=total) return;
+  slides[cur].classList.remove('active');
+  cur = i;
+  slides[cur].classList.add('active');
+  pFill.style.width = ((cur+1)/total*100) + '%';
+  hudR.textContent = pad(cur+1) + ' / ' + pad(total);
+}
+function next(){ show(Math.min(cur+1, total-1)); }
+function prev(){ show(Math.max(cur-1, 0)); }
+
+document.addEventListener('keydown', e => {
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ e.preventDefault(); next(); }
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); prev(); }
+  else if(e.key==='Home') show(0);
+  else if(e.key==='End') show(total-1);
+  else if(e.key==='f'||e.key==='F'){
+    if(!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  }
+});
+
+let tx=0;
+document.addEventListener('touchstart', e => tx = e.touches[0].clientX);
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if(Math.abs(dx)>50) dx<0 ? next() : prev();
+});
+
+hudR.textContent = '01 / ' + pad(total);
+</script>
+</body>
+</html>
