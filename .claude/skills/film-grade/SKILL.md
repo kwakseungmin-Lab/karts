@@ -1,21 +1,15 @@
 ---
 name: film-grade
-description: 생성된 씬 영상에 색보정을 적용한다. pipeline/config/color_grades.json의 파라미터를 사용해 씬별 색감 아크를 구현한다.
+description: 생성된 씬 영상에 색보정을 적용한다. short-film-project/plan/color_grades.json의 파라미터로 씬별 색감 아크를 구현한다.
 ---
 
 # /film-grade
 
-씬별 영상에 기획서 색감 곡선에 따른 색보정을 적용한다.
+씬별 영상에 색보정을 적용한다.
 
 ## 사용법
 ```
 /film-grade [씬번호|all]
-```
-
-## 예시
-```
-/film-grade all        # 전체 씬 색보정
-/film-grade 01 02 03   # 씬01-03만 색보정
 ```
 
 ## 색감 아크
@@ -24,13 +18,7 @@ description: 생성된 씬 영상에 색보정을 적용한다. pipeline/config/
 - 씬09-10: 밝고 따뜻함 (채도 80-85%)
 - 씬11-12: 다시 탈색 (채도 20-30%)
 
-## 실행 순서
-1. `short-film-project/final/videos/` 에서 씬 영상 확인
-2. `pipeline/config/color_grades.json` 에서 파라미터 로드
-3. color-grader 에이전트로 FFmpeg 색보정 실행
-4. `/tmp/karts_output/graded/` 에 결과 저장
-
-## 주요 파일
+## 에이전트 및 도구
 - 에이전트: `.claude/agents/color-grader.md`
-- 도구: `pipeline/tools/ffmpeg.py`
-- 설정: `pipeline/config/color_grades.json`
+- 파라미터: `short-film-project/plan/color_grades.json`
+- 기존 도구: `tools/enhancement/color_grade.py`
