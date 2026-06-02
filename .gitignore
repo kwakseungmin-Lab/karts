@@ -6,3 +6,4 @@ outputs/
 *.mp4
 *.mov
 !short-film-project/final/videos/*.mp4
+!short-film-project/final/*.mp4
