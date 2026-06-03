@@ -1,3 +1,4 @@
+import math
 import os
 import shutil
 import json
@@ -13,6 +14,7 @@ from interfaces import *
 from langchain.chat_models import init_chat_model
 from tools.render_backend import RenderBackend
 from utils.provider_presets import resolve_chat_model_config
+from utils.ffmpeg_upscale import upscale_inplace
 
 class Script2VideoPipeline:
 
@@ -28,11 +30,15 @@ class Script2VideoPipeline:
         image_generator,
         video_generator,
         working_dir: str,
+        target_duration_minutes: Optional[float] = None,
+        shot_duration_seconds: int = 8,
     ):
 
         self.chat_model = chat_model
         self.image_generator = image_generator
         self.video_generator = video_generator
+        self.target_duration_minutes = target_duration_minutes
+        self.shot_duration_seconds = shot_duration_seconds
 
         self.character_extractor = CharacterExtractor(chat_model=self.chat_model)
         self.character_portraits_generator = CharacterPortraitsGenerator(image_generator=self.image_generator)
@@ -59,7 +65,24 @@ class Script2VideoPipeline:
             image_generator=backend.image_generator,
             video_generator=backend.video_generator,
             working_dir=config["working_dir"],
+            target_duration_minutes=config.get("target_duration_minutes"),
+            shot_duration_seconds=config.get("shot_duration_seconds", 8),
         )
+
+    def _build_duration_requirement(self, base_requirement: str) -> str:
+        """target_duration_minutes가 설정되어 있으면 필요한 샷 수를 요구사항에 추가."""
+        if not self.target_duration_minutes:
+            return base_requirement
+        required_shots = math.ceil(
+            self.target_duration_minutes * 60 / self.shot_duration_seconds
+        )
+        duration_hint = (
+            f"The video must contain approximately {required_shots} shots "
+            f"to achieve a target duration of {self.target_duration_minutes} minutes "
+            f"(each shot is about {self.shot_duration_seconds} seconds). "
+            "Do not limit the number of scenes or shots — generate as many as needed."
+        )
+        return f"{base_requirement}\n{duration_hint}" if base_requirement else duration_hint
 
     async def __call__(
         self,
@@ -69,6 +92,8 @@ class Script2VideoPipeline:
         characters: List[CharacterInScene] = None,
         character_portraits_registry: Optional[Dict[str, Dict[str, Dict[str, str]]]] = None,
     ):
+        user_requirement = self._build_duration_requirement(user_requirement)
+
         if characters is None:
             characters = await self.extract_characters(script=script)
 
@@ -155,6 +180,10 @@ class Script2VideoPipeline:
             final_video = concatenate_videoclips(video_clips)
             final_video.write_videofile(final_video_path, codec="libx264", preset="medium")
             print(f"☑️ Concatenated videos, saved to {final_video_path}.")
+
+        print(f"🔧 Upscaling to 1920×1080...")
+        upscale_inplace(final_video_path)
+        print(f"☑️ Upscaled to 1920×1080: {final_video_path}.")
 
         return final_video_path
 

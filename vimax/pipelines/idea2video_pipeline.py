@@ -1,3 +1,4 @@
+import math
 import os
 import logging
 from agents import Screenwriter, CharacterExtractor, CharacterPortraitsGenerator
@@ -11,6 +12,7 @@ import yaml
 from langchain.chat_models import init_chat_model
 from tools.render_backend import RenderBackend
 from utils.provider_presets import resolve_chat_model_config
+from utils.ffmpeg_upscale import upscale_inplace
 
 
 class Idea2VideoPipeline:
@@ -20,11 +22,15 @@ class Idea2VideoPipeline:
         image_generator: str,
         video_generator: str,
         working_dir: str,
+        target_duration_minutes: Optional[float] = None,
+        shot_duration_seconds: int = 8,
     ):
         self.chat_model = chat_model
         self.image_generator = image_generator
         self.video_generator = video_generator
         self.working_dir = working_dir
+        self.target_duration_minutes = target_duration_minutes
+        self.shot_duration_seconds = shot_duration_seconds
         os.makedirs(self.working_dir, exist_ok=True)
 
         self.screenwriter = Screenwriter(chat_model=self.chat_model)
@@ -47,7 +53,24 @@ class Idea2VideoPipeline:
             image_generator=backend.image_generator,
             video_generator=backend.video_generator,
             working_dir=config["working_dir"],
+            target_duration_minutes=config.get("target_duration_minutes"),
+            shot_duration_seconds=config.get("shot_duration_seconds", 8),
         )
+
+    def _build_duration_requirement(self, base_requirement: str) -> str:
+        """target_duration_minutes가 설정되어 있으면 씬/샷 수 힌트를 요구사항에 추가."""
+        if not self.target_duration_minutes:
+            return base_requirement
+        required_shots = math.ceil(
+            self.target_duration_minutes * 60 / self.shot_duration_seconds
+        )
+        duration_hint = (
+            f"The final video must be approximately {self.target_duration_minutes} minutes long. "
+            f"Generate enough scenes and shots to reach roughly {required_shots} total shots "
+            f"(each shot is about {self.shot_duration_seconds} seconds). "
+            "Do not artificially limit the number of scenes."
+        )
+        return f"{base_requirement}\n{duration_hint}" if base_requirement else duration_hint
 
     async def extract_characters(
         self,
@@ -199,6 +222,7 @@ class Idea2VideoPipeline:
         user_requirement: str,
         style: str,
     ):
+        user_requirement = self._build_duration_requirement(user_requirement)
 
         story = await self.develop_story(idea=idea, user_requirement=user_requirement)
 
@@ -222,6 +246,8 @@ class Idea2VideoPipeline:
                 image_generator=self.image_generator,
                 video_generator=self.video_generator,
                 working_dir=scene_working_dir,
+                target_duration_minutes=None,  # idea2video는 최상위에서 이미 주입
+                shot_duration_seconds=self.shot_duration_seconds,
             )
             final_video_path = await script2video_pipeline(
                 script=scene_script,
@@ -240,6 +266,11 @@ class Idea2VideoPipeline:
             video_clips = [VideoFileClip(final_video_path)
                            for final_video_path in all_video_paths]
             final_video = concatenate_videoclips(video_clips)
-            final_video.write_videofile(final_video_path)
+            final_video.write_videofile(final_video_path, codec="libx264", preset="medium")
             print(f"☑️ Concatenated videos, saved to {final_video_path}.")
+
+        print(f"🔧 Upscaling to 1920×1080...")
+        upscale_inplace(final_video_path)
+        print(f"☑️ Upscaled to 1920×1080: {final_video_path}.")
+
         return final_video_path
