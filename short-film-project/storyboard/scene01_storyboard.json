@@ -1,0 +1,83 @@
+{
+  "scene_id": "01",
+  "title": "프롤로그: 늑대의 시대",
+  "total_duration_sec": 38,
+  "color_mood": "극도 탈색, 회색. 유일한 색채는 바랜 깃발의 빨강과 금색",
+  "cuts": [
+    {
+      "cut_id": "01",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "extreme wide aerial establishing shot",
+      "subject": "안개 낀 폐허 전장 전경 — 세 진영 깃발이 진흙 속에 처박혀 있음",
+      "action": "카메라가 천천히 낮게 하강하며 전장 잔해를 훑음",
+      "characters": [],
+      "background_ref": "images/03_background_art/battlefield_ruins/bg_10_battlefield_crows_aerial.png",
+      "character_refs": [],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic extreme wide aerial shot, fog-covered medieval battlefield at dawn, desaturated near-grayscale, broken swords and fallen armor scattered across muddy ruins, three faction banners — knight cross, viking raven, samurai chrysanthemum — half-buried in mud, crows circling overhead, dramatic overcast sky with no sun, eerie silence conveyed through stillness, For Honor cinematic trailer style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "Slow aerial descent from bird's eye toward ground level, crows scatter upward as camera descends",
+      "color_grade": {"sat": 0.15, "bright": -0.08, "contrast": 1.1, "blue": 0.05, "red": -0.03}
+    },
+    {
+      "cut_id": "02",
+      "type": "insert",
+      "duration_sec": 3,
+      "camera": "extreme close-up macro",
+      "subject": "검날 위에 앉은 까마귀",
+      "action": "까마귀가 정지 상태, 깃털이 미풍에 흔들림",
+      "characters": [],
+      "background_ref": null,
+      "character_refs": [],
+      "insert_ref": "images/05_cuts/action_cuts/cut_10_crow_blade.png",
+      "frame_prompt": "Cinematic extreme close-up macro shot, a single crow perched on a rusted medieval sword blade half-buried in mud, desaturated near-grayscale, single black feather trembling in slight wind, rust and old blood on blade surface, shallow depth of field, For Honor cinematic style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "Static shot, micro wind movement on crow feather, crow turns head slightly",
+      "color_grade": {"sat": 0.15, "bright": -0.08, "contrast": 1.1, "blue": 0.05, "red": -0.03}
+    },
+    {
+      "cut_id": "03",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "slow tracking wide shot",
+      "subject": "전장 잔해 디테일 — 부러진 검, 찢어진 깃발, 쓰러진 갑옷",
+      "action": "카메라가 좌에서 우로 천천히 트래킹하며 전쟁의 잔해를 훑음",
+      "characters": [],
+      "background_ref": "images/03_background_art/battlefield_ruins/bg_09_battlefield_ruins.png",
+      "character_refs": [],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic slow tracking wide shot, detailed medieval battlefield ruins at ground level, broken swords, torn flags, collapsed armor, shattered shields, all half-buried in mud and fog, extremely desaturated grayscale with only faint red and gold tones on weathered banners, overcast diffused lighting with no directional shadows, atmosphere of melancholy desolation, For Honor cinematic trailer style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "Lateral tracking left to right at ground level, slow deliberate movement, fog drifting across frame",
+      "color_grade": {"sat": 0.15, "bright": -0.08, "contrast": 1.1, "blue": 0.05, "red": -0.03}
+    },
+    {
+      "cut_id": "04",
+      "type": "insert",
+      "duration_sec": 4,
+      "camera": "close-up",
+      "subject": "피 묻은 돌바닥 — 세 진영 문장이 새겨진 깃발 조각들",
+      "action": "정적. 빗방울이 피 위에 떨어짐",
+      "characters": [],
+      "background_ref": null,
+      "character_refs": [],
+      "insert_ref": "images/05_cuts/action_cuts/cut_09_blood_on_stone.png",
+      "frame_prompt": "Cinematic close-up of stone ground with dried blood pooling between cobblestones, fragments of three faction banners — knight heraldry, viking runes, samurai crest — lying in the blood, a single raindrop falls into the red pool creating ripples, extremely desaturated with only the blood retaining a faint red hue, For Honor cinematic style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "Static, single raindrop falls into blood pool, ripple expands slowly",
+      "color_grade": {"sat": 0.15, "bright": -0.08, "contrast": 1.1, "blue": 0.05, "red": -0.03}
+    },
+    {
+      "cut_id": "05",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "wide shot with slow push-in",
+      "subject": "전장 전체 — 안개가 서서히 전장을 삼킴",
+      "action": "카메라가 천천히 전방으로 푸시하며 안개 속으로 들어감. 보이스오버 종료",
+      "characters": [],
+      "background_ref": "images/03_background_art/battlefield_ruins/bg_09_battlefield_ruins.png",
+      "character_refs": [],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic wide shot with slow forward push, fog gradually consuming the entire medieval battlefield, ruins disappearing into white mist, camera slowly moving forward into the fog creating a white-out transition effect, the world dissolving into grey nothingness, deeply melancholic and haunting atmosphere, For Honor cinematic trailer style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "Slow push forward into thickening fog, gradual white-out dissolve toward scene end, prepares transition to Scene 02",
+      "color_grade": {"sat": 0.15, "bright": -0.08, "contrast": 1.1, "blue": 0.05, "red": -0.03}
+    }
+  ]
+}

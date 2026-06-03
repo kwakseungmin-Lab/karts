@@ -1,0 +1,152 @@
+{
+  "scene_id": "09",
+  "title": "처형의 순간 — 멈춘 검",
+  "total_duration_sec": 62,
+  "color_mood": "밝은 아침빛, 차가운 깨끗함, 가장 높은 채도",
+  "cuts": [
+    {
+      "cut_id": "01",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "low angle medium shot",
+      "subject": "에이든이 무릎 꿇은 카게마사 앞에 서서 롱소드를 높이 들어올리는 처형 포지션",
+      "action": "에이든이 롱소드를 머리 위로 치켜들어 처형 포지션. 뒤에서 아침 햇빛이 비쳐 에이든의 실루엣에 림라이트 효과",
+      "characters": ["에이든", "카게마사"],
+      "background_ref": "images/03_background_art/borderlands_bridge/bg_01_bridge_foggy_morning.png",
+      "character_refs": [
+        "images/01_character_sheets/aiden/aiden_01_front_view.png",
+        "images/01_character_sheets/aiden/aiden_06_sword_detail.png",
+        "images/01_character_sheets/kagemasa/kagemasa_01_front_view.png",
+        "images/01_character_sheets/kagemasa/kagemasa_05_armor_detail.png"
+      ],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic low angle medium shot, Aiden, medieval knight in dark steel partial plate armor with chain mail, scarred face, brown hair, longsword with runic engravings, raises sword in execution stance overhead, backlit by cold clean morning sunlight creating rim light silhouette effect, Kagemasa, samurai in deep navy oyoroi armor with gold imperial crest, wide shoulder sode, kneeling on stone bridge floor in submission, cracked menpou mask still on face, ruined stone bridge borderlands setting, fog lifting to clear morning, bright clean cold morning light, highest saturation in film, For Honor cinematic trailer style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "Ultra slow motion upward arc of sword raise, camera tilts up following blade catching sunlight",
+      "color_grade": {"sat": 0.80, "bright": 0.10, "contrast": 1.0, "blue": -0.02, "red": 0.06}
+    },
+    {
+      "cut_id": "02",
+      "type": "insert",
+      "duration_sec": 4,
+      "camera": "extreme close-up",
+      "subject": "카게마사의 금 간 멘포가 천천히 미끄러져 돌바닥에 떨어지는 순간",
+      "action": "멘포가 카게마사의 얼굴에서 미끄러져 돌바닥을 구르며 멈춤. 귀신 얼굴 가면에 금이 간 채로",
+      "characters": [],
+      "background_ref": "images/03_background_art/borderlands_bridge/bg_03_bridge_detail_ruins.png",
+      "character_refs": [],
+      "insert_ref": "images/05_cuts/action_cuts/cut_02_menpou_floor.png",
+      "frame_prompt": "Cinematic extreme close-up insert shot, cracked oni-face menpou mask falling and sliding across stone bridge floor, metal and ceramic hitting stone, hairline cracks spreading across the iron face of the mask, settling on ancient worn stone surface, cold morning light casting sharp shadows, For Honor cinematic trailer style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "Slow motion mask falling, slight rotation as it hits stone, brief ring and slide to rest",
+      "color_grade": {"sat": 0.80, "bright": 0.10, "contrast": 1.0, "blue": -0.02, "red": 0.06}
+    },
+    {
+      "cut_id": "03",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "extreme close-up",
+      "subject": "멘포가 벗겨진 카게마사의 맨 얼굴 — 두려움 없이 고요한 눈",
+      "action": "카게마사의 맨 얼굴이 드러남. 40대 초반의 지친 얼굴, 긴 흑발 상투, 깊고 고요한 눈. 눈을 감지 않고 에이든을 올려다봄",
+      "characters": ["카게마사"],
+      "background_ref": null,
+      "character_refs": [
+        "images/01_character_sheets/kagemasa/kagemasa_04_face_without_mask.png",
+        "images/01_character_sheets/kagemasa/kagemasa_01_front_view.png"
+      ],
+      "insert_ref": "images/05_cuts/action_cuts/cut_04_kagemasa_eyes_fearless.png",
+      "frame_prompt": "Cinematic extreme close-up, Kagemasa, samurai in deep navy oyoroi armor with gold imperial crest, bare face revealed without menpou mask, early 40s weathered face, long black hair tied in topknot, deep calm fearless eyes looking upward, exhausted but resolute, no fear in expression, cold morning light illuminating face, subtle moisture in eyes, For Honor cinematic trailer style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "Static extreme close-up, slow rack focus from background blur to eyes, gaze steadily upward",
+      "color_grade": {"sat": 0.80, "bright": 0.10, "contrast": 1.0, "blue": -0.02, "red": 0.06}
+    },
+    {
+      "cut_id": "04",
+      "type": "insert",
+      "duration_sec": 4,
+      "camera": "extreme close-up",
+      "subject": "에이든의 눈 — 흔들림에서 결의로",
+      "action": "에이든의 투구 아래 보이는 눈. 카게마사의 맨 얼굴을 바라보며 동요함. 눈동자가 떨리다가 서서히 멈춤",
+      "characters": ["에이든"],
+      "background_ref": null,
+      "character_refs": [
+        "images/01_character_sheets/aiden/aiden_04_face_closeup.png",
+        "images/01_character_sheets/aiden/aiden_01_front_view.png"
+      ],
+      "insert_ref": "images/05_cuts/action_cuts/cut_03_aiden_eyes_wavering.png",
+      "frame_prompt": "Cinematic extreme close-up insert shot, Aiden, medieval knight in dark steel partial plate armor with chain mail, eyes visible beneath barbuta helmet, scarred face with vertical scar over left eye, brown hair, eyes showing internal conflict and wavering emotion upon seeing enemy's bare face, pupils slightly dilated, micro-tremor in gaze, cold morning light reflecting in irises, For Honor cinematic trailer style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "Static extreme close-up, eye twitch and waver, slow blink, subtle emotional shift from aggression to recognition",
+      "color_grade": {"sat": 0.80, "bright": 0.10, "contrast": 1.0, "blue": -0.02, "red": 0.06}
+    },
+    {
+      "cut_id": "05",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "medium shot, over-the-shoulder",
+      "subject": "긴 정적 — 에이든이 검을 공중에서 멈추고 카게마사의 얼굴을 내려다보는 정점의 순간",
+      "action": "검이 허공에서 완전히 멈춤. 완전한 정적. 에이든이 카게마사의 눈을 내려다보며 내면의 갈등을 겪는 긴 정적의 순간",
+      "characters": ["에이든", "카게마사"],
+      "background_ref": "images/03_background_art/borderlands_bridge/bg_02_bridge_both_ends.png",
+      "character_refs": [
+        "images/01_character_sheets/aiden/aiden_01_front_view.png",
+        "images/01_character_sheets/aiden/aiden_04_face_closeup.png",
+        "images/01_character_sheets/kagemasa/kagemasa_04_face_without_mask.png",
+        "images/01_character_sheets/kagemasa/kagemasa_01_front_view.png"
+      ],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic medium over-the-shoulder shot from behind Aiden, medieval knight in dark steel partial plate armor with chain mail, scarred face, brown hair, longsword with runic engravings frozen motionless overhead at peak of execution arc, looking down at kneeling Kagemasa, samurai in deep navy oyoroi armor with gold imperial crest, bare unmasked face looking up without fear, bright clean morning light flooding stone bridge, long frozen moment of suspended time, emotional climax of film, For Honor cinematic trailer style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "Completely static frame, no camera movement, held breath tension, sword frozen overhead",
+      "color_grade": {"sat": 0.80, "bright": 0.10, "contrast": 1.0, "blue": -0.02, "red": 0.06}
+    },
+    {
+      "cut_id": "06",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "medium shot, side profile",
+      "subject": "에이든이 롱소드를 천천히 내림 — 칼끝이 돌바닥에 닿는 순간",
+      "action": "에이든이 아주 천천히 롱소드를 내림. 칼끝이 돌바닥에 닿아 금속 소리가 울리고, 에이든이 한 발 뒤로 물러남",
+      "characters": ["에이든", "카게마사"],
+      "background_ref": "images/03_background_art/borderlands_bridge/bg_03_bridge_detail_ruins.png",
+      "character_refs": [
+        "images/01_character_sheets/aiden/aiden_01_front_view.png",
+        "images/01_character_sheets/aiden/aiden_06_sword_detail.png",
+        "images/01_character_sheets/kagemasa/kagemasa_01_front_view.png",
+        "images/01_character_sheets/kagemasa/kagemasa_04_face_without_mask.png"
+      ],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic medium side profile shot, Aiden, medieval knight in dark steel partial plate armor with chain mail, scarred face, brown hair, longsword with runic engravings slowly lowering from overhead execution position down to stone bridge floor, sword tip touching ancient stone, Kagemasa, samurai in deep navy oyoroi armor, still kneeling watching, bright clean morning light on stone bridge, slow deliberate movement of mercy, For Honor cinematic trailer style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "Ultra slow motion sword lowering arc, final moment when tip touches stone in real time with metallic ring",
+      "color_grade": {"sat": 0.80, "bright": 0.10, "contrast": 1.0, "blue": -0.02, "red": 0.06}
+    },
+    {
+      "cut_id": "07",
+      "type": "insert",
+      "duration_sec": 4,
+      "camera": "extreme close-up",
+      "subject": "롱소드 칼끝이 돌바닥에 닿는 인서트컷",
+      "action": "롱소드의 칼끝이 돌바닥에 접촉. 미세한 금속 울림. 에이든이 한 발 물러서는 장화 소리",
+      "characters": [],
+      "background_ref": null,
+      "character_refs": [],
+      "insert_ref": "images/05_cuts/action_cuts/cut_05_sword_tip_stone.png",
+      "frame_prompt": "Cinematic extreme close-up insert shot, medieval longsword tip touching ancient worn stone bridge floor, runic engravings visible on blade near crossguard, cold morning light reflecting off polished blade, small stone dust particles, a step backward visible at edge of frame, symbolic mercy moment, For Honor cinematic trailer style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "Static close-up, sword tip makes contact with stone, single resonant metallic ring fading to silence",
+      "color_grade": {"sat": 0.80, "bright": 0.10, "contrast": 1.0, "blue": -0.02, "red": 0.06}
+    },
+    {
+      "cut_id": "08",
+      "type": "insert",
+      "duration_sec": 8,
+      "camera": "extreme close-up",
+      "subject": "처형 직전 에이든의 눈빛 — 망설임과 결의가 공존하는 극도 클로즈업",
+      "action": "에이든의 눈 극도 클로즈업. 검을 내리기 직전의 찰나. 동공 안에서 망설임의 떨림이 사라지고 무언가를 결심한 단단한 결의로 응고되는 순간. 눈물이 맺히지 않으나 눈빛에 감정의 무게가 담김",
+      "characters": ["에이든"],
+      "background_ref": null,
+      "character_refs": [
+        "images/01_character_sheets/aiden/aiden_04_face_closeup.png",
+        "images/01_character_sheets/aiden/aiden_01_front_view.png"
+      ],
+      "insert_ref": "images/05_cuts/action_cuts/cut_08_aiden_eyes_resolve.png",
+      "frame_prompt": "For Honor cinematic style extreme close-up, Aiden medieval knight, eyes only visible beneath dark steel barbuta helmet, scarred face with vertical scar over left eye, brown hair, eyes showing the final moment before decision — hesitation dissolving into absolute resolve, pupils steady and hardened after trembling, irises catching bright cold clean morning sunlight at highest saturation, emotional weight of honor and mercy condensed into a single gaze, micro-reflections of the bridge and sky in iris, no tears but profound depth of feeling, shallow depth of field with background blurred, warm morning golden rim light on skin above cheekbone, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "Extreme close-up held static, micro-zoom in over 8 seconds from full iris to near-pupil level, the tremor in gaze visibly stills to absolute stillness — a decision crystallizing in real time",
+      "color_grade": {"sat": 0.80, "bright": 0.10, "contrast": 1.0, "blue": -0.02, "red": 0.06}
+    }
+  ]
+}

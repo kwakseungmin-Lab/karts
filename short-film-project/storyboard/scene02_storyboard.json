@@ -1,0 +1,93 @@
+{
+  "scene_id": "02",
+  "title": "에이든의 기억: 블랙스톤의 명령",
+  "total_duration_sec": 40,
+  "color_mood": "탈색, 어두움 — 횃불 오렌지/갈색 + 차가운 블루 빗속 밤",
+  "cuts": [
+    {
+      "cut_id": "01",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "low angle, chiaroscuro wide shot",
+      "subject": "블랙스톤 야영지 — 횃불 아래 지휘관 실루엣과 병사들",
+      "action": "블랙스톤 지휘관이 지도 테이블 앞에 서서 마을을 가리키며 학살 명령 하달",
+      "characters": ["블랙스톤 지휘관", "에이든", "군단 병사들"],
+      "background_ref": "images/03_background_art/ashfeld/bg_04_ashfeld_night_camp.png",
+      "character_refs": [
+        "images/01_character_sheets/aiden/aiden_01_front_view.png",
+        "images/01_character_sheets/aiden/aiden_02_three_quarter_view.png"
+      ],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic low angle wide shot, Blackstone Legion camp at night in rain, Gothic castle wall looming behind, torches and campfire flickering in downpour, Black commander in dark full plate armor with wolf-crest helmet stands at map table, flanked by 5 armored soldiers, chiaroscuro torchlight against blue-cold rain. Background: Aiden (medieval knight in dark steel partial plate armor with chain mail, scarred face, brown hair, longsword with runic engravings) stands as dark silhouette at frame edge, back to torchlight. Highly desaturated — warm orange torchlight only color, rain steam rising from fires. For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
+      "motion_desc": "Slow push-in from wide to medium, rain falling throughout, torches flicker with wind",
+      "color_grade": {"sat": 0.20, "bright": -0.05, "contrast": 1.1, "blue": 0.03, "red": -0.02}
+    },
+    {
+      "cut_id": "02",
+      "type": "insert",
+      "duration_sec": 4,
+      "camera": "tight close-up",
+      "subject": "에이든의 눈 — 투구 안에서 반응",
+      "action": "에이든이 눈을 감음 — 명령을 거부하는 내적 결의",
+      "characters": ["에이든"],
+      "background_ref": null,
+      "character_refs": [
+        "images/01_character_sheets/aiden/aiden_04_face_closeup.png"
+      ],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic extreme close-up, Aiden's eyes inside barbeuta helmet visor, torchlight reflection dancing in pupils, eyes slowly closing in refusal — Aiden (medieval knight in dark steel partial plate armor with chain mail, scarred face, brown hair, left eye bears a vertical scar), rain droplets on helmet metal catching orange torchlight. Desaturated warm tone, deep shadows around eyes, emotional tension. For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
+      "motion_desc": "Static close-up, eyes close slowly over 2 seconds, slight rain tremor on armor",
+      "color_grade": {"sat": 0.20, "bright": -0.05, "contrast": 1.1, "blue": 0.03, "red": -0.02}
+    },
+    {
+      "cut_id": "03",
+      "type": "insert",
+      "duration_sec": 3,
+      "camera": "extreme close-up",
+      "subject": "긁혀 지워진 블랙스톤 문장 — 어깨갑 스크래치 마크",
+      "action": "에이든의 왼쪽 어깨갑 클로즈업 — 칼로 긁혀 지워진 블랙스톤 문장 디테일",
+      "characters": [],
+      "background_ref": null,
+      "character_refs": [],
+      "insert_ref": "images/05_cuts/action_cuts/cut_06_scratch_mark_crest.png",
+      "frame_prompt": "Cinematic extreme close-up insert shot, left pauldron of dark steel armor with deep scratch marks gouged into metal surface where a crest emblem was deliberately scraped away, rain water running through the grooves of the scratches, torchlight catching the raw metal beneath, rust at edges. This is the moment of identity rejection. Desaturated, only orange torchlight warmth on metal. For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
+      "motion_desc": "Static extreme close-up, rain beads roll down armor surface into scratch grooves",
+      "color_grade": {"sat": 0.20, "bright": -0.05, "contrast": 1.1, "blue": 0.03, "red": -0.02}
+    },
+    {
+      "cut_id": "04",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "over-the-shoulder medium pull-back",
+      "subject": "에이든이 돌아서서 어둠 속으로 걸어나감",
+      "action": "에이든이 지휘관에게 등을 돌리고 야영지 밖 어둠을 향해 걸어감. 뒤에서 지휘관이 검을 뽑는 금속음. 에이든은 멈추지 않음",
+      "characters": ["에이든", "블랙스톤 지휘관"],
+      "background_ref": "images/03_background_art/ashfeld/bg_04_ashfeld_night_camp.png",
+      "character_refs": [
+        "images/01_character_sheets/aiden/aiden_01_front_view.png",
+        "images/01_character_sheets/aiden/aiden_03_back_view.png"
+      ],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic over-the-shoulder medium pull-back shot, Aiden (medieval knight in dark steel partial plate armor with chain mail, brown hair, longsword sheathed on back) turns away from the Blackstone commander and walks toward darkness beyond the camp. Camera slowly pulls back as Aiden recedes into shadow. Behind him the commander raises a flamberge sword in threat. Rain soaking everything, torchlight falls off as Aiden moves into darkness. Desaturated, chiaroscuro, dramatic. For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
+      "motion_desc": "Camera slowly pulls back and slightly rises as Aiden walks away, figure shrinking into darkness",
+      "color_grade": {"sat": 0.20, "bright": -0.05, "contrast": 1.1, "blue": 0.03, "red": -0.02}
+    },
+    {
+      "cut_id": "05",
+      "type": "transition",
+      "duration_sec": 5,
+      "camera": "symmetrical medium wide shot",
+      "subject": "에이든이 고딕 성채 문을 지나 밖으로 나감 — 성문이 닫힘",
+      "action": "에이든이 비를 맞으며 고딕 아치 성문을 통과해 밖으로 나감. 뒤에서 무거운 성문이 천천히 닫힘. 에이든은 돌아보지 않음",
+      "characters": ["에이든"],
+      "background_ref": "images/03_background_art/ashfeld/bg_05_ashfeld_gothic_gate.png",
+      "character_refs": [
+        "images/01_character_sheets/aiden/aiden_01_front_view.png"
+      ],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic symmetrical medium wide shot, Aiden (medieval knight in dark steel partial plate armor with chain mail, scarred face, brown hair, longsword with runic engravings) walks through massive Gothic stone archway gate of Ashfeld castle into rain-soaked darkness beyond. Gothic arch frames the shot perfectly. Behind Aiden the heavy wooden gate slowly swings closed. Rain pouring down the stone walls, torchlight from inside fading as gate closes. Figure walking toward camera into the unknown. Flashback ends — cold blue rain outside vs warm orange torchlight inside. Desaturated, atmospheric. For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
+      "motion_desc": "Static symmetrical camera, gate slowly closes behind Aiden, light from inside narrows to nothing, fade to dark",
+      "color_grade": {"sat": 0.20, "bright": -0.05, "contrast": 1.1, "blue": 0.03, "red": -0.02}
+    }
+  ]
+}
