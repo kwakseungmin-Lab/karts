@@ -1,0 +1,37 @@
+# ViMax — OpenAI 전용 설정 (GPT-4o + GPT Image + Sora)
+# OPENAI_API_KEY 환경변수 하나로 모든 서비스 사용 가능
+
+chat_model:
+  init_args:
+    model: gpt-4o
+    model_provider: openai
+    api_key:              # 비워두면 OPENAI_API_KEY 환경변수 사용
+    base_url:             # 비워두면 OpenAI 기본 엔드포인트 사용
+  # OpenAI Tier-4 기준 rate limit
+  max_requests_per_minute: 500
+  max_requests_per_day: 10000
+
+image_generator:
+  class_path: tools.ImageGeneratorGptImageOpenAIAPI
+  init_args:
+    api_key:              # 비워두면 OPENAI_API_KEY 환경변수 사용
+    model: gpt-image-1
+  # gpt-image-1 rate limit (기본 티어)
+  max_requests_per_minute: 5
+  max_requests_per_day: 200
+
+video_generator:
+  class_path: tools.VideoGeneratorSoraOpenAIAPI
+  init_args:
+    api_key:              # 비워두면 OPENAI_API_KEY 환경변수 사용
+    model: sora-2
+  # Sora rate limit (보수적)
+  max_requests_per_minute: 2
+  max_requests_per_day: 20
+
+working_dir: .working_dir/idea2video_sora
+
+# 목표 영상 길이 설정 (5~10분 범위에서 조정)
+# null로 설정하면 AI가 자체 판단 (기본 2~3분 수준)
+target_duration_minutes: 7
+shot_duration_seconds: 8

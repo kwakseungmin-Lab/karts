@@ -1,12 +1,14 @@
-.env
-*.env
+# Python-generated files
 __pycache__/
-*.py[cod]
-outputs/
-*.mp4
-*.mov
-!short-film-project/final/videos/*.mp4
-!short-film-project/final/*.mp4
-!vimax/output/*.mp4
-.claude/settings.local.json
-CLAUDE.local.md
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# working directory
+.working_dir/
+.test/
