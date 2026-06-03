@@ -9,9 +9,9 @@ tools: Bash, Read
 씬별 색보정을 적용하는 전문 에이전트.
 
 ## 역할
-- `short-film-project/final/videos/` 입력
+- `short-film-project/final/videos/` 입력 (1920×1080)
 - `short-film-project/plan/color_grades.json` 의 씬별 파라미터 적용
-- 결과를 `/tmp/karts_output/graded/` 저장
+- 결과를 `short-film-project/final/graded/` 저장 (1920×1080 유지)
 
 ## 색감 아크 (기획서 기준)
 ```

@@ -38,23 +38,54 @@ pipeline/
 └── config/               # 씬별 설정 (색보정 파라미터)
 ```
 
-## 영상 규격
-- 해상도: 1280x720 (720p)
+## 영상/이미지 규격
+- **최종 해상도**: 1920×1080 (Full HD)
 - 씬당 길이: 8초
 - 트랜지션: 0.8초 크로스페이드
 - 출력 코덱: H.264 (yuv420p, QuickTime 호환)
 
+### API별 생성 해상도 → 최종 스케일
+| 단계 | 생성 크기 | 최종 처리 |
+|------|----------|---------|
+| GPT Image (스토리보드/컷 이미지) | 1536×1024 | 16:9 크롭 → 1920×1080 |
+| Sora 영상 | 1792×1024 | FFmpeg 1920×1080 업스케일 |
+| FFmpeg 최종 출력 | 1920×1080 | 네이티브 |
+
+## 파이프라인 구조 (전체)
+```
+기존 컨셉아트 + film_plan.md
+  → [storyboard-artist]  → storyboard/*.json + 스토리보드 이미지
+  → [frame-artist]       → final/frames/scene{N}_cut{M}.png (1920×1080)
+  → [cinematographer]    → final/videos/scene{N}_cut{M}.mp4 (Sora 1792×1024 → 1920×1080)
+  → [colorist]           → final/graded/scene{N}_cut{M}.mp4
+  → [editor]             → final/the_weight_of_honor.mp4
+  → [film-critic]        → final/review_report.md
+```
+
 ## 주요 도구
-- **Sora (OpenAI)**: 이미지→영상 (sora-2 모델)
+- **GPT Image (gpt-image-1)**: 스토리보드·컷 이미지 생성
+- **Sora (OpenAI)**: 이미지→영상 (sora-2, 1792×1024)
 - **Higgsfield CLI**: 영상 생성 대안 (veo3_1_lite, seedance1_5)
-- **FFmpeg**: 색보정, 편집, 이어붙이기
+- **FFmpeg**: 색보정, 스케일, 편집, 이어붙이기
 
 ## 주의사항
 - Higgsfield Ultra 플랜: 동시 Job 최대 8개
-- Sora 지원 크기: 720x1280, 1280x720, 1024x1792, 1792x1024
+- Sora 지원 크기: 720×1280, 1280×720, 1024×1792, **1792×1024** (사용)
 - Sora 지원 길이: 4초, 8초, 12초
+- GPT Image 지원 크기: 1024×1024, 1536×1024, 1024×1536
 - Veo 모델은 폭력적 이미지 NSFW 필터 있음
 - 최종 영상은 `-pix_fmt yuv420p -movflags +faststart` 필수 (QuickTime 호환)
+- 스케일 업: `ffmpeg -vf scale=1920:1080:flags=lanczos`
+
+## 에이전트 목록
+| 에이전트 | 역할 | 모델 |
+|---------|------|------|
+| storyboard-artist | 기획안+이미지 → 스토리보드 JSON+이미지 | Sonnet |
+| frame-artist | 스토리보드 컷 → 구체화 이미지 (GPT Image) | Haiku |
+| cinematographer | 이미지 → 영상 (Sora/Higgsfield) | Haiku |
+| colorist | FFmpeg 색보정 | Haiku |
+| editor | 최종 편집·조립 | Sonnet |
+| film-critic | 기획안 대비 검수·평가 | Sonnet |
 
 ## 스킬 목록
 - `/film-generate` — 씬 이미지 → 영상 생성 (Sora/Higgsfield)

@@ -25,6 +25,7 @@ ffmpeg -y -i scene01.mp4 -i scene02.mp4 ... \
 ```
 
 ## 출력 규격
+- 해상도: **1920×1080 (Full HD)**
 - 코덱: H.264, CRF 18
 - 픽셀 포맷: `yuv420p` (QuickTime 호환 필수)
 - 스트리밍: `-movflags +faststart`

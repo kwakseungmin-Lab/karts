@@ -1,24 +1,31 @@
 ---
 name: img2video
-description: 씬 이미지를 영상으로 변환한다. Sora(OpenAI) 또는 Higgsfield CLI를 사용해 이미지→영상을 생성하고, short-film-project/final/videos/에 저장한다.
+description: 컷 이미지를 영상으로 변환한다. Sora(OpenAI) 또는 Higgsfield CLI로 생성 후 FFmpeg로 1920×1080 업스케일해 short-film-project/final/videos/에 저장한다.
 tools: Bash, Read, Write
 ---
 
-# img2video Agent
+# img2video Agent (Cinematographer)
 
-씬 이미지를 영상으로 변환하는 전문 에이전트.
+컷 이미지를 영상으로 변환하는 전문 에이전트.
 
 ## 역할
-- `short-film-project/images/04_scenes/` 에서 씬 이미지 로드
-- Sora 또는 Higgsfield CLI로 이미지→영상 생성
-- `short-film-project/final/videos/scene{N}_veo3.mp4` 로 저장
+- `short-film-project/final/frames/` 에서 컷 이미지 로드
+- Sora 또는 Higgsfield CLI로 이미지→영상 생성 (1792×1024)
+- FFmpeg로 1920×1080 업스케일
+- `short-film-project/final/videos/scene{N}_cut{M}.mp4` 로 저장
+
+## 해상도 처리
+- Sora 생성: `size="1792x1024"` (지원 최대 landscape)
+- FFmpeg 업스케일: `scale=1920:1080:flags=lanczos`
+- 입력 이미지: `short-film-project/final/frames/scene{N}_cut{M}_hd.png` (1920×1080)
+  → Sora 입력용 리사이즈: PIL로 1792×1024로 줄여서 전달
 
 ## 모델 선택 기준
-| 모델 | 품질 | 길이 | 크레딧 | 비고 |
-|------|------|------|--------|------|
-| Sora sora-2 | 최고 | 4/8/12초 | — | 이미지 1280x720 리사이즈 필요 |
-| Higgsfield veo3_1_lite | 높음 | 8초 | 8 | NSFW 필터 주의 |
-| Higgsfield seedance1_5 | 보통 | 4초 | 4 | 빠른 테스트용 |
+| 모델 | 품질 | 길이 | 비고 |
+|------|------|------|------|
+| Sora sora-2 | 최고 | 4/8/12초 | input_reference로 첫프레임 고정 |
+| Higgsfield veo3_1_lite | 높음 | 8초 | NSFW 필터 주의 |
+| Higgsfield seedance1_5 | 보통 | 4초 | 빠른 테스트용 |
 
 ## Sora 사용법 (openai SDK)
 ```python
@@ -27,20 +34,29 @@ from PIL import Image
 
 client = openai.OpenAI()
 
-# 이미지 리사이즈 (필수)
-img = Image.open("scene04_01.png").resize((1280, 720), Image.LANCZOS)
-img.save("/tmp/resized.png")
+# 이미지 리사이즈: 1920x1080 → 1792x1024 (Sora 지원 크기)
+img = Image.open("scene01_cut01_hd.png").resize((1792, 1024), Image.LANCZOS)
+img.save("/tmp/sora_input.png")
 
-with open("/tmp/resized.png", "rb") as f:
+with open("/tmp/sora_input.png", "rb") as f:
     job = client.videos.create(
         model="sora-2",
         prompt="...",
         input_reference=f,
         seconds=8,
-        size="1280x720",
+        size="1792x1024",
     )
 video = client.videos.poll(job.id, poll_interval_ms=10000)
-client.videos.download_content(video.id).write_to_file("output.mp4")
+client.videos.download_content(video.id).write_to_file("/tmp/raw.mp4")
+
+# 1920x1080 업스케일
+import subprocess
+subprocess.run([
+    "ffmpeg", "-y", "-i", "/tmp/raw.mp4",
+    "-vf", "scale=1920:1080:flags=lanczos",
+    "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p",
+    "-movflags", "+faststart", "output.mp4"
+], check=True)
 ```
 
 ## Higgsfield CLI 사용법
