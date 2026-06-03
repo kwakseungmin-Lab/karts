@@ -1,0 +1,29 @@
+# ViMax script2video — OpenAI 전용 설정 (GPT-4o + GPT Image + Sora)
+# OPENAI_API_KEY 환경변수 하나로 모든 서비스 사용 가능
+
+chat_model:
+  init_args:
+    model: gpt-4o
+    model_provider: openai
+    api_key:
+    base_url:
+  max_requests_per_minute: 500
+  max_requests_per_day: 10000
+
+image_generator:
+  class_path: tools.ImageGeneratorGptImageOpenAIAPI
+  init_args:
+    api_key:
+    model: gpt-image-1
+  max_requests_per_minute: 5
+  max_requests_per_day: 200
+
+video_generator:
+  class_path: tools.VideoGeneratorSoraOpenAIAPI
+  init_args:
+    api_key:
+    model: sora-2
+  max_requests_per_minute: 2
+  max_requests_per_day: 20
+
+working_dir: .working_dir/script2video_sora
