@@ -1,0 +1,133 @@
+{
+  "scene_id": "06",
+  "title": "1차 교전: 강철의 충돌",
+  "total_duration_sec": 52,
+  "color_mood": "블루-그레이, 안개 걷히며 따뜻한 빛 유입, 피의 붉은색만 선명",
+  "cuts": [
+    {
+      "cut_id": "01",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "medium wide shot, dynamic orbiting",
+      "subject": "카게마사의 선공 — 노다치 상단 내려치기",
+      "action": "카게마사가 상단에서 노다치를 강하게 내려치고, 에이든이 롱소드로 패리",
+      "characters": ["에이든", "카게마사"],
+      "background_ref": "images/03_background_art/borderlands_bridge/bg_01_bridge_foggy_morning.png",
+      "character_refs": [
+        "images/01_character_sheets/aiden/aiden_01_front_view.png",
+        "images/01_character_sheets/kagemasa/kagemasa_01_front_view.png"
+      ],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic medium wide dynamic orbiting shot, on a ruined stone bridge, Kagemasa samurai in deep navy oyoroi armor with gold imperial crest and wide shoulder sode swings nodachi with cherry blossom tsuba downward from high stance, Aiden medieval knight in dark steel partial plate armor with chain mail raises longsword with runic engravings to parry, morning fog beginning to lift, cool blue-grey desaturated tone, For Honor cinematic trailer style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "카메라가 두 전사를 중심으로 궤도를 그리며 회전. 첫 충돌 직전에 슬로우모션 진입",
+      "color_grade": {"sat": 0.50, "bright": 0.00, "contrast": 1.2, "blue": 0.05, "red": 0.00}
+    },
+    {
+      "cut_id": "02",
+      "type": "insert",
+      "duration_sec": 4,
+      "camera": "extreme close-up, slow motion",
+      "subject": "두 검날의 충돌 — 불꽃과 금속 파편",
+      "action": "롱소드와 노다치 검날이 부딪히며 불꽃과 금속 파편이 사방으로 튐. 슬로우모션",
+      "characters": [],
+      "background_ref": null,
+      "character_refs": [],
+      "insert_ref": "images/05_cuts/action_cuts/cut_01_swords_x_sparks.png",
+      "frame_prompt": "Cinematic extreme close-up slow motion insert, two sword blades clashing, longsword and nodachi crossed in impact, sparks and metal shards exploding outward, dramatic orange spark flash against cool blue-grey background, ultra sharp detail on blade edges, For Honor cinematic style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "극도의 슬로우모션. 금속 충돌음이 저음으로 늘어짐. 불꽃이 프레임 밖으로 흩어짐",
+      "color_grade": {"sat": 0.50, "bright": 0.00, "contrast": 1.2, "blue": 0.05, "red": 0.00}
+    },
+    {
+      "cut_id": "03",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "medium handheld, POV intercut",
+      "subject": "연속 교환 — 카게마사의 횡베기 회피 및 에이든의 가드 브레이크",
+      "action": "카게마사의 넓은 횡베기를 에이든이 몸을 낮춰 회피하고 어깨로 밀치기(가드 브레이크) 실행. 카게마사가 비틀거리나 즉각 반격 태세",
+      "characters": ["에이든", "카게마사"],
+      "background_ref": "images/03_background_art/borderlands_bridge/bg_02_bridge_both_ends.png",
+      "character_refs": [
+        "images/01_character_sheets/aiden/aiden_01_front_view.png",
+        "images/01_character_sheets/aiden/aiden_04_face_closeup.png",
+        "images/01_character_sheets/kagemasa/kagemasa_01_front_view.png"
+      ],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic medium handheld shot, Aiden medieval knight in dark steel partial plate armor with chain mail, scarred face, brown hair ducks under wide horizontal swing and drives shoulder into opponent, Kagemasa samurai in deep navy oyoroi armor stumbles back on ruined stone bridge, morning fog partially lifted, side light catching blade reflections, cool desaturated blue-grey tone with slight warmth entering from clearing fog, For Honor cinematic trailer style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "핸드헬드 카메라. 에이든 시점(POV)으로 전환했다가 풀아웃. 빠른 편집 리듬",
+      "color_grade": {"sat": 0.50, "bright": 0.00, "contrast": 1.2, "blue": 0.05, "red": 0.00}
+    },
+    {
+      "cut_id": "04",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "medium tracking shot, 360 orbit",
+      "subject": "카게마사의 노다치 리치 공세 — 에이든을 밀어붙이는 장거리 연속 베기",
+      "action": "카게마사가 노다치의 긴 리치를 활용해 에이든을 다리 난간 쪽으로 연속 밀어붙임. 에이든이 연속 패리로 버팀",
+      "characters": ["에이든", "카게마사"],
+      "background_ref": "images/03_background_art/borderlands_bridge/bg_03_bridge_detail_ruins.png",
+      "character_refs": [
+        "images/01_character_sheets/aiden/aiden_01_front_view.png",
+        "images/01_character_sheets/kagemasa/kagemasa_01_front_view.png",
+        "images/01_character_sheets/kagemasa/kagemasa_06_nodachi_detail.png"
+      ],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic medium 360-degree tracking shot, Kagemasa samurai in deep navy oyoroi armor with wide shoulder sode presses forward with long nodachi sweeping strikes, Aiden medieval knight in dark steel partial plate armor retreats parrying desperately, stone bridge railing visible behind Aiden, morning light now entering from side glinting on blades, slightly warmer tone than earlier, residual fog wisps on bridge, For Honor cinematic trailer style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "카메라가 두 전사 주변을 360도 회전하는 다이나믹 오비팅. 에이든이 난간에 밀리는 순간 정면 앵글",
+      "color_grade": {"sat": 0.50, "bright": 0.00, "contrast": 1.2, "blue": 0.05, "red": 0.00}
+    },
+    {
+      "cut_id": "05",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "medium close-up, POV feint",
+      "subject": "에이든의 페인트 공격 — 상단 위협 후 하단 베기로 카게마사 허벅지 스침",
+      "action": "에이든이 상단 공격을 위협하다가 순간 하단으로 전환해 카게마사 허벅지를 검날로 스침. 첫 피. 카게마사가 물러서며 재정비",
+      "characters": ["에이든", "카게마사"],
+      "background_ref": "images/03_background_art/borderlands_bridge/bg_01_bridge_foggy_morning.png",
+      "character_refs": [
+        "images/01_character_sheets/aiden/aiden_01_front_view.png",
+        "images/01_character_sheets/kagemasa/kagemasa_01_front_view.png",
+        "images/01_character_sheets/kagemasa/kagemasa_05_armor_detail.png"
+      ],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic medium close-up POV feint shot, Aiden medieval knight in dark steel partial plate armor feints high with longsword then drops low to slash, Kagemasa samurai in deep navy oyoroi armor reacts too late, blade grazes thigh armor, first blood — small red streak on navy armor plate, Kagemasa steps back to regroup on stone bridge, morning light from side, cool blue-grey with red of blood as only saturated color, For Honor cinematic trailer style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "에이든 시점(POV)에서 페인트 모션 후 피격 클로즈업. 카게마사가 물러서며 카메라 풀아웃",
+      "color_grade": {"sat": 0.50, "bright": 0.00, "contrast": 1.2, "blue": 0.05, "red": 0.00}
+    },
+    {
+      "cut_id": "06",
+      "type": "insert",
+      "duration_sec": 4,
+      "camera": "extreme close-up",
+      "subject": "돌바닥 위의 첫 피",
+      "action": "카게마사의 허벅지에서 떨어진 핏방울이 다리 석조 바닥에 번짐",
+      "characters": [],
+      "background_ref": null,
+      "character_refs": [],
+      "insert_ref": "images/05_cuts/action_cuts/cut_09_blood_on_stone.png",
+      "frame_prompt": "Cinematic extreme close-up insert, blood dripping and spreading on weathered stone bridge surface, deep red against cold grey stone texture, small droplets and thin streak pattern, early morning cool light, desaturated tone except vivid red blood, For Honor cinematic style, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "정적. 핏방울이 천천히 번지는 미세한 움직임만. 짧은 정적 후 다음 씬으로 전환",
+      "color_grade": {"sat": 0.50, "bright": 0.00, "contrast": 1.2, "blue": 0.05, "red": 0.00}
+    },
+    {
+      "cut_id": "07",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "low angle wide shot, dramatic push-in",
+      "subject": "1차 교전 클라이맥스 — 에이든과 카게마사의 극적인 검 교차 충돌",
+      "action": "에이든과 카게마사가 동시에 전력으로 돌진, 두 검이 정면으로 교차하는 순간 서로 맞잡힌 채 힘을 겨루며 눈이 마주침. 두 전사의 결의와 긴장이 폭발하는 클라이맥스 정지 순간",
+      "characters": ["에이든", "카게마사"],
+      "background_ref": "images/03_background_art/borderlands_bridge/bg_01_bridge_foggy_morning.png",
+      "character_refs": [
+        "images/01_character_sheets/aiden/aiden_01_front_view.png",
+        "images/01_character_sheets/aiden/aiden_04_face_closeup.png",
+        "images/01_character_sheets/kagemasa/kagemasa_01_front_view.png",
+        "images/01_character_sheets/kagemasa/kagemasa_04_face_closeup.png"
+      ],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic low angle wide dramatic push-in shot, Aiden medieval knight in dark steel partial plate armor with chain mail and Kagemasa samurai in deep navy oyoroi armor with gold imperial crest charge toward each other and lock swords in climactic cross-blade clash, longsword with runic engravings crossed against cherry blossom tsuba nodachi, faces inches apart locked in intense eye contact, sweat and exhaustion visible, morning fog behind both warriors, dramatic side rim lighting catching blades and armor details, cool blue-grey desaturated tone with slight warm backlight, For Honor cinematic trailer style epic climax composition, photorealistic, 1920x1080, 16:9 composition",
+      "motion_desc": "로우 앵글에서 카메라가 빠르게 두 전사에게 밀고 들어오다 검 교차 순간 극적으로 정지. 슬로우모션으로 전환되며 두 전사의 눈 마주침을 클로즈업",
+      "color_grade": {"sat": 0.50, "bright": 0.00, "contrast": 1.2, "blue": 0.05, "red": 0.00}
+    }
+  ]
+}

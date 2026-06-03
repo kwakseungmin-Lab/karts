@@ -25,9 +25,9 @@ MAX_WAIT = 600
 
 _SORA_DURATION_SUPPORTED = (4, 8, 12)
 _SORA_ASPECT_TO_SIZE = {
-    "16:9": "1792x1024",
-    "9:16": "1024x1792",
-    "1:1": "1024x1024",
+    "16:9": "1280x720",
+    "9:16": "720x1280",
+    "1:1": "1280x720",
 }
 
 
@@ -150,15 +150,34 @@ class VideoGeneratorSoraOpenAIAPI:
         raise RuntimeError("Sora 생성 타임아웃 (10분 초과)")
 
     async def _download(self, video_id: str) -> VideoOutput:
-        resp = await asyncio.to_thread(
-            requests.get,
-            f"{SORA_GENERATIONS_URL}/{video_id}/content/video",
-            headers={"Authorization": f"Bearer {self.api_key}"},
-            timeout=120,
-            stream=True,
-        )
-        if resp.status_code != 200:
-            raise RuntimeError(f"Sora 다운로드 실패 {resp.status_code}: {resp.text[:200]}")
-        video_bytes = b"".join(resp.iter_content(chunk_size=8192))
-        logging.info(f"  Sora 다운로드 완료 ({len(video_bytes)//1024}KB)")
-        return VideoOutput(fmt="bytes", ext="mp4", data=video_bytes)
+        import openai as _openai
+
+        client = _openai.OpenAI(api_key=self.api_key)
+
+        def _fetch() -> bytes:
+            response = client.videos.download_content(video_id)
+            return b"".join(response.iter_bytes())
+
+        try:
+            video_bytes = await asyncio.to_thread(_fetch)
+            logging.info(f"  Sora 다운로드 완료 ({len(video_bytes)//1024}KB)")
+            return VideoOutput(fmt="bytes", ext="mp4", data=video_bytes)
+        except Exception as sdk_err:
+            logging.warning(f"SDK 다운로드 실패 ({sdk_err}), REST fallback 시도...")
+            # generations/{id}/content 엔드포인트 fallback
+            for path in (
+                f"{SORA_GENERATIONS_URL}/{video_id}/content",
+                f"https://api.openai.com/v1/videos/generations/{video_id}/content/video",
+            ):
+                resp = await asyncio.to_thread(
+                    requests.get,
+                    path,
+                    headers={"Authorization": f"Bearer {self.api_key}"},
+                    timeout=120,
+                    stream=True,
+                )
+                if resp.status_code == 200:
+                    video_bytes = b"".join(resp.iter_content(chunk_size=8192))
+                    logging.info(f"  fallback 다운로드 완료 ({len(video_bytes)//1024}KB) via {path}")
+                    return VideoOutput(fmt="bytes", ext="mp4", data=video_bytes)
+            raise RuntimeError(f"Sora 다운로드 실패: SDK + REST fallback 모두 실패") from sdk_err

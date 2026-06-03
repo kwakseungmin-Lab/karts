@@ -354,12 +354,27 @@ class Script2VideoPipeline:
                 frame_paths.append(os.path.join(self.working_dir, "shots", f"{shot_description.idx}", "last_frame.png"))
 
             print(f"🎬 Starting video generation for shot {shot_description.idx}...")
-            video_output = await self.video_generator.generate_single_video(
-                prompt=shot_description.motion_desc + "\n" + shot_description.audio_desc,
-                reference_image_paths=frame_paths,
-            )
-            video_output.save(video_path)
-            print(f"☑️ Generated video for shot {shot_description.idx}, saved to {video_path}.")
+            try:
+                video_output = await self.video_generator.generate_single_video(
+                    prompt=shot_description.motion_desc + "\n" + shot_description.audio_desc,
+                    reference_image_paths=frame_paths,
+                )
+                video_output.save(video_path)
+                print(f"☑️ Generated video for shot {shot_description.idx}, saved to {video_path}.")
+            except RuntimeError as e:
+                if "moderation" in str(e).lower() or "blocked" in str(e).lower() or "failed" in str(e).lower():
+                    print(f"⚠️  Shot {shot_description.idx} blocked by moderation — falling back to still image video.")
+                    import subprocess as _sp
+                    _sp.run([
+                        "ffmpeg", "-y", "-loop", "1", "-i", frame_paths[0],
+                        "-t", str(getattr(shot_description, 'duration', 8)),
+                        "-vf", "scale=1280:720:flags=lanczos,format=yuv420p",
+                        "-c:v", "libx264", "-preset", "fast", "-crf", "23",
+                        "-movflags", "+faststart", video_path,
+                    ], check=True, capture_output=True)
+                    print(f"☑️  Still-image fallback saved for shot {shot_description.idx}.")
+                else:
+                    raise
 
     async def generate_frame_for_single_shot(
         self,

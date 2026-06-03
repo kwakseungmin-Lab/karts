@@ -1,0 +1,101 @@
+{
+  "scene_id": "12",
+  "title": "에필로그: 안개 속으로",
+  "total_duration_sec": 38,
+  "color_mood": "극도 탈색, 블루-그레이 회귀, 전쟁의 순환",
+  "cuts": [
+    {
+      "cut_id": "01",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "extreme wide static shot — locked off, low angle from bridge level",
+      "subject": "안개 낀 경계의 다리 전경 — 에이든과 카게마사 실루엣이 각각 다리 양 끝으로 멀어짐",
+      "action": "두 실루엣이 안개 속으로 천천히 사라짐",
+      "characters": ["에이든(실루엣)", "카게마사(실루엣)"],
+      "background_ref": "images/03_background_art/borderlands_bridge/bg_02_bridge_both_ends.png",
+      "character_refs": [
+        "images/01_character_sheets/aiden/aiden_01_front_view.png",
+        "images/01_character_sheets/kagemasa/kagemasa_01_front_view.png"
+      ],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic extreme wide static shot, locked off, both ends of a ruined stone bridge visible, Aiden (medieval knight in dark steel partial plate armor with chain mail, longsword sheathed on back) walking away left into fog, Kagemasa (samurai in deep navy oyoroi armor with gold imperial crest, nodachi sheathed) walking away right into fog, two silhouettes diverging symmetrically, heavy fog swallowing both figures, desaturated blue-grey tone, overcast sky, For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
+      "motion_desc": "Static locked camera, two silhouettes walk in opposite directions and gradually disappear into fog",
+      "color_grade": {"sat": 0.20, "bright": -0.05, "contrast": 1.1, "blue": 0.06, "red": -0.03}
+    },
+    {
+      "cut_id": "02",
+      "type": "insert",
+      "duration_sec": 4,
+      "camera": "crane up / slow aerial ascent from bridge level to bird's eye view",
+      "subject": "다리 전체를 내려다보는 조감 — 전투의 흔적, 빈 다리",
+      "action": "카메라가 천천히 상승하며 다리 전체 노출, 히스무어 풍경이 드러남",
+      "characters": [],
+      "background_ref": "images/03_background_art/borderlands_bridge/bg_01_bridge_foggy_morning.png",
+      "character_refs": [],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic slow crane-up aerial ascent, bird's eye view descending on ruined stone bridge, empty bridge with battle traces — blood stains, metal fragments, broken mask pieces on stone floor, fog on both sides of bridge, left side shows gothic Ashfeld castle silhouette and green forest, right side shows Myre misty wetlands and bamboo silhouette, two worlds divided by one bridge, extreme desaturation blue-grey, overcast, For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
+      "motion_desc": "Slow crane-up from bridge level to aerial bird's eye view, fog fills frame edges",
+      "color_grade": {"sat": 0.20, "bright": -0.05, "contrast": 1.1, "blue": 0.06, "red": -0.03}
+    },
+    {
+      "cut_id": "03",
+      "type": "insert",
+      "duration_sec": 3,
+      "camera": "extreme close-up — floor level insert",
+      "subject": "돌바닥 위의 전투 흔적 — 깨진 멘포, 피, 검날 긁힌 자국",
+      "action": "정지. 미세한 바람에 먼지가 흩어짐",
+      "characters": [],
+      "background_ref": null,
+      "character_refs": [],
+      "insert_ref": "images/05_cuts/action_cuts/cut_02_menpou_floor.png",
+      "frame_prompt": "Extreme close-up insert shot, broken cracked menpo (samurai demon face mask) lying on ancient stone floor, blood spreading on stone, sword scratch marks on cobblestone, metal fragments, shallow depth of field, desaturated blue-grey, single dust particle drifting in light, For Honor cinematic style, photorealistic, 1920x1080 16:9",
+      "motion_desc": "Static, micro dust drift in ambient light, no camera movement",
+      "color_grade": {"sat": 0.20, "bright": -0.05, "contrast": 1.1, "blue": 0.06, "red": -0.03}
+    },
+    {
+      "cut_id": "04",
+      "type": "transition",
+      "duration_sec": 5,
+      "camera": "ultra-wide aerial bird's eye — extreme pull-back",
+      "subject": "최종 와이드샷 — 히스무어 전경, 양쪽 언덕에 각 진영의 군대 행군 실루엣",
+      "action": "양쪽 언덕에서 군대 행렬이 움직임. 전쟁은 계속된다",
+      "characters": [],
+      "background_ref": "images/03_background_art/battlefield_ruins/bg_10_battlefield_crows_aerial.png",
+      "character_refs": [],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic ultra-wide aerial bird's eye view, extreme pull-back reveal, Heathmoor landscape, ancient stone bridge tiny in center frame, left hill silhouettes of knight army marching (Iron Legion banners), right hill silhouettes of samurai army advancing (Dawn Empire banners), fog filling the valley between, overcast grey sky, crows circling above, two armies converging toward the same bridge, desaturated blue-grey, epic and tragic, For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
+      "motion_desc": "Slow camera pull-back revealing full scale of landscape and converging armies",
+      "color_grade": {"sat": 0.20, "bright": -0.05, "contrast": 1.1, "blue": 0.06, "red": -0.03}
+    },
+    {
+      "cut_id": "05",
+      "type": "insert",
+      "duration_sec": 4,
+      "camera": "extreme close-up — crow on blade",
+      "subject": "까마귀가 녹슨 검날 위에 앉아 있음 — 씬 1 반복, 순환 완결",
+      "action": "까마귀가 정지해 있다가 날아오름",
+      "characters": [],
+      "background_ref": null,
+      "character_refs": [],
+      "insert_ref": "images/05_cuts/action_cuts/cut_10_crow_blade.png",
+      "frame_prompt": "Extreme close-up insert shot, crow perched on a rusted abandoned sword blade embedded in stone, single black feather detail, misty grey atmosphere, desaturated blue-grey, crow slowly spreads wings and takes flight, echoing the opening scene, For Honor cinematic style, photorealistic, 1920x1080 16:9",
+      "motion_desc": "Crow static then takes flight — single feather drops, fade to black begins",
+      "color_grade": {"sat": 0.20, "bright": -0.05, "contrast": 1.1, "blue": 0.06, "red": -0.03}
+    },
+    {
+      "cut_id": "06",
+      "type": "transition",
+      "duration_sec": 6,
+      "camera": "fade to black — title card",
+      "subject": "암전 후 타이틀 등장: 명예의 무게 (The Weight of Honor)",
+      "action": "3초 암전 후 타이틀 텍스트 서서히 등장. 모든 사운드 페이드아웃. 마지막 3초 완전한 무음",
+      "characters": [],
+      "background_ref": null,
+      "character_refs": [],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic title card, full black screen fade-in, centered title text '명예의 무게' with subtitle 'The Weight of Honor' in elegant serif typography, subtle grey-white lettering on pure black, no decoration, minimal, final frame of film, 1920x1080 16:9",
+      "motion_desc": "Slow fade to black (3 seconds) then title text fades in over 3 seconds",
+      "color_grade": {"sat": 0.20, "bright": -0.05, "contrast": 1.1, "blue": 0.06, "red": -0.03}
+    }
+  ]
+}
