@@ -122,7 +122,7 @@ class VideoGeneratorSoraOpenAIAPI:
         status = data.get("status", "")
 
         if status == "completed":
-            return await self._download(video_id)
+            return await self._download(video_id, completed_data=data)
 
         if not video_id:
             raise RuntimeError(f"video_id 없음: {data}")
@@ -142,42 +142,45 @@ class VideoGeneratorSoraOpenAIAPI:
             s = d.get("status", "")
             logging.info(f"  Sora 상태: {s} ({d.get('progress', 0)}%)")
             if s == "completed":
-                return await self._download(video_id)
+                return await self._download(video_id, completed_data=d)
             if s in ("failed", "cancelled"):
                 err = (d.get("error") or {}).get("message", s)
                 raise RuntimeError(f"Sora 생성 {s}: {err}")
 
         raise RuntimeError("Sora 생성 타임아웃 (10분 초과)")
 
-    async def _download(self, video_id: str) -> VideoOutput:
-        import openai as _openai
-
-        client = _openai.OpenAI(api_key=self.api_key)
-
-        def _fetch() -> bytes:
-            response = client.videos.download_content(video_id)
-            return b"".join(response.iter_bytes())
-
-        try:
-            video_bytes = await asyncio.to_thread(_fetch)
-            logging.info(f"  Sora 다운로드 완료 ({len(video_bytes)//1024}KB)")
-            return VideoOutput(fmt="bytes", ext="mp4", data=video_bytes)
-        except Exception as sdk_err:
-            logging.warning(f"SDK 다운로드 실패 ({sdk_err}), REST fallback 시도...")
-            # generations/{id}/content 엔드포인트 fallback
-            for path in (
-                f"{SORA_GENERATIONS_URL}/{video_id}/content",
-                f"https://api.openai.com/v1/videos/generations/{video_id}/content/video",
+    async def _download(self, video_id: str, completed_data: dict = None) -> VideoOutput:
+        # 1) completed_data 안에 직접 URL이 있으면 우선 사용
+        if completed_data:
+            for url in (
+                completed_data.get("url"),
+                (completed_data.get("generations") or [{}])[0].get("url"),
+                (completed_data.get("data") or [{}])[0].get("url"),
             ):
-                resp = await asyncio.to_thread(
-                    requests.get,
-                    path,
-                    headers={"Authorization": f"Bearer {self.api_key}"},
-                    timeout=120,
-                    stream=True,
-                )
-                if resp.status_code == 200:
-                    video_bytes = b"".join(resp.iter_content(chunk_size=8192))
-                    logging.info(f"  fallback 다운로드 완료 ({len(video_bytes)//1024}KB) via {path}")
-                    return VideoOutput(fmt="bytes", ext="mp4", data=video_bytes)
-            raise RuntimeError(f"Sora 다운로드 실패: SDK + REST fallback 모두 실패") from sdk_err
+                if url:
+                    resp = await asyncio.to_thread(
+                        requests.get, url,
+                        headers=self._headers(), timeout=120, stream=True,
+                    )
+                    if resp.status_code == 200:
+                        video_bytes = b"".join(resp.iter_content(chunk_size=8192))
+                        logging.info(f"  Sora 다운로드 완료 ({len(video_bytes)//1024}KB) via response URL")
+                        return VideoOutput(fmt="bytes", ext="mp4", data=video_bytes)
+
+        # 2) REST 엔드포인트 순차 시도
+        for path in (
+            f"{SORA_GENERATIONS_URL}/{video_id}/content",
+            f"{SORA_GENERATIONS_URL}/{video_id}/content/video",
+            f"https://api.openai.com/v1/videos/generations/{video_id}/content",
+        ):
+            resp = await asyncio.to_thread(
+                requests.get, path,
+                headers=self._headers(), timeout=120, stream=True,
+            )
+            if resp.status_code == 200:
+                video_bytes = b"".join(resp.iter_content(chunk_size=8192))
+                logging.info(f"  Sora 다운로드 완료 ({len(video_bytes)//1024}KB) via {path}")
+                return VideoOutput(fmt="bytes", ext="mp4", data=video_bytes)
+            logging.warning(f"  다운로드 시도 실패 {resp.status_code}: {path}")
+
+        raise RuntimeError(f"Sora 다운로드 실패: 모든 엔드포인트 실패 (video_id={video_id})")

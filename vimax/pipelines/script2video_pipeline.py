@@ -166,7 +166,10 @@ class Script2VideoPipeline:
             for shot_description in shot_descriptions
         ]
         tasks.extend(video_tasks)
-        await asyncio.gather(*tasks)
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        for i, r in enumerate(results):
+            if isinstance(r, Exception):
+                print(f"⚠️  Task {i} failed: {r} — continuing.")
 
         final_video_path = os.path.join(self.working_dir, "final_video.mp4")
         if os.path.exists(final_video_path):
@@ -361,20 +364,17 @@ class Script2VideoPipeline:
                 )
                 video_output.save(video_path)
                 print(f"☑️ Generated video for shot {shot_description.idx}, saved to {video_path}.")
-            except RuntimeError as e:
-                if "moderation" in str(e).lower() or "blocked" in str(e).lower() or "failed" in str(e).lower():
-                    print(f"⚠️  Shot {shot_description.idx} blocked by moderation — falling back to still image video.")
-                    import subprocess as _sp
-                    _sp.run([
-                        "ffmpeg", "-y", "-loop", "1", "-i", frame_paths[0],
-                        "-t", str(getattr(shot_description, 'duration', 8)),
-                        "-vf", "scale=1280:720:flags=lanczos,format=yuv420p",
-                        "-c:v", "libx264", "-preset", "fast", "-crf", "23",
-                        "-movflags", "+faststart", video_path,
-                    ], check=True, capture_output=True)
-                    print(f"☑️  Still-image fallback saved for shot {shot_description.idx}.")
-                else:
-                    raise
+            except Exception as e:
+                print(f"⚠️  Shot {shot_description.idx} failed ({e}) — still-image fallback.")
+                import subprocess as _sp
+                _sp.run([
+                    "ffmpeg", "-y", "-loop", "1", "-i", frame_paths[0],
+                    "-t", "8",
+                    "-vf", "scale=1280:720:flags=lanczos,format=yuv420p",
+                    "-c:v", "libx264", "-preset", "fast", "-crf", "23",
+                    "-movflags", "+faststart", video_path,
+                ], check=True, capture_output=True)
+                print(f"☑️  Still-image fallback saved for shot {shot_description.idx}.")
 
     async def generate_frame_for_single_shot(
         self,
