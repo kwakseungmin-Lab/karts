@@ -1,6 +1,0 @@
-# 03_background_art / ashfeld
-
-| 파일 | 상태 | 프롬프트 |
-|------|------|----------|
-| `bg_04_ashfeld_night_camp.png` | ✅ | cinematic dark fantasy, For Honor game aesthetic, desaturated blue-gray palette #5A6A7A, photorealistic, dramatic lighting, professional film production quality, NO CROPPING, environment concept art, matte painting, atmospheric perspective, volumetric fog, complete scene fully visible within frame. Ashfeld Black Stone Legion military camp at night, heavy rain. Gothic fortress wall in background, rows of dark tents, soldiers in shadows. Torch-lit commander's tent at center. Caravaggio chiaroscuro — torches as ONLY light source, strong shadow contrast. FULL SCENE from foreground to fortress wall visible. |
-| `bg_05_ashfeld_gothic_gate.png` | ✅ | cinematic dark fantasy, For Honor game aesthetic, desaturated blue-gray palette #5A6A7A, photorealistic, dramatic lighting, professional film production quality, NO CROPPING, environment concept art, matte painting, atmospheric perspective, volumetric fog, complete scene fully visible within frame. Massive Gothic fortress gate at night, torrential rain. View from INSIDE looking OUT through the open portcullis gate. Stone arch frame, heavy iron portcullis above, darkness beyond. Torchlight from inside illuminates the arch. FULL GATE arch completely visible. |

@@ -1,6 +1,0 @@
-# 04_scenes / scene_01_prologue
-
-| 파일 | 상태 | 프롬프트 |
-|------|------|----------|
-| `scene01_01_prologue_wide.png` | ✅ | cinematic dark fantasy, For Honor game aesthetic, desaturated blue-gray palette #5A6A7A, photorealistic, dramatic lighting, professional film production quality, NO CROPPING, movie still, cinematic composition, complete scene with all subjects fully visible, no limbs or heads cut off, realistic human body proportions, anatomically correct figures. Scene 1 PROLOGUE: Extreme wide shot of post-battle wasteland. Gray overcast sky, flock of crows swirling over field of broken swords and armor. Three torn battle banners. No living people. Complete desolation. Extreme desaturation, near-monochrome. FULL SCENE — sky to ground, left to right all visible. |
-| `scene01_02_prologue_crows.png` | ✅ | cinematic dark fantasy, For Honor game aesthetic, desaturated blue-gray palette #5A6A7A, photorealistic, dramatic lighting, professional film production quality, NO CROPPING, extreme close-up macro detail, sharp focus, high contrast, subject centered and completely within frame. Macro close-up: crow talons gripping a bloodied sword blade on battlefield ground. Surrounding debris: broken spears, rust, dried blood. Ground-level fog. CROW FEET AND SWORD BLADE COMPLETELY VISIBLE, centered in frame. |
