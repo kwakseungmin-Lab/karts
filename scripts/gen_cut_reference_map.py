@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""컷별 레퍼런스 이미지 & 프롬프트 문서 생성."""
+"""컷별 생성 프레임 이미지 & 프롬프트 문서 생성."""
 import json
 import os
 
@@ -9,19 +9,22 @@ VIDEOS_DIR = "short-film-project/final/videos"
 OUT_PATH = "short-film-project/plan/cut_reference_map.md"
 
 # cut_reference_map.md 는 short-film-project/plan/ 에 위치
-# 이미지는 short-film-project/images/ 에 위치 → 상대 경로 ../images/...
-def ref_to_img_tag(ref_path: str) -> str:
-    """JSON refs 경로를 plan/ 기준 상대경로 이미지 태그로 변환."""
-    # ref_path 예: images/01_character_sheets/aiden/aiden_01_front_view.png
+# 프레임 이미지는 short-film-project/final/frames/ → 상대 경로 ../final/frames/...
+# 캐릭터 시트는 short-film-project/images/ → 상대 경로 ../images/...
+
+def frame_img_tag(sc_num: int, cut_num: int) -> str:
+    fname = f"scene{sc_num:02d}_cut{cut_num:02d}_hd.png"
+    return f"![{fname}](../final/frames/{fname})"
+
+def char_ref_tag(ref_path: str) -> str:
     fname = os.path.basename(ref_path)
-    rel = "../" + ref_path
-    return f"![{fname}]({rel})"
+    return f"![{fname}](../{ref_path})"
 
 
 lines: list[str] = []
-lines.append("# 명예의 무게 — 컷별 레퍼런스 이미지 & 프롬프트")
+lines.append("# 명예의 무게 — 컷별 생성 프레임 & 프롬프트")
 lines.append("")
-lines.append("> 생성 방식: GPT Image (frame) → Sora sora-2 (1280×720 → 1920×1080 업스케일)")
+lines.append("> 생성 방식: GPT Image gpt-image-1 (frame) → Sora sora-2 (1280×720 → 1920×1080 업스케일)")
 lines.append("")
 
 for sc_num in range(1, 13):
@@ -51,26 +54,38 @@ for sc_num in range(1, 13):
 
     for i, cut in enumerate(cuts, 1):
         prompt = cut.get("frame_prompt") or cut.get("prompt", "")
-        refs: list[str] = [r for r in cut.get("character_refs", []) if r]
+        char_refs: list[str] = [r for r in cut.get("character_refs", []) if r]
         motion = cut.get("motion_desc") or cut.get("camera_motion", "")
 
-        frame_ok = os.path.exists(f"{FRAMES_DIR}/scene{sc_num:02d}_cut{i:02d}_hd.png")
+        frame_path = f"{FRAMES_DIR}/scene{sc_num:02d}_cut{i:02d}_hd.png"
+        frame_ok = os.path.exists(frame_path)
         video_ok = os.path.exists(f"{VIDEOS_DIR}/scene{sc_num:02d}_cut{i:02d}.mp4")
 
         lines.append(f"### 컷 {i:02d}  |  프레임 {'✓' if frame_ok else '✗'}  영상 {'✓' if video_ok else '✗'}")
         lines.append("")
+
+        # 생성된 프레임 이미지 (실제 결과물)
+        if frame_ok:
+            lines.append("**생성 프레임**")
+            lines.append("")
+            lines.append(frame_img_tag(sc_num, i))
+            lines.append("")
+        else:
+            lines.append("**생성 프레임**: 없음")
+            lines.append("")
+
         lines.append("**프롬프트**")
         lines.append(f"> {prompt}")
         lines.append("")
 
-        if refs:
-            lines.append("**레퍼런스 이미지**")
+        # 캐릭터 시트 레퍼런스 (GPT Image 입력으로 사용한 것)
+        if char_refs:
+            lines.append("<details><summary>캐릭터 시트 레퍼런스 (GPT Image 입력)</summary>")
             lines.append("")
-            for r in refs:
-                lines.append(ref_to_img_tag(r))
+            for r in char_refs:
+                lines.append(char_ref_tag(r))
                 lines.append("")
-        else:
-            lines.append("**레퍼런스 이미지**: 없음 (환경/사물 씬)")
+            lines.append("</details>")
             lines.append("")
 
         if motion:
