@@ -1,42 +1,40 @@
 ---
 name: frame-artist
-description: 스토리보드 JSON의 각 컷을 GPT Image로 생성한다. 캐릭터 일관성을 위해 character_refs 이미지를 edit 엔드포인트에 주입한다.
+description: 스토리보드 JSON의 각 컷을 GPT Image로 생성한다. character_refs 이미지를 참조해 일관성을 유지한다.
 ---
 
 # Frame Artist
 
 ## 역할
-storyboard JSON의 각 컷을 GPT Image(gpt-image-1)로 생성한다.
-캐릭터가 등장하는 컷은 반드시 캐릭터 시트를 참조 이미지로 주입해 일관성을 유지한다.
+storyboard JSON의 각 컷을 GPT Image로 생성한다.
+`character_refs`에 지정된 이미지를 참조해 캐릭터 일관성을 유지한다.
+
+## 작업 시작 전 필수 탐색
+
+1. `CLAUDE.md` 읽기 → 사용 모델, 해상도, 출력 경로 확인
+2. storyboard JSON 읽기 → `character_refs`, `frame_prompt`, `insert_ref` 파악
+3. `character_refs`에 명시된 경로가 실제 존재하는지 확인 (`ls`)
 
 ## 입력
-- `short-film-project/storyboard/scene{N:02d}_storyboard.json`
+```
+{프로젝트루트}/storyboard/scene{N:02d}_storyboard.json
+```
 
 ## 출력
 ```
-short-film-project/final/frames/
-  scene{N:02d}_cut{M:02d}.png      # 생성 원본 (1536×1024)
-  scene{N:02d}_cut{M:02d}_hd.png   # FFmpeg 스케일 후 (1920×1080)
+{프로젝트루트}/final/frames/
+  scene{N:02d}_cut{M:02d}.png      # 생성 원본
+  scene{N:02d}_cut{M:02d}_hd.png   # FFmpeg 1920×1080 스케일 후
 ```
 
-## 캐릭터 참조 이미지 경로 매핑
+## 모델 선택
 
-```python
-CHARACTER_REFS = {
-    "aiden": {
-        "default": "short-film-project/images/01_character_sheets/aiden/aiden_01_front_view.png",
-        "closeup": "short-film-project/images/01_character_sheets/aiden/aiden_04_face_closeup.png",
-        "fullbody": "short-film-project/images/references/ref_aiden_fullbody.png",
-        "three_quarter": "short-film-project/images/01_character_sheets/aiden/aiden_02_three_quarter_view.png",
-    },
-    "kagemasa": {
-        "default": "short-film-project/images/01_character_sheets/kagemasa/kagemasa_01_front_view.png",
-        "closeup": "short-film-project/images/01_character_sheets/kagemasa/kagemasa_04_face_without_mask.png",
-        "fullbody": "short-film-project/images/references/ref_kagemasa_fullbody.png",
-        "three_quarter": "short-film-project/images/01_character_sheets/kagemasa/kagemasa_02_three_quarter_view.png",
-    },
-}
-```
+`CLAUDE.md`에 지정된 모델을 우선 사용. 명시 없으면 최신 `gpt-image-2` 사용.
+
+| 모델 | 지원 사이즈 | 특징 |
+|------|------------|------|
+| `gpt-image-2` | 1536×1024, 1024×1024 등 | 최신, 품질 우수 |
+| `gpt-image-1` | 1536×1024, 1024×1024 등 | 안정 버전 |
 
 ## GPT Image 호출 방법
 
@@ -47,9 +45,9 @@ import base64
 
 client = OpenAI()
 
-def generate_frame(prompt: str, out_path: str):
+def generate_frame(prompt: str, out_path: str, model: str = "gpt-image-2"):
     response = client.images.generate(
-        model="gpt-image-1",
+        model=model,
         prompt=prompt,
         size="1536x1024",
         quality="high",
@@ -60,24 +58,25 @@ def generate_frame(prompt: str, out_path: str):
         f.write(data)
 ```
 
-### 캐릭터 등장 컷 (edit 엔드포인트로 참조 이미지 주입)
+### 캐릭터 등장 컷 (character_refs 활용)
 ```python
-def generate_frame_with_refs(prompt: str, ref_paths: list[str], out_path: str):
+def generate_frame_with_refs(prompt: str, ref_paths: list[str], out_path: str, model: str = "gpt-image-2"):
     """
-    ref_paths: storyboard의 character_refs + background_ref 경로 목록
-    GPT Image edit 엔드포인트는 이미지를 스타일/외형 참조로 활용함
+    ref_paths: storyboard의 character_refs 경로 목록 (실제 존재하는 파일만)
+    참조 이미지는 스타일·외형 힌트로 활용됨 (inpainting 아님)
     """
-    # 참조 이미지 중 첫 번째를 메인 reference로 사용
-    with open(ref_paths[0], "rb") as img_f:
-        # 추가 참조는 프롬프트에 텍스트로 명시
-        extra_desc = ""
-        if len(ref_paths) > 1:
-            extra_desc = f" Reference images provided for character consistency."
+    # 존재하는 파일만 필터링
+    valid_refs = [p for p in ref_paths if os.path.exists(p)]
 
+    if not valid_refs:
+        # 참조 없으면 generate로 폴백
+        return generate_frame(prompt, out_path, model)
+
+    with open(valid_refs[0], "rb") as img_f:
         response = client.images.edit(
-            model="gpt-image-1",
+            model=model,
             image=img_f,
-            prompt=prompt + extra_desc,
+            prompt=prompt,
             size="1536x1024",
         )
     data = base64.b64decode(response.data[0].b64_json)
@@ -90,10 +89,9 @@ def generate_frame_with_refs(prompt: str, ref_paths: list[str], out_path: str):
 import subprocess
 
 def scale_to_hd(src: str, dst: str):
-    # 1536×1024 → 16:9 크롭(1536×864) → 1920×1080
     subprocess.run([
         "ffmpeg", "-y", "-i", src,
-        "-vf", "crop=1536:864:0:80,scale=1920:1080:flags=lanczos",
+        "-vf", "crop=iw:iw*9/16:0:(ih-iw*9/16)/2,scale=1920:1080:flags=lanczos",
         dst
     ], check=True)
 ```
@@ -102,26 +100,27 @@ def scale_to_hd(src: str, dst: str):
 
 1. storyboard JSON 로드
 2. 각 컷에 대해:
-   a. `character_refs` 가 있으면 → `generate_frame_with_refs()` 사용
-   b. `insert_ref` 가 있으면 → 해당 이미지를 edit으로 정제
-   c. 없으면 → `generate_frame()` 사용
-3. `scale_to_hd()` 로 1920×1080 변환
-4. `final/frames/` 에 저장
+   - `character_refs`가 있고 파일이 존재하면 → `generate_frame_with_refs()` 사용
+   - `insert_ref`가 있으면 → 해당 이미지를 edit으로 정제
+   - 없으면 → `generate_frame()` 사용
+3. `scale_to_hd()`로 1920×1080 변환
+4. `final/frames/`에 저장
 
 ## 컷 타입별 처리
 
 | 타입 | ref 주입 | 메서드 |
 |------|---------|--------|
-| scene (캐릭터 있음) | character_refs + background_ref | edit |
-| scene (배경만) | background_ref | edit |
-| insert (05_cuts 기반) | insert_ref | edit (원본 정제) |
+| scene (캐릭터 있음) | character_refs | edit |
+| scene (배경만) | background_ref (선택) | generate |
+| insert (기존 소품 기반) | insert_ref | edit |
 | insert (새 생성) | 없음 | generate |
-| transition | background_ref | edit 또는 generate |
+| transition | 없음 | generate |
 
 ## 주의사항
-- `OPENAI_API_KEY` 환경변수 필수
-- gpt-image-1 응답: `response.data[0].b64_json`
-- edit 엔드포인트: 참조 이미지 스타일을 유지하면서 프롬프트 방향으로 생성
-- 캐릭터 클로즈업 컷은 `face_closeup` 참조 이미지 우선 사용
-- 씬09-10 카게마사 맨포 없는 얼굴: `kagemasa_04_face_without_mask.png` 사용
-- 병렬 생성 가능 (동일 씬 내 컷들)
+
+- `OPENAI_API_KEY` 환경변수 필수 (`.env`에서 로드)
+- 응답 형식: `response.data[0].b64_json`
+- `character_refs` 경로는 storyboard JSON에서 읽은 그대로 사용 — 존재하지 않는 파일은 건너뜀
+- 병렬 생성 가능 (ThreadPoolExecutor, 최대 5개 동시)
+- edit 엔드포인트는 참조 이미지를 inpainting이 아닌 스타일 힌트로 활용함
+- 생성 실패 시 1회 재시도 후 로그 기록하고 다음 컷으로 진행
