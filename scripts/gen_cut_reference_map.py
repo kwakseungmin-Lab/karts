@@ -27,7 +27,7 @@ lines.append("")
 lines.append("> 생성 방식: GPT Image gpt-image-1 (frame) → Sora sora-2 (1280×720 → 1920×1080 업스케일)")
 lines.append("")
 
-for sc_num in range(1, 13):
+for sc_num in range(0, 13):
     json_path = f"{SCENES_DIR}/scene{sc_num:02d}_storyboard.json"
     if not os.path.exists(json_path):
         continue

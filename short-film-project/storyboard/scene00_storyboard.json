@@ -1,0 +1,68 @@
+{
+  "scene_id": "00",
+  "scene_title": "대재앙: 히스무어의 탄생",
+  "total_duration_sec": 32,
+  "color_mood": "극도 탈색, 회색+주황 불빛",
+  "cuts": [
+    {
+      "cut_id": "01",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "extreme aerial view from outer space",
+      "subject": "우주에서 본 대륙 충돌",
+      "action": "거대한 대륙들이 충돌하며 히스무어로 합쳐짐",
+      "characters": [],
+      "background_ref": null,
+      "character_refs": [],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic extreme aerial view from outer space, ancient Earth during catastrophic cataclysm, massive continents colliding and merging into one landmass, enormous tidal waves and earthquakes reshaping coastlines, volcanic eruptions lighting the darkness, ash clouds covering half the globe, cinematic epic scale, extremely desaturated near-grayscale with only orange fire glow as color, For Honor cinematic style, photorealistic, 1920x1080 16:9",
+      "motion_desc": "Slow zoom toward the merging continents, volcanic glow intensifies",
+      "color_grade": {"sat": 0.1, "bright": -0.1, "contrast": 1.15, "blue": 0.03, "red": -0.02}
+    },
+    {
+      "cut_id": "02",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "cinematic wide ground-level shot",
+      "subject": "지상에서 본 쓰나미+토네이도 동시 재앙",
+      "action": "쓰나미와 토네이도가 동시에 중세 마을을 덮침",
+      "characters": [],
+      "background_ref": null,
+      "character_refs": [],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic wide ground-level shot, catastrophic cataclysm striking simultaneously — massive tsunami wave hundreds of meters tall crashing into medieval settlement on left, enormous tornado consuming gothic towers on right, earthquake splitting the earth in center foreground, terrified medieval villagers fleeing in silhouette, apocalyptic sky with lightning and ash, extremely desaturated grayscale with orange fire glow, For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
+      "motion_desc": "Camera shakes from earthquake, tsunami wall approaches from left",
+      "color_grade": {"sat": 0.1, "bright": -0.1, "contrast": 1.15, "blue": 0.03, "red": -0.02}
+    },
+    {
+      "cut_id": "03",
+      "type": "scene",
+      "duration_sec": 8,
+      "camera": "cinematic wide establishing shot",
+      "subject": "대재앙 이후 세 진영이 마주선 히스무어",
+      "action": "나이트·사무라이·바이킹이 황폐한 땅에서 서로를 마주봄",
+      "characters": [],
+      "background_ref": "images/03_background_art/battlefield_ruins/bg_09_battlefield_ruins.png",
+      "character_refs": [],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic wide establishing shot, post-cataclysm merged continent Heathmoor, three factions facing each other across a destroyed landscape — left: medieval knights in dark steel armor under a fractured stone banner, center: ruins and cracked earth, right: samurai warriors in navy armor under tattered silk banners with distant viking silhouettes, dawn light breaking through ash clouds, deeply desaturated cold blue-grey tone, For Honor cinematic epic style, photorealistic, 1920x1080 16:9",
+      "motion_desc": "Slow push-in from wide to medium, three factions revealed",
+      "color_grade": {"sat": 0.15, "bright": -0.08, "contrast": 1.1, "blue": 0.05, "red": -0.03}
+    },
+    {
+      "cut_id": "04",
+      "type": "insert",
+      "duration_sec": 8,
+      "camera": "extreme close-up macro shot",
+      "subject": "천 년 전쟁의 칼자국이 쌓인 석벽",
+      "action": "수백 년에 걸쳐 새겨진 칼자국들",
+      "characters": [],
+      "background_ref": null,
+      "character_refs": [],
+      "insert_ref": null,
+      "frame_prompt": "Cinematic extreme close-up macro shot, ancient stone wall surface covered in countless sword slash marks layered over centuries, fresh marks cut over old faded ones, dried blood stains at various ages, a single torch flame casting warm orange light across the cold grey stone, text carved in three scripts — runic, kanji, latin — all meaning war, deeply desaturated with only the torch flame as warm color, For Honor cinematic style, photorealistic, 1920x1080 16:9",
+      "motion_desc": "Static, slow rack focus across the layered slash marks",
+      "color_grade": {"sat": 0.12, "bright": -0.09, "contrast": 1.12, "blue": 0.04, "red": -0.02}
+    }
+  ]
+}

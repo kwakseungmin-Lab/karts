@@ -3,6 +3,54 @@
 > 생성 방식: GPT Image gpt-image-1 (frame) → Sora sora-2 (1280×720 → 1920×1080 업스케일)
 
 ---
+## 씬 00 — 대재앙: 히스무어의 탄생
+> 4컷
+
+### 컷 01  |  프레임 ✓  영상 ✗
+
+**생성 프레임**
+
+![scene00_cut01_hd.png](../final/frames/scene00_cut01_hd.png)
+
+**프롬프트**
+> Cinematic extreme aerial view from outer space, ancient Earth during catastrophic cataclysm, massive continents colliding and merging into one landmass, enormous tidal waves and earthquakes reshaping coastlines, volcanic eruptions lighting the darkness, ash clouds covering half the globe, cinematic epic scale, extremely desaturated near-grayscale with only orange fire glow as color, For Honor cinematic style, photorealistic, 1920x1080 16:9
+
+**카메라/모션**: Slow zoom toward the merging continents, volcanic glow intensifies
+
+### 컷 02  |  프레임 ✓  영상 ✗
+
+**생성 프레임**
+
+![scene00_cut02_hd.png](../final/frames/scene00_cut02_hd.png)
+
+**프롬프트**
+> Cinematic wide ground-level shot, catastrophic cataclysm striking simultaneously — massive tsunami wave hundreds of meters tall crashing into medieval settlement on left, enormous tornado consuming gothic towers on right, earthquake splitting the earth in center foreground, terrified medieval villagers fleeing in silhouette, apocalyptic sky with lightning and ash, extremely desaturated grayscale with orange fire glow, For Honor cinematic trailer style, photorealistic, 1920x1080 16:9
+
+**카메라/모션**: Camera shakes from earthquake, tsunami wall approaches from left
+
+### 컷 03  |  프레임 ✓  영상 ✗
+
+**생성 프레임**
+
+![scene00_cut03_hd.png](../final/frames/scene00_cut03_hd.png)
+
+**프롬프트**
+> Cinematic wide establishing shot, post-cataclysm merged continent Heathmoor, three factions facing each other across a destroyed landscape — left: medieval knights in dark steel armor under a fractured stone banner, center: ruins and cracked earth, right: samurai warriors in navy armor under tattered silk banners with distant viking silhouettes, dawn light breaking through ash clouds, deeply desaturated cold blue-grey tone, For Honor cinematic epic style, photorealistic, 1920x1080 16:9
+
+**카메라/모션**: Slow push-in from wide to medium, three factions revealed
+
+### 컷 04  |  프레임 ✓  영상 ✗
+
+**생성 프레임**
+
+![scene00_cut04_hd.png](../final/frames/scene00_cut04_hd.png)
+
+**프롬프트**
+> Cinematic extreme close-up macro shot, ancient stone wall surface covered in countless sword slash marks layered over centuries, fresh marks cut over old faded ones, dried blood stains at various ages, a single torch flame casting warm orange light across the cold grey stone, text carved in three scripts — runic, kanji, latin — all meaning war, deeply desaturated with only the torch flame as warm color, For Honor cinematic style, photorealistic, 1920x1080 16:9
+
+**카메라/모션**: Static, slow rack focus across the layered slash marks
+
+---
 ## 씬 01 — 프롤로그: 늑대의 시대
 > 5컷
 

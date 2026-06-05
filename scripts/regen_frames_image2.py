@@ -41,7 +41,7 @@ FRAMES_DIR = PROJECT_ROOT / "final/frames"
 FRAMES_DIR.mkdir(parents=True, exist_ok=True)
 
 MODEL = "gpt-image-2"
-SIZE = "1536x1024"
+SIZE = "1792x1024"   # 16:9 네이티브 → FFmpeg로 1920×1080 업스케일
 QUALITY = "high"
 MAX_WORKERS = 4
 
@@ -87,6 +87,17 @@ def load_cuts() -> list[dict]:
                 "out_path": FRAMES_DIR / f"scene{sc_num:02d}_cut{i:02d}_hd.png",
             })
     return cuts
+
+
+def upscale_to_1080(src: Path, dst: Path) -> None:
+    """1792×1024 → 1920×1080 (16:9 유지, lanczos 업스케일)."""
+    import subprocess
+    subprocess.run(
+        ["ffmpeg", "-y", "-i", str(src),
+         "-vf", "scale=1920:1080:flags=lanczos",
+         "-q:v", "2", str(dst)],
+        check=True, capture_output=True,
+    )
 
 
 def generate_with_ref(prompt: str, ref_path: Path, out_path: Path) -> bytes:
@@ -135,8 +146,12 @@ def process_cut(cut: dict, retry: int = 1) -> Optional[str]:
             else:
                 data = generate_without_ref(prompt, out_path)
 
-            out_path.write_bytes(data)
-            log.info("OK  %s  (%d bytes)", label, len(data))
+            # 임시 저장 후 1920×1080 업스케일
+            tmp = out_path.with_suffix(".tmp.png")
+            tmp.write_bytes(data)
+            upscale_to_1080(tmp, out_path)
+            tmp.unlink(missing_ok=True)
+            log.info("OK  %s  1920×1080 (%d bytes)", label, out_path.stat().st_size)
             return str(out_path)
 
         except Exception as e:
@@ -150,8 +165,11 @@ def process_cut(cut: dict, retry: int = 1) -> Optional[str]:
                     log.warning("%s edit 실패 → generate 폴백", label)
                     try:
                         data = generate_without_ref(prompt, out_path)
-                        out_path.write_bytes(data)
-                        log.info("OK  %s  (generate fallback, %d bytes)", label, len(data))
+                        tmp = out_path.with_suffix(".tmp.png")
+                        tmp.write_bytes(data)
+                        upscale_to_1080(tmp, out_path)
+                        tmp.unlink(missing_ok=True)
+                        log.info("OK  %s  (generate fallback, 1920×1080)", label)
                         return str(out_path)
                     except Exception as e2:
                         log.error("FAIL %s: %s", label, e2)
