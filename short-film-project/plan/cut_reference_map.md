@@ -990,9 +990,11 @@
 
 **카메라/모션**: Static close-up, sword tip makes contact with stone, single resonant metallic ring fading to silence
 
-### 컷 08  |  프레임 ✗  영상 ✗
+### 컷 08  |  프레임 ✓  영상 ✗
 
-**생성 프레임**: 없음
+**생성 프레임**
+
+![scene09_cut08_hd.png](../final/frames/scene09_cut08_hd.png)
 
 **프롬프트**
 > For Honor cinematic style extreme close-up, Aiden medieval knight, eyes only visible beneath dark steel barbuta helmet, scarred face with vertical scar over left eye, brown hair, eyes showing the final moment before decision — hesitation dissolving into absolute resolve, pupils steady and hardened after trembling, irises catching bright cold clean morning sunlight at highest saturation, emotional weight of honor and mercy condensed into a single gaze, micro-reflections of the bridge and sky in iris, no tears but profound depth of feeling, shallow depth of field with background blurred, warm morning golden rim light on skin above cheekbone, photorealistic, 1920x1080, 16:9 composition
