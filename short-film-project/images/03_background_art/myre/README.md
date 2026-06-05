@@ -1,0 +1,6 @@
+# 03_background_art / myre
+
+| 파일 | 상태 | 프롬프트 |
+|------|------|----------|
+| `bg_06_myre_wetlands.png` | ✅ | cinematic dark fantasy, For Honor game aesthetic, desaturated blue-gray palette #5A6A7A, photorealistic, dramatic lighting, professional film production quality, NO CROPPING, environment concept art, matte painting, atmospheric perspective, volumetric fog, complete scene fully visible within frame. The Myre — Japanese faction wetlands. Misty swampland at dusk. Ancient Japanese pagoda silhouette in distance, bamboo forest, water reflections. Lotus flowers at water surface. Teal-brown atmosphere. FULL PANORAMIC SCENE, horizon to foreground all visible. |
+| `bg_07_myre_bamboo_bridge.png` | ✅ | cinematic dark fantasy, For Honor game aesthetic, desaturated blue-gray palette #5A6A7A, photorealistic, dramatic lighting, professional film production quality, NO CROPPING, environment concept art, matte painting, atmospheric perspective, volumetric fog, complete scene fully visible within frame. Right side of Borderlands Bridge (Myre/Samurai side). Bamboo grove encroaching on stone bridge, partial torii gate, wetland mist rising from below bridge. Dawn light through bamboo. FULL SCENE with bridge and bamboo completely visible. |

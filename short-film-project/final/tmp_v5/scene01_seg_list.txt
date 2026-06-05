@@ -1,0 +1,5 @@
+file '/Users/ksm2761/karts/short-film-project/final/graded/scene01_cut01.mp4'
+file '/Users/ksm2761/karts/short-film-project/final/graded/scene01_cut02.mp4'
+file '/Users/ksm2761/karts/short-film-project/final/graded/scene01_cut03.mp4'
+file '/Users/ksm2761/karts/short-film-project/final/graded/scene01_cut04.mp4'
+file '/Users/ksm2761/karts/short-film-project/final/graded/scene01_cut05.mp4'

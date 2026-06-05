@@ -1,0 +1,6 @@
+# 03_background_art / battlefield_ruins
+
+| 파일 | 상태 | 프롬프트 |
+|------|------|----------|
+| `bg_09_battlefield_ruins.png` | ✅ | cinematic dark fantasy, For Honor game aesthetic, desaturated blue-gray palette #5A6A7A, photorealistic, dramatic lighting, professional film production quality, NO CROPPING, environment concept art, matte painting, atmospheric perspective, volumetric fog, complete scene fully visible within frame. Post-battle wasteland — wide establishing shot. Shattered weapons in ground, torn banners of 3 factions (knight cross, Japanese kanji, Viking rune). Abandoned armor. Gray overcast sky above. Crows circling in sky. Extreme desaturation, near-monochrome. COMPLETE SCENE from ground to horizon visible. |
+| `bg_10_battlefield_crows_aerial.png` | ✅ | cinematic dark fantasy, For Honor game aesthetic, desaturated blue-gray palette #5A6A7A, photorealistic, dramatic lighting, professional film production quality, NO CROPPING, environment concept art, matte painting, atmospheric perspective, volumetric fog, complete scene fully visible within frame. Aerial bird's-eye view of battlefield ruins. Looking straight down: broken weapons, three faction banners fallen. Crows as black specks against gray ground. Scale of devastation visible. Extreme desaturation, almost black and white. FULL AERIAL VIEW, all edges of scene visible. |
