@@ -11,16 +11,25 @@
       "camera": "medium two-shot, static",
       "subject": "에이든과 카게마사, 1차 교전 직후 5미터 거리 대치",
       "action": "거친 호흡, 부상 상태로 서로를 주시, 검을 내리지 않음",
-      "characters": ["에이든", "카게마사"],
+      "characters": [
+        "에이든",
+        "카게마사"
+      ],
       "background_ref": "images/03_background_art/borderlands_bridge/bg_02_bridge_both_ends.png",
       "character_refs": [
         "images/01_character_sheets/aiden/aiden_01_front_view.png",
         "images/01_character_sheets/kagemasa/kagemasa_01_front_view.png"
       ],
       "insert_ref": null,
-      "frame_prompt": "Cinematic medium two-shot, static camera, Aiden and Kagemasa standing 5 meters apart on a ruined stone bridge after first clash, both showing combat damage — Aiden (medieval knight in dark steel partial plate armor with chain mail, scarred face, brown hair, longsword lowered but not sheathed, left arm with fresh graze wound) and Kagemasa (samurai in deep navy oyoroi armor with gold imperial crest, wide shoulder sode, nodachi sword held cautiously, right thigh with shallow cut), heavy breathing visible, morning fog halfway cleared, soft lateral light on armor, For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
+      "frame_prompt": "Cinematic medium two-shot, static camera, Aiden and Kagemasa standing 5 meters apart on a ruined stone bridge after first clash, both showing combat damage — Aiden (medieval knight in dark steel partial plate armor with chain mail, scarred face, brown hair, longsword lowered but not sheathed, left arm with fresh graze wound) and Kagemasa (samurai in deep navy oyoroi armor with gold imperial crest, wide shoulder sode, kabuto helmet with menpou demon face mask, nodachi sword held cautiously, right thigh with shallow cut), heavy breathing visible, morning fog halfway cleared, soft lateral light on armor, For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
       "motion_desc": "Static shot, slight camera breathing, both warriors heaving with effort",
-      "color_grade": {"sat": 0.55, "bright": 0.02, "contrast": 1.1, "blue": 0.04, "red": 0.01}
+      "color_grade": {
+        "sat": 0.55,
+        "bright": 0.02,
+        "contrast": 1.1,
+        "blue": 0.04,
+        "red": 0.01
+      }
     },
     {
       "cut_id": "02",
@@ -37,7 +46,13 @@
       "insert_ref": "images/05_cuts/action_cuts/cut_06_scratch_mark_crest.png",
       "frame_prompt": "Cinematic extreme close-up POV shot from Kagemasa's perspective, Aiden's left pauldron in dark steel partial plate armor, deep scratch marks carved into the metal surface where a Blackstone Legion emblem was deliberately defaced — gouged lines obliterating the crest, rust and battle damage around the scratches, morning light catching the grooves, symbolic detail, For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
       "motion_desc": "Slow focus pull onto the scratched emblem, static hold",
-      "color_grade": {"sat": 0.55, "bright": 0.02, "contrast": 1.1, "blue": 0.04, "red": 0.01}
+      "color_grade": {
+        "sat": 0.55,
+        "bright": 0.02,
+        "contrast": 1.1,
+        "blue": 0.04,
+        "red": 0.01
+      }
     },
     {
       "cut_id": "03",
@@ -54,7 +69,13 @@
       "insert_ref": "images/05_cuts/action_cuts/cut_07_imperial_crest_flaking.png",
       "frame_prompt": "Cinematic extreme close-up POV shot from Aiden's perspective, Kagemasa's chest armor in deep navy oyoroi lacquered plate, gold-leaf Dawn Empire imperial crest partially flaking and battle-damaged — gilded symbol of the samurai emperor's authority worn and chipped by combat, morning light catching the remaining gold fragments against dark navy lacquer, For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
       "motion_desc": "Slow focus pull onto the faded imperial crest, static hold",
-      "color_grade": {"sat": 0.55, "bright": 0.02, "contrast": 1.1, "blue": 0.04, "red": 0.01}
+      "color_grade": {
+        "sat": 0.55,
+        "bright": 0.02,
+        "contrast": 1.1,
+        "blue": 0.04,
+        "red": 0.01
+      }
     },
     {
       "cut_id": "04",
@@ -63,16 +84,25 @@
       "camera": "tight cross-cut close-ups, alternating faces",
       "subject": "에이든과 카게마사의 감정 교환 — 서로의 무게를 읽음",
       "action": "에이든이 무의식적으로 긁힌 어깨 문장에 손을 댐, 카게마사가 미세하게 고개를 끄덕임",
-      "characters": ["에이든", "카게마사"],
+      "characters": [
+        "에이든",
+        "카게마사"
+      ],
       "background_ref": "images/03_background_art/borderlands_bridge/bg_01_bridge_foggy_morning.png",
       "character_refs": [
         "images/01_character_sheets/aiden/aiden_04_face_closeup.png",
         "images/01_character_sheets/kagemasa/kagemasa_04_face_without_mask.png"
       ],
       "insert_ref": null,
-      "frame_prompt": "Cinematic alternating tight close-ups, cross-cutting between two warriors' faces — first Aiden (medieval knight, scarred face with vertical scar above left eye, brown hair, exhausted eyes registering sudden recognition, gauntleted hand unconsciously touching his own damaged left pauldron where a crest was scratched away) then Kagemasa (samurai, 40s, long black hair in topknot, deep composed eyes with subtle understanding, giving the faintest deliberate nod), both warriors still holding weapons but the aggression momentarily suspended, morning fog behind, For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
+      "frame_prompt": "Cinematic alternating tight close-ups, cross-cutting between two warriors' faces — first Aiden, medieval knight, bare face with no helmet — scarred face, vertical scar above left eye, short brown hair, exhausted eyes registering sudden recognition, gauntleted hand unconsciously touching his damaged left pauldron where a crest was scratched away — then Kagemasa, samurai in deep navy oyoroi armor, kabuto helmet with menpou demon face mask, only his deep composed eyes visible through the mask slit showing subtle understanding and giving the faintest deliberate nod, both warriors still holding weapons but aggression momentarily suspended, morning fog behind, For Honor cinematic trailer style, photorealistic, single cinematic frame, 1920x1080 16:9",
       "motion_desc": "Alternating close-up cuts between Aiden's hand touching his pauldron and Kagemasa's subtle nod, slow rhythm",
-      "color_grade": {"sat": 0.55, "bright": 0.02, "contrast": 1.1, "blue": 0.04, "red": 0.01}
+      "color_grade": {
+        "sat": 0.55,
+        "bright": 0.02,
+        "contrast": 1.1,
+        "blue": 0.04,
+        "red": 0.01
+      }
     },
     {
       "cut_id": "05",
@@ -81,7 +111,10 @@
       "camera": "wide pull-back, static",
       "subject": "경계의 다리 전경 — 두 전사 대치, 안개 속 정적",
       "action": "두 전사 모두 검을 내리지 않고 대치 상태 유지, 전쟁의 무게가 공간을 채움",
-      "characters": ["에이든", "카게마사"],
+      "characters": [
+        "에이든",
+        "카게마사"
+      ],
       "background_ref": "images/03_background_art/borderlands_bridge/bg_02_bridge_both_ends.png",
       "character_refs": [
         "images/01_character_sheets/aiden/aiden_01_front_view.png",
@@ -90,7 +123,13 @@
       "insert_ref": null,
       "frame_prompt": "Cinematic wide static shot pulling back to reveal full ruined stone bridge, Aiden (medieval knight in dark steel partial plate armor with chain mail) and Kagemasa (samurai in deep navy oyoroi armor) standing 5 meters apart — neither sheathing their weapons but neither advancing, the vast silent bridge between them loaded with unspoken recognition, morning fog half-cleared revealing the bridge's damaged stonework, two civilizations' warrior traditions facing each other in suspended tension, contemplative and still, For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
       "motion_desc": "Slow camera pull-back revealing the full bridge, gradual hold on wide composition",
-      "color_grade": {"sat": 0.55, "bright": 0.02, "contrast": 1.1, "blue": 0.04, "red": 0.01}
+      "color_grade": {
+        "sat": 0.55,
+        "bright": 0.02,
+        "contrast": 1.1,
+        "blue": 0.04,
+        "red": 0.01
+      }
     }
   ]
 }

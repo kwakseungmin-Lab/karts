@@ -11,16 +11,25 @@
       "camera": "extreme wide static shot — locked off, low angle from bridge level",
       "subject": "안개 낀 경계의 다리 전경 — 에이든과 카게마사 실루엣이 각각 다리 양 끝으로 멀어짐",
       "action": "두 실루엣이 안개 속으로 천천히 사라짐",
-      "characters": ["에이든(실루엣)", "카게마사(실루엣)"],
+      "characters": [
+        "에이든(실루엣)",
+        "카게마사(실루엣)"
+      ],
       "background_ref": "images/03_background_art/borderlands_bridge/bg_02_bridge_both_ends.png",
       "character_refs": [
         "images/01_character_sheets/aiden/aiden_01_front_view.png",
         "images/01_character_sheets/kagemasa/kagemasa_01_front_view.png"
       ],
       "insert_ref": null,
-      "frame_prompt": "Cinematic extreme wide static shot, locked off, both ends of a ruined stone bridge visible, Aiden (medieval knight in dark steel partial plate armor with chain mail, longsword sheathed on back) walking away left into fog, Kagemasa (samurai in deep navy oyoroi armor with gold imperial crest, nodachi sheathed) walking away right into fog, two silhouettes diverging symmetrically, heavy fog swallowing both figures, desaturated blue-grey tone, overcast sky, For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
+      "frame_prompt": "Cinematic extreme wide static shot, locked off, full ruined stone bridge visible. STRICT SYMMETRY — two silhouettes diverging in OPPOSITE directions: LEFT: Aiden, medieval knight in dark steel partial plate armor with chain mail, longsword sheathed on back, silhouette walking LEFT into thick fog. RIGHT: Kagemasa, samurai in deep navy oyoroi armor with gold imperial crest, nodachi sheathed, silhouette walking RIGHT into thick fog on the other end. The two figures grow smaller in opposite directions simultaneously, heavy fog swallowing both figures equally, perfectly symmetrical composition with bridge center empty, desaturated blue-grey tone, overcast sky. NOT the same direction — opposite ends of the bridge. For Honor cinematic trailer style, photorealistic, single cinematic frame, 1920x1080 16:9",
       "motion_desc": "Static locked camera, two silhouettes walk in opposite directions and gradually disappear into fog",
-      "color_grade": {"sat": 0.20, "bright": -0.05, "contrast": 1.1, "blue": 0.06, "red": -0.03}
+      "color_grade": {
+        "sat": 0.2,
+        "bright": -0.05,
+        "contrast": 1.1,
+        "blue": 0.06,
+        "red": -0.03
+      }
     },
     {
       "cut_id": "02",
@@ -35,7 +44,13 @@
       "insert_ref": null,
       "frame_prompt": "Cinematic slow crane-up aerial ascent, bird's eye view descending on ruined stone bridge, empty bridge with battle traces — blood stains, metal fragments, broken mask pieces on stone floor, fog on both sides of bridge, left side shows gothic Ashfeld castle silhouette and green forest, right side shows Myre misty wetlands and bamboo silhouette, two worlds divided by one bridge, extreme desaturation blue-grey, overcast, For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
       "motion_desc": "Slow crane-up from bridge level to aerial bird's eye view, fog fills frame edges",
-      "color_grade": {"sat": 0.20, "bright": -0.05, "contrast": 1.1, "blue": 0.06, "red": -0.03}
+      "color_grade": {
+        "sat": 0.2,
+        "bright": -0.05,
+        "contrast": 1.1,
+        "blue": 0.06,
+        "red": -0.03
+      }
     },
     {
       "cut_id": "03",
@@ -48,9 +63,15 @@
       "background_ref": null,
       "character_refs": [],
       "insert_ref": "images/05_cuts/action_cuts/cut_02_menpou_floor.png",
-      "frame_prompt": "Extreme close-up insert shot, broken cracked menpo (samurai demon face mask) lying on ancient stone floor, blood spreading on stone, sword scratch marks on cobblestone, metal fragments, shallow depth of field, desaturated blue-grey, single dust particle drifting in light, For Honor cinematic style, photorealistic, 1920x1080 16:9",
+      "frame_prompt": "Cinematic extreme close-up insert shot, time-lapse of aging — a broken cracked menpou demon face mask lying on ancient stone bridge floor, heavily weathered and oxidized after many years — cracks in the lacquer filled with green moss and small wildflowers growing through the metal, rust-orange oxidation spreading across the surface, thin ivy tendrils creeping over one edge, stone beneath stained with decades of rainwater residue, a small fern sprouting from the largest crack, cold overcast grey light, deeply desaturated, atmosphere of abandoned time and forgotten war, For Honor cinematic style, photorealistic, single cinematic frame, 1920x1080 16:9",
       "motion_desc": "Static, micro dust drift in ambient light, no camera movement",
-      "color_grade": {"sat": 0.20, "bright": -0.05, "contrast": 1.1, "blue": 0.06, "red": -0.03}
+      "color_grade": {
+        "sat": 0.2,
+        "bright": -0.05,
+        "contrast": 1.1,
+        "blue": 0.06,
+        "red": -0.03
+      }
     },
     {
       "cut_id": "04",
@@ -65,7 +86,13 @@
       "insert_ref": null,
       "frame_prompt": "Cinematic ultra-wide aerial bird's eye view, extreme pull-back reveal, Heathmoor landscape, ancient stone bridge tiny in center frame, left hill silhouettes of knight army marching (Iron Legion banners), right hill silhouettes of samurai army advancing (Dawn Empire banners), fog filling the valley between, overcast grey sky, crows circling above, two armies converging toward the same bridge, desaturated blue-grey, epic and tragic, For Honor cinematic trailer style, photorealistic, 1920x1080 16:9",
       "motion_desc": "Slow camera pull-back revealing full scale of landscape and converging armies",
-      "color_grade": {"sat": 0.20, "bright": -0.05, "contrast": 1.1, "blue": 0.06, "red": -0.03}
+      "color_grade": {
+        "sat": 0.2,
+        "bright": -0.05,
+        "contrast": 1.1,
+        "blue": 0.06,
+        "red": -0.03
+      }
     },
     {
       "cut_id": "05",
@@ -80,7 +107,13 @@
       "insert_ref": "images/05_cuts/action_cuts/cut_10_crow_blade.png",
       "frame_prompt": "Extreme close-up insert shot, crow perched on a rusted abandoned sword blade embedded in stone, single black feather detail, misty grey atmosphere, desaturated blue-grey, crow slowly spreads wings and takes flight, echoing the opening scene, For Honor cinematic style, photorealistic, 1920x1080 16:9",
       "motion_desc": "Crow static then takes flight — single feather drops, fade to black begins",
-      "color_grade": {"sat": 0.20, "bright": -0.05, "contrast": 1.1, "blue": 0.06, "red": -0.03}
+      "color_grade": {
+        "sat": 0.2,
+        "bright": -0.05,
+        "contrast": 1.1,
+        "blue": 0.06,
+        "red": -0.03
+      }
     },
     {
       "cut_id": "06",
@@ -95,7 +128,13 @@
       "insert_ref": null,
       "frame_prompt": "Cinematic title card, full black screen fade-in, centered title text '명예의 무게' with subtitle 'The Weight of Honor' in elegant serif typography, subtle grey-white lettering on pure black, no decoration, minimal, final frame of film, 1920x1080 16:9",
       "motion_desc": "Slow fade to black (3 seconds) then title text fades in over 3 seconds",
-      "color_grade": {"sat": 0.20, "bright": -0.05, "contrast": 1.1, "blue": 0.06, "red": -0.03}
+      "color_grade": {
+        "sat": 0.2,
+        "bright": -0.05,
+        "contrast": 1.1,
+        "blue": 0.06,
+        "red": -0.03
+      }
     }
   ]
 }
