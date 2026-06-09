@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>명예의 무게 — AI 단편영화 파이프라인 보고서</title>
+<style>
+:root {
+  --bg: #f5f6fa;
+  --surface: #ffffff;
+  --surface2: #f0f2f8;
+  --border: #e2e6f0;
+  --border2: #d0d6e8;
+  --blue: #3b6bff;
+  --blue-light: #ebefff;
+  --purple: #7c3aed;
+  --purple-light: #ede9fe;
+  --red: #e53e3e;
+  --red-light: #fff5f5;
+  --orange: #dd6b20;
+  --orange-light: #fffaf0;
+  --yellow: #d69e2e;
+  --yellow-light: #fffff0;
+  --green: #2f855a;
+  --green-light: #f0fff4;
+  --teal: #2c7a7b;
+  --teal-light: #e6fffa;
+  --gray: #4a5568;
+  --text: #1a202c;
+  --text-muted: #4a5568;
+  --text-dim: #a0aec0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 32px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', system-ui, sans-serif;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+/* ── 헤더 ─────────────────────────────── */
+.hero {
+  background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 40%, #1e40af 100%);
+  padding: 56px 48px 48px;
+  color: white;
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; }
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  color: rgba(255,255,255,0.9);
+}
+.hero h1 {
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+.hero h1 .sub { font-size: 24px; font-weight: 400; opacity: 0.75; display: block; margin-top: 4px; }
+.hero-desc {
+  font-size: 15px;
+  opacity: 0.8;
+  margin-bottom: 32px;
+  max-width: 600px;
+}
+.hero-stats {
+  display: flex;
+  gap: 0;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  overflow: hidden;
+  width: fit-content;
+}
+.stat {
+  padding: 14px 24px;
+  border-right: 1px solid rgba(255,255,255,0.15);
+  text-align: center;
+}
+.stat:last-child { border-right: none; }
+.stat-value { font-size: 22px; font-weight: 700; line-height: 1; }
+.stat-label { font-size: 11px; opacity: 0.7; margin-top: 3px; white-space: nowrap; }
+
+/* ── 레이아웃 ─────────────────────────── */
+.wrapper { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+section { padding: 44px 0; border-bottom: 1px solid var(--border); }
+section:last-child { border-bottom: none; }
+
+.section-header { margin-bottom: 28px; }
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--blue);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+.section-desc { font-size: 14px; color: var(--text-muted); }
+h3 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+p { color: var(--text-muted); margin-bottom: 10px; }
+
+/* ── 카드 ─────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.card-grid { display: grid; gap: 14px; }
+.card-grid-2 { grid-template-columns: 1fr 1fr; }
+.card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+/* ══════════════════════════════════════════════
+   핵심: 파이프라인 흐름도
+══════════════════════════════════════════════ */
+.pipeline-flow {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 36px 32px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+.pipeline-flow::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3b6bff, #7c3aed, #e53e3e, #dd6b20, #2f855a, #2c7a7b);
+}
+
+/* 중앙 연결선 */
+.flow-spine {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+}
+
+.flow-step {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 0;
+  position: relative;
+}
+
+.flow-step-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 2px;
+}
+
+.flow-num {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+  flex-shrink: 0;
+  z-index: 2;
+  box-shadow: var(--shadow-md);
+  color: white;
+}
+
+.flow-connector {
+  width: 2px;
+  flex: 1;
+  min-height: 28px;
+  margin: 4px 0;
+}
+
+.flow-step-right {
+  padding: 0 0 28px 18px;
+}
+.flow-step:last-child .flow-step-right { padding-bottom: 0; }
+
+.flow-card {
+  border: 1px solid;
+  border-radius: 12px;
+  padding: 18px 20px;
+  position: relative;
+  transition: box-shadow 0.2s;
+}
+.flow-card:hover { box-shadow: var(--shadow-md); }
+
+.flow-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.flow-phase-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 20px;
+}
+.flow-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+.flow-parallel {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  color: #92400e;
+}
+.flow-seq {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  color: #4b5563;
+}
+
+.flow-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 10px;
+  align-items: start;
+  margin-bottom: 10px;
+}
+.flow-io {
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.flow-io-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.flow-io-item {
+  font-size: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 2px 0;
+  color: var(--text-muted);
+}
+.flow-io-item::before { content: '›'; flex-shrink: 0; }
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 24px;
+  font-size: 18px;
+  color: var(--text-dim);
+}
+
+.flow-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.flow-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.tag {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* 색상 테마 per step */
+/* Step 1 — Blue */
+.s1 .flow-num { background: linear-gradient(135deg, #3b6bff, #1d4ed8); }
+.s1 .flow-connector { background: linear-gradient(#dbeafe, #ede9fe); }
+.s1 .flow-card { background: #f0f5ff; border-color: #bfcfff; }
+.s1 .flow-phase-badge { background: #dbeafe; color: #1e40af; }
+.s1 .flow-io { background: white; border: 1px solid #bfcfff; }
+.s1 .flow-io-label.in { color: #3b6bff; }
+.s1 .flow-io-label.out { color: #2f855a; }
+.s1 .tag { background: #dbeafe; color: #1e40af; }
+
+/* Step 2 — Purple */
+.s2 .flow-num { background: linear-gradient(135deg, #7c3aed, #5b21b6); }
+.s2 .flow-connector { background: linear-gradient(#ede9fe, #fce7f3); }
+.s2 .flow-card { background: #faf5ff; border-color: #d8b4fe; }
+.s2 .flow-phase-badge { background: #ede9fe; color: #5b21b6; }
+.s2 .flow-io { background: white; border: 1px solid #d8b4fe; }
+.s2 .flow-io-label.in { color: #7c3aed; }
+.s2 .flow-io-label.out { color: #2f855a; }
+.s2 .tag { background: #ede9fe; color: #5b21b6; }
+
+/* Step 3 — Red */
+.s3 .flow-num { background: linear-gradient(135deg, #e53e3e, #c53030); }
+.s3 .flow-connector { background: linear-gradient(#fee2e2, #fef3c7); }
+.s3 .flow-card { background: #fff8f8; border-color: #fca5a5; }
+.s3 .flow-phase-badge { background: #fee2e2; color: #b91c1c; }
+.s3 .flow-io { background: white; border: 1px solid #fca5a5; }
+.s3 .flow-io-label.in { color: #e53e3e; }
+.s3 .flow-io-label.out { color: #2f855a; }
+.s3 .tag { background: #fee2e2; color: #b91c1c; }
+
+/* Step 4 — Orange */
+.s4 .flow-num { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.s4 .flow-connector { background: linear-gradient(#fef3c7, #dcfce7); }
+.s4 .flow-card { background: #fffdf0; border-color: #fcd34d; }
+.s4 .flow-phase-badge { background: #fef3c7; color: #92400e; }
+.s4 .flow-io { background: white; border: 1px solid #fcd34d; }
+.s4 .flow-io-label.in { color: #d97706; }
+.s4 .flow-io-label.out { color: #2f855a; }
+.s4 .tag { background: #fef3c7; color: #92400e; }
+
+/* Step 5 — Green */
+.s5 .flow-num { background: linear-gradient(135deg, #10b981, #059669); }
+.s5 .flow-connector { background: linear-gradient(#dcfce7, #ccfbf1); }
+.s5 .flow-card { background: #f0fdf4; border-color: #86efac; }
+.s5 .flow-phase-badge { background: #dcfce7; color: #166534; }
+.s5 .flow-io { background: white; border: 1px solid #86efac; }
+.s5 .flow-io-label.in { color: #10b981; }
+.s5 .flow-io-label.out { color: #2f855a; }
+.s5 .tag { background: #dcfce7; color: #166534; }
+
+/* Step 6 — Teal */
+.s6 .flow-num { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
+.s6 .flow-connector { background: transparent; }
+.s6 .flow-card { background: #f0f9ff; border-color: #7dd3fc; }
+.s6 .flow-phase-badge { background: #e0f2fe; color: #075985; }
+.s6 .flow-io { background: white; border: 1px solid #7dd3fc; }
+.s6 .flow-io-label.in { color: #0ea5e9; }
+.s6 .flow-io-label.out { color: #2f855a; }
+.s6 .tag { background: #e0f2fe; color: #075985; }
+
+/* ── 에이전트 카드 ─────────────────────── */
+.agent-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.agent-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  border-top: 3px solid;
+}
+.agent-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.agent-icon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.agent-name { font-size: 15px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+.agent-role { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.agent-model {
+  margin-left: auto;
+  font-size: 10px; font-weight: 600;
+  padding: 3px 8px; border-radius: 4px;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text-muted); white-space: nowrap;
+  font-family: monospace;
+}
+
+.agent-section { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-dim); margin: 12px 0 6px; }
+
+.logic-list { list-style: none; counter-reset: logic; }
+.logic-list li {
+  counter-increment: logic;
+  display: flex; gap: 8px;
+  padding: 5px 0;
+  font-size: 13px; color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+.logic-list li:last-child { border-bottom: none; }
+.logic-list li::before {
+  content: counter(logic);
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--blue-light);
+  color: var(--blue);
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 2px;
+}
+
+/* ── 코드 ─────────────────────────────── */
+pre {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 14px 16px;
+  overflow-x: auto;
+  font-size: 12px; line-height: 1.7;
+  margin: 10px 0;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  color: #e2e8f0;
+}
+.ck { color: #93c5fd; }
+.cs { color: #86efac; }
+.cc { color: #64748b; }
+.cv { color: #fde68a; }
+.cn { color: #c4b5fd; }
+
+/* ── 테이블 ───────────────────────────── */
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  background: var(--surface2);
+  color: var(--text-muted);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 9px 12px; text-align: left;
+  border-bottom: 2px solid var(--border);
+}
+td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--text-muted); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--surface2); }
+td:first-child { color: var(--text); font-weight: 500; }
+
+/* ── 알림 박스 ─────────────────────────── */
+.alert {
+  border-radius: 8px; padding: 12px 16px;
+  margin: 10px 0; font-size: 13px;
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.alert-icon { flex-shrink: 0; font-size: 14px; margin-top: 1px; }
+.alert-warn { background: #fffbeb; border: 1px solid #fcd34d; color: #92400e; }
+.alert-info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+.alert-error { background: #fff1f2; border: 1px solid #fecdd3; color: #be123c; }
+.alert-success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+
+/* ── 색감 아크 ─────────────────────────── */
+.color-arc-bar {
+  display: flex; gap: 3px; margin: 16px 0; align-items: stretch; height: 70px;
+}
+.arc-seg {
+  flex: 1; border-radius: 6px; display: flex;
+  flex-direction: column; align-items: center;
+  justify-content: center; text-align: center;
+  padding: 4px 2px; min-width: 0;
+}
+.arc-seg-num { font-size: 11px; font-weight: 700; line-height: 1; }
+.arc-seg-sat { font-size: 10px; margin-top: 3px; }
+
+/* ── 워크플로우 시각화 ──────────────────── */
+.wf-viz {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+}
+.wf-phase-row {
+  margin-bottom: 16px;
+}
+.wf-phase-row:last-child { margin-bottom: 0; }
+.wf-phase-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--text-dim);
+  margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px;
+}
+.wf-phase-label::after {
+  content: '';
+  flex: 1; height: 1px; background: var(--border);
+}
+.wf-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.wf-chip {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+.wf-chip-icon { font-size: 13px; }
+.wf-chip-name { font-family: monospace; font-weight: 600; color: var(--text); }
+.wf-chip-detail { color: var(--text-dim); font-size: 11px; }
+.wf-arrow-row {
+  text-align: center; color: var(--text-dim);
+  font-size: 14px; padding: 4px 0;
+  display: flex; align-items: center; gap: 8px;
+}
+.wf-arrow-row::before, .wf-arrow-row::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+.wf-data-box {
+  display: inline-block;
+  background: var(--blue-light);
+  border: 1px solid #bfcfff;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 11px; font-family: monospace;
+  color: var(--blue);
+  margin: 4px 0;
+}
+.wf-parallel-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #fffbeb; border: 1px solid #fcd34d;
+  border-radius: 5px; padding: 3px 8px;
+  font-size: 10px; font-weight: 700; color: #92400e;
+}
+.wf-seq-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #f3f4f6; border: 1px solid #d1d5db;
+  border-radius: 5px; padding: 3px 8px;
+  font-size: 10px; font-weight: 700; color: #4b5563;
+}
+
+/* ── 파일 트리 ─────────────────────────── */
+.tree {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  color: var(--text-muted); line-height: 1.9;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 16px 20px;
+}
+.tree .dir { color: var(--blue); font-weight: 600; }
+.tree .cmt { color: var(--text-dim); }
+
+/* ── 해상도 체인 ───────────────────────── */
+.res-chain {
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap; margin: 14px 0;
+}
+.res-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 14px;
+  text-align: center; min-width: 120px;
+  box-shadow: var(--shadow);
+}
+.res-label { font-size: 11px; color: var(--text-muted); margin-bottom: 3px; }
+.res-val { font-size: 14px; font-weight: 700; font-family: monospace; color: var(--blue); }
+.res-note { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+.res-arrow { color: var(--text-dim); font-size: 16px; }
+
+/* ── 반응형 ───────────────────────────── */
+@media (max-width: 800px) {
+  .wrapper { padding: 0 20px; }
+  .hero { padding: 36px 20px; }
+  .hero h1 { font-size: 26px; }
+  .card-grid-2, .card-grid-3, .agent-grid { grid-template-columns: 1fr; }
+  .flow-row { grid-template-columns: 1fr; }
+  .flow-arrow { display: none; }
+  .hero-stats { flex-wrap: wrap; }
+}
+
+/* ── 목차 ─────────────────────────────── */
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 22px;
+  box-shadow: var(--shadow);
+  margin-bottom: 0;
+}
+.toc-title { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; }
+.toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.toc-grid a {
+  color: var(--text-muted); text-decoration: none;
+  font-size: 13px; padding: 4px 0;
+  display: flex; align-items: center; gap: 8px;
+  border-radius: 4px; transition: color 0.15s;
+}
+.toc-grid a:hover { color: var(--blue); }
+.toc-grid a span { color: var(--text-dim); font-size: 11px; font-family: monospace; }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════ HERO ═══════════════════════════════ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">● karts — AI 단편영화 파이프라인 분석 보고서</div>
+    <h1>
+      명예의 무게
+      <span class="sub">The Weight of Honor</span>
+    </h1>
+    <div class="hero-desc">
+      Claude Code Workflow + 6개 전문 에이전트가 기획안에서 완성 영상까지 자동 제작하는 AI 파이프라인
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-value">6</div><div class="stat-label">파이프라인 페이즈</div></div>
+      <div class="stat"><div class="stat-value">6</div><div class="stat-label">전문 에이전트</div></div>
+      <div class="stat"><div class="stat-value">12</div><div class="stat-label">씬 구성</div></div>
+      <div class="stat"><div class="stat-value">~63컷</div><div class="stat-label">총 컷 수</div></div>
+      <div class="stat"><div class="stat-value">8~10분</div><div class="stat-label">목표 상영시간</div></div>
+      <div class="stat"><div class="stat-value">1920×1080</div><div class="stat-label">최종 해상도</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrapper">
+
+<!-- ═══════ 목차 ════════════════════════════════ -->
+<section>
+  <div class="toc">
+    <div class="toc-title">목차</div>
+    <div class="toc-grid">
+      <a href="#overview"><span>01</span> 시스템 구조</a>
+      <a href="#pipeline"><span>02</span> 파이프라인 전체 흐름</a>
+      <a href="#workflow"><span>03</span> 워크플로우 오케스트레이션</a>
+      <a href="#agents"><span>04</span> 에이전트 상세 명세</a>
+      <a href="#dataflow"><span>05</span> 데이터 흐름 체인</a>
+      <a href="#tools"><span>06</span> 도구 레이어</a>
+      <a href="#colorarc"><span>07</span> 색감 아크</a>
+      <a href="#audio"><span>08</span> 오디오 파이프라인</a>
+      <a href="#techspec"><span>09</span> 기술 명세 & 주의사항</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 01 시스템 구조 ══════════════════════ -->
+<section id="overview">
+  <div class="section-header">
+    <div class="section-label">01 — System Overview</div>
+    <h2>시스템 구조</h2>
+    <div class="section-desc">karts 레포지토리는 단편영화 "명예의 무게"를 AI로 자동 제작하는 파이프라인입니다.
+    Claude Code Workflow가 오케스트레이터로 동작하고 6개의 전문 에이전트가 각 단계를 담당합니다.</div>
+  </div>
+
+  <div class="card-grid card-grid-3" style="margin-bottom:20px;">
+    <div class="card">
+      <div style="font-size:28px;margin-bottom:8px;">🎬</div>
+      <h3>오케스트레이터</h3>
+      <p>Claude Code Workflow<br><code style="font-size:11px;background:var(--surface2);padding:2px 6px;border-radius:3px;border:1px solid var(--border);">.claude/workflows/film-pipeline.js</code><br>
+      JavaScript로 에이전트 실행 순서·병렬화·데이터 전달을 제어합니다.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:28px;margin-bottom:8px;">🤖</div>
+      <h3>전문 에이전트 6종</h3>
+      <p><code style="font-size:11px;background:var(--surface2);padding:2px 6px;border-radius:3px;border:1px solid var(--border);">.claude/agents/</code>에 마크다운으로 정의된 각 에이전트가 독립적 역할을 수행하며 출력물을 다음 에이전트에게 연결합니다.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:28px;margin-bottom:8px;">🔧</div>
+      <h3>도구 레이어</h3>
+      <p><code style="font-size:11px;background:var(--surface2);padding:2px 6px;border-radius:3px;border:1px solid var(--border);">tools/</code> 패키지에 GPT Image, Sora, Higgsfield, FFmpeg 등 외부 API와 로컬 툴이 <code>BaseTool</code> 추상 계약으로 통합됩니다.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:12px;">파일 구조</h3>
+    <div class="tree">
+<span class="dir">karts/</span>
+├── <span class="dir">.claude/</span>                         <span class="cmt"># Claude Code 설정</span>
+│   ├── <span class="dir">agents/</span>                      <span class="cmt"># 에이전트 시스템 프롬프트 (마크다운)</span>
+│   │   ├── storyboard-artist.md
+│   │   ├── frame-artist.md
+│   │   ├── img2video.md             <span class="cmt"># Cinematographer</span>
+│   │   ├── color-grader.md
+│   │   ├── video-editor.md
+│   │   └── film-critic.md
+│   └── <span class="dir">workflows/</span>
+│       └── film-pipeline.js         <span class="cmt"># 메인 오케스트레이터 스크립트</span>
+│
+├── <span class="dir">tools/</span>                           <span class="cmt"># 도구 레이어</span>
+│   ├── base_tool.py                 <span class="cmt"># 모든 툴의 추상 베이스 클래스</span>
+│   ├── tool_registry.py             <span class="cmt"># 자동 발견 레지스트리</span>
+│   ├── cost_tracker.py              <span class="cmt"># 예산 관리 시스템</span>
+│   ├── <span class="dir">video/</span>                     <span class="cmt"># Sora, Higgsfield, FFmpeg 등 34종</span>
+│   ├── <span class="dir">graphics/</span>                  <span class="cmt"># GPT Image, FLUX 등 14종</span>
+│   ├── <span class="dir">audio/</span>                     <span class="cmt"># TTS, 음악 생성 12종</span>
+│   └── <span class="dir">enhancement/</span>               <span class="cmt"># 색보정</span>
+│
+└── <span class="dir">short-film-project/</span>
+    ├── <span class="dir">plan/</span>                      <span class="cmt"># film_plan.md, color_grades.json</span>
+    ├── <span class="dir">images/</span>                    <span class="cmt"># 캐릭터 시트, 컨셉아트, 배경</span>
+    ├── <span class="dir">storyboard/</span>               <span class="cmt"># 생성된 스토리보드 JSON</span>
+    └── <span class="dir">final/</span>
+        ├── <span class="dir">frames/</span>               <span class="cmt"># 컷 이미지 PNG</span>
+        ├── <span class="dir">videos/</span>               <span class="cmt"># Sora 생성 원본 MP4</span>
+        └── <span class="dir">graded/</span>               <span class="cmt"># 색보정 완료 MP4</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 02 파이프라인 전체 흐름 ════════════ -->
+<section id="pipeline">
+  <div class="section-header">
+    <div class="section-label">02 — Pipeline Flow</div>
+    <h2>파이프라인 전체 흐름</h2>
+    <div class="section-desc">기획안(film_plan.md)과 컨셉아트를 시작점으로 6단계를 거쳐 완성 영상이 출력됩니다. Phase 1~4는 병렬 실행, Phase 5~6은 순차 실행입니다.</div>
+  </div>
+
+  <div class="pipeline-flow">
+    <div class="flow-spine">
+
+      <!-- ─── Phase 1 ─── -->
+      <div class="flow-step s1">
+        <div class="flow-step-left">
+          <div class="flow-num">1</div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-step-right">
+          <div class="flow-card">
+            <div class="flow-card-header">
+              <div class="flow-phase-badge">Storyboard</div>
+              <div class="flow-title">스토리보드 생성</div>
+              <div class="flow-parallel">⚡ parallel(12씬)</div>
+            </div>
+            <div class="flow-desc">기획안과 컨셉아트를 읽어 12개 씬의 스토리보드 JSON을 생성합니다. 각 씬이 독립적으로 병렬 처리되며, Structured Output으로 스키마를 강제합니다.</div>
+            <div class="flow-row">
+              <div class="flow-io">
+                <div class="flow-io-label in">INPUT</div>
+                <div class="flow-io-item">plan/film_plan.md (스토리·캐릭터 외형)</div>
+                <div class="flow-io-item">plan/color_grades.json</div>
+                <div class="flow-io-item">images/01_character_sheets/</div>
+                <div class="flow-io-item">images/03_background_art/</div>
+                <div class="flow-io-item">images/05_cuts/action_cuts/</div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-io">
+                <div class="flow-io-label out">OUTPUT</div>
+                <div class="flow-io-item">storyboard/scene{N}_storyboard.json</div>
+                <div class="flow-io-item">씬당 4~6컷 (scene/insert/transition)</div>
+                <div class="flow-io-item">character_refs 경로 내장</div>
+                <div class="flow-io-item">color_grade 파라미터 내장</div>
+              </div>
+            </div>
+            <div class="flow-tags">
+              <span class="tag" style="background:#dbeafe;color:#1e40af;">에이전트: storyboard-artist</span>
+              <span class="tag" style="background:#f3f4f6;color:#374151;">모델: Sonnet</span>
+              <span class="tag" style="background:#fef9c3;color:#713f12;">12개 JSON 병렬 출력</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Phase 2 ─── -->
+      <div class="flow-step s2">
+        <div class="flow-step-left">
+          <div class="flow-num">2</div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-step-right">
+          <div class="flow-card">
+            <div class="flow-card-header">
+              <div class="flow-phase-badge">Frame Art</div>
+              <div class="flow-title">컷 이미지 생성</div>
+              <div class="flow-parallel">⚡ parallel(~63컷)</div>
+            </div>
+            <div class="flow-desc">스토리보드 JSON의 각 컷을 GPT Image로 생성합니다. character_refs 경로가 있으면 <code>images.edit()</code> 엔드포인트로 캐릭터 참조 이미지를 주입해 외형 일관성을 유지합니다.</div>
+            <div class="flow-row">
+              <div class="flow-io">
+                <div class="flow-io-label in">INPUT</div>
+                <div class="flow-io-item">scene{N}_storyboard.json (cut 배열)</div>
+                <div class="flow-io-item">character_refs → 캐릭터 시트 PNG</div>
+                <div class="flow-io-item">frame_prompt, insert_ref</div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-io">
+                <div class="flow-io-label out">OUTPUT</div>
+                <div class="flow-io-item">final/frames/scene{N}_cut{M}.png (1536×1024)</div>
+                <div class="flow-io-item">final/frames/scene{N}_cut{M}_hd.png (1920×1080)</div>
+                <div class="flow-io-item">FFmpeg 16:9 crop + lanczos scale</div>
+              </div>
+            </div>
+            <div class="flow-tags">
+              <span class="tag" style="background:#ede9fe;color:#5b21b6;">에이전트: frame-artist</span>
+              <span class="tag" style="background:#f3f4f6;color:#374151;">모델: Haiku</span>
+              <span class="tag" style="background:#ede9fe;color:#5b21b6;">GPT Image 2 · edit/generate 분기</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Phase 3 ─── -->
+      <div class="flow-step s3">
+        <div class="flow-step-left">
+          <div class="flow-num">3</div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-step-right">
+          <div class="flow-card">
+            <div class="flow-card-header">
+              <div class="flow-phase-badge">Production</div>
+              <div class="flow-title">이미지 → 영상 변환 (Sora + Higgsfield CLI)</div>
+              <div class="flow-parallel">⚡ parallel(~63컷)</div>
+            </div>
+            <div class="flow-desc">각 컷 이미지를 <strong>Sora sora-2</strong> 또는 <strong>Higgsfield CLI</strong>로 영상화합니다. 씬 내용에 따라 모델을 선택하며, Sora는 REST API 직접 호출(SDK 우회), Higgsfield는 CLI를 통해 upload → generate → wait 순으로 처리합니다. 모든 결과는 FFmpeg로 1920×1080 업스케일합니다.</div>
+            <div class="flow-row">
+              <div class="flow-io">
+                <div class="flow-io-label in">INPUT</div>
+                <div class="flow-io-item">final/frames/scene{N}_cut{M}_hd.png</div>
+                <div class="flow-io-item">motion_desc (카메라 움직임)</div>
+                <div class="flow-io-item">frame_prompt, duration_sec</div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-io">
+                <div class="flow-io-label out">OUTPUT</div>
+                <div class="flow-io-item">final/videos/scene{N}_cut{M}.mp4</div>
+                <div class="flow-io-item">1920×1080, H.264, yuv420p</div>
+                <div class="flow-io-item">4초 / 8초 / 12초 중 선택</div>
+              </div>
+            </div>
+            <div style="background:#fff8f8;border:1px solid #fca5a5;border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div>
+                  <div style="font-size:11px;font-weight:700;color:#b91c1c;margin-bottom:6px;">🔴 Sora sora-2</div>
+                  <div style="font-size:12px;color:#4a5568;line-height:1.6;">
+                    • 생성 크기: <code>1280×720</code> (지원 landscape 최대)<br>
+                    • PIL 1920×1080 → 1280×720 리사이즈<br>
+                    • base64 data URL → REST POST /v1/videos<br>
+                    • 10초 간격 폴링 → /content 스트리밍 다운로드<br>
+                    • 주력 모델 (품질 최고)
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:700;color:#92400e;margin-bottom:6px;">🟠 Higgsfield CLI</div>
+                  <div style="font-size:12px;color:#4a5568;line-height:1.6;">
+                    • <code>higgsfield upload create {image}</code><br>
+                    • <code>higgsfield generate create veo3_1_lite</code><br>
+                    • <code>higgsfield generate wait {job_id}</code><br>
+                    • 동시 Job 최대 8개 (Ultra 플랜)<br>
+                    • 폭력 씬 NSFW 필터 주의
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flow-tags">
+              <span class="tag" style="background:#fee2e2;color:#b91c1c;">에이전트: img2video</span>
+              <span class="tag" style="background:#f3f4f6;color:#374151;">모델: Haiku</span>
+              <span class="tag" style="background:#fee2e2;color:#b91c1c;">Sora sora-2 (1280×720)</span>
+              <span class="tag" style="background:#fef3c7;color:#92400e;">Higgsfield veo3_1_lite / seedance1_5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Phase 4 ─── -->
+      <div class="flow-step s4">
+        <div class="flow-step-left">
+          <div class="flow-num">4</div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-step-right">
+          <div class="flow-card">
+            <div class="flow-card-header">
+              <div class="flow-phase-badge">Color Grade</div>
+              <div class="flow-title">씬별 색보정</div>
+              <div class="flow-parallel">⚡ parallel(12씬)</div>
+            </div>
+            <div class="flow-desc">color_grades.json의 씬별 파라미터를 FFmpeg eq + colorbalance 필터로 적용합니다. 채도·밝기·명암비·컬러 밸런스를 조정해 스토리 감정 아크를 색감으로 구현합니다.</div>
+            <div class="flow-row">
+              <div class="flow-io">
+                <div class="flow-io-label in">INPUT</div>
+                <div class="flow-io-item">final/videos/scene{N}_cut*.mp4</div>
+                <div class="flow-io-item">plan/color_grades.json</div>
+                <div class="flow-io-item">sat / bright / contrast / red / blue 파라미터</div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-io">
+                <div class="flow-io-label out">OUTPUT</div>
+                <div class="flow-io-item">final/graded/scene{N}_cut*.mp4</div>
+                <div class="flow-io-item">1920×1080 유지, H.264 CRF 18</div>
+              </div>
+            </div>
+            <div class="flow-tags">
+              <span class="tag" style="background:#fef3c7;color:#92400e;">에이전트: color-grader</span>
+              <span class="tag" style="background:#f3f4f6;color:#374151;">모델: Haiku</span>
+              <span class="tag" style="background:#fef3c7;color:#92400e;">FFmpeg eq + colorbalance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Phase 5 ─── -->
+      <div class="flow-step s5">
+        <div class="flow-step-left">
+          <div class="flow-num">5</div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-step-right">
+          <div class="flow-card">
+            <div class="flow-card-header">
+              <div class="flow-phase-badge">Edit</div>
+              <div class="flow-title">최종 편집 조립</div>
+              <div class="flow-seq">순차 실행</div>
+            </div>
+            <div class="flow-desc">색보정된 모든 컷을 씬·컷 번호 순서로 이어붙입니다. 씬 경계마다 0.8초 FFmpeg xfade 크로스페이드를 적용하고, 컷 내부는 직접 연결합니다.</div>
+            <div class="flow-row">
+              <div class="flow-io">
+                <div class="flow-io-label in">INPUT</div>
+                <div class="flow-io-item">final/graded/ 의 전체 MP4 (~63개)</div>
+                <div class="flow-io-item">scene01_cut01 → scene12_cutN 정렬</div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-io">
+                <div class="flow-io-label out">OUTPUT</div>
+                <div class="flow-io-item">final/the_weight_of_honor_v2.mp4</div>
+                <div class="flow-io-item">1920×1080, H.264, CRF18, faststart</div>
+                <div class="flow-io-item">씬 경계 xfade 0.8초</div>
+              </div>
+            </div>
+            <div class="flow-tags">
+              <span class="tag" style="background:#dcfce7;color:#166534;">에이전트: video-editor</span>
+              <span class="tag" style="background:#f3f4f6;color:#374151;">모델: Sonnet</span>
+              <span class="tag" style="background:#dcfce7;color:#166534;">FFmpeg xfade crossfade</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Phase 6 ─── -->
+      <div class="flow-step s6">
+        <div class="flow-step-left">
+          <div class="flow-num">6</div>
+        </div>
+        <div class="flow-step-right">
+          <div class="flow-card">
+            <div class="flow-card-header">
+              <div class="flow-phase-badge">QA</div>
+              <div class="flow-title">품질 검수 리포트</div>
+              <div class="flow-seq">순차 실행</div>
+            </div>
+            <div class="flow-desc">ffprobe로 해상도·코덱·길이를 기계적으로 검증하고, 기획안 대비 색감 아크·스토리 흐름을 평가해 100점 만점 채점 리포트를 생성합니다.</div>
+            <div class="flow-row">
+              <div class="flow-io">
+                <div class="flow-io-label in">INPUT</div>
+                <div class="flow-io-item">final/the_weight_of_honor_v2.mp4</div>
+                <div class="flow-io-item">final/graded/ (씬별 영상)</div>
+                <div class="flow-io-item">plan/film_plan.md, color_grades.json</div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-io">
+                <div class="flow-io-label out">OUTPUT</div>
+                <div class="flow-io-item">final/review_report.md</div>
+                <div class="flow-io-item">100점 채점 (기술·색감·스토리·완성도)</div>
+                <div class="flow-io-item">개선 권고사항 목록</div>
+              </div>
+            </div>
+            <div class="flow-tags">
+              <span class="tag" style="background:#e0f2fe;color:#075985;">에이전트: film-critic</span>
+              <span class="tag" style="background:#f3f4f6;color:#374151;">모델: Sonnet</span>
+              <span class="tag" style="background:#e0f2fe;color:#075985;">ffprobe 자동 검증</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 03 워크플로우 오케스트레이션 ══════════ -->
+<section id="workflow">
+  <div class="section-header">
+    <div class="section-label">03 — Workflow Orchestration</div>
+    <h2>워크플로우 오케스트레이션</h2>
+    <div class="section-desc"><code>.claude/workflows/film-pipeline.js</code> — JavaScript로 작성된 Claude Code Workflow 스크립트가 agent(), parallel(), phase() 프리미티브로 실행 DAG를 기술합니다.</div>
+  </div>
+
+  <div class="wf-viz">
+    <!-- Phase 1 -->
+    <div class="wf-phase-row">
+      <div class="wf-phase-label">Phase 1 · Storyboard <span class="wf-parallel-badge" style="margin-left:8px;">⚡ parallel(12)</span></div>
+      <div class="wf-chips">
+        <div class="wf-chip" style="border-color:#bfcfff;"><span class="wf-chip-icon">📋</span><span class="wf-chip-name">storyboard:scene01</span></div>
+        <div class="wf-chip" style="border-color:#bfcfff;"><span class="wf-chip-icon">📋</span><span class="wf-chip-name">storyboard:scene02</span></div>
+        <div class="wf-chip" style="border-color:#bfcfff;"><span class="wf-chip-icon">📋</span><span class="wf-chip-name">storyboard:scene03</span></div>
+        <div class="wf-chip" style="opacity:0.5;"><span class="wf-chip-detail">…× 9</span></div>
+        <div class="wf-chip" style="border-color:#bfcfff;"><span class="wf-chip-icon">📋</span><span class="wf-chip-name">storyboard:scene12</span></div>
+      </div>
+      <div style="margin-top:6px;"><span class="wf-data-box">validBoards.flatMap(sb =&gt; sb.cuts) → allCuts (~63개) — 다음 페이즈 투입</span></div>
+    </div>
+
+    <div class="wf-arrow-row">↓</div>
+
+    <!-- Phase 2 -->
+    <div class="wf-phase-row">
+      <div class="wf-phase-label">Phase 2 · Frame Art <span class="wf-parallel-badge" style="margin-left:8px;">⚡ parallel(~63)</span></div>
+      <div class="wf-chips">
+        <div class="wf-chip" style="border-color:#d8b4fe;"><span class="wf-chip-icon">🎨</span><span class="wf-chip-name">frame:s01c01</span></div>
+        <div class="wf-chip" style="border-color:#d8b4fe;"><span class="wf-chip-icon">🎨</span><span class="wf-chip-name">frame:s01c02</span></div>
+        <div class="wf-chip" style="border-color:#d8b4fe;"><span class="wf-chip-icon">🎨</span><span class="wf-chip-name">frame:s01c03</span></div>
+        <div class="wf-chip" style="opacity:0.5;"><span class="wf-chip-detail">…× 60</span></div>
+      </div>
+      <div style="margin-top:6px;"><span class="wf-data-box" style="background:#faf5ff;border-color:#d8b4fe;color:#5b21b6;">final/frames/scene{N}_cut{M}_hd.png 생성</span></div>
+    </div>
+
+    <div class="wf-arrow-row">↓</div>
+
+    <!-- Phase 3 -->
+    <div class="wf-phase-row">
+      <div class="wf-phase-label">Phase 3 · Production (Sora) <span class="wf-parallel-badge" style="margin-left:8px;">⚡ parallel(~63)</span></div>
+      <div class="wf-chips">
+        <div class="wf-chip" style="border-color:#fca5a5;"><span class="wf-chip-icon">🎥</span><span class="wf-chip-name">video:s01c01</span><span class="wf-chip-detail">Sora</span></div>
+        <div class="wf-chip" style="border-color:#fca5a5;"><span class="wf-chip-icon">🎥</span><span class="wf-chip-name">video:s01c02</span><span class="wf-chip-detail">Sora</span></div>
+        <div class="wf-chip" style="border-color:#fed7aa;"><span class="wf-chip-icon">🎥</span><span class="wf-chip-name">video:s06c01</span><span class="wf-chip-detail">Higgsfield</span></div>
+        <div class="wf-chip" style="opacity:0.5;"><span class="wf-chip-detail">…× 60</span></div>
+      </div>
+      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
+        <span class="wf-data-box" style="background:#fff8f8;border-color:#fca5a5;color:#b91c1c;">Sora: 1280×720 생성 → FFmpeg 1920×1080 업스케일</span>
+        <span class="wf-data-box" style="background:#fffbeb;border-color:#fcd34d;color:#92400e;">Higgsfield: CLI upload→generate→wait → FFmpeg 업스케일</span>
+      </div>
+    </div>
+
+    <div class="wf-arrow-row">↓</div>
+
+    <!-- Phase 4 -->
+    <div class="wf-phase-row">
+      <div class="wf-phase-label">Phase 4 · Color Grade <span class="wf-parallel-badge" style="margin-left:8px;">⚡ parallel(12)</span></div>
+      <div class="wf-chips">
+        <div class="wf-chip" style="border-color:#fcd34d;"><span class="wf-chip-icon">🎨</span><span class="wf-chip-name">grade:scene01</span></div>
+        <div class="wf-chip" style="border-color:#fcd34d;"><span class="wf-chip-icon">🎨</span><span class="wf-chip-name">grade:scene02</span></div>
+        <div class="wf-chip" style="opacity:0.5;"><span class="wf-chip-detail">…× 10</span></div>
+        <div class="wf-chip" style="border-color:#fcd34d;"><span class="wf-chip-icon">🎨</span><span class="wf-chip-name">grade:scene12</span></div>
+      </div>
+      <div style="margin-top:6px;"><span class="wf-data-box" style="background:#fffdf0;border-color:#fcd34d;color:#92400e;">final/graded/scene{N}_cut*.mp4 생성</span></div>
+    </div>
+
+    <div class="wf-arrow-row">↓</div>
+
+    <!-- Phase 5 -->
+    <div class="wf-phase-row">
+      <div class="wf-phase-label">Phase 5 · Edit <span class="wf-seq-badge" style="margin-left:8px;">순차 실행</span></div>
+      <div class="wf-chips">
+        <div class="wf-chip" style="border-color:#86efac;"><span class="wf-chip-icon">✂️</span><span class="wf-chip-name">final-edit</span><span class="wf-chip-detail">graded/*.mp4 → the_weight_of_honor_v2.mp4</span></div>
+      </div>
+      <div style="margin-top:6px;"><span class="wf-data-box" style="background:#f0fdf4;border-color:#86efac;color:#166534;">final/the_weight_of_honor_v2.mp4 (1920×1080, 8~10분)</span></div>
+    </div>
+
+    <div class="wf-arrow-row">↓</div>
+
+    <!-- Phase 6 -->
+    <div class="wf-phase-row">
+      <div class="wf-phase-label">Phase 6 · QA <span class="wf-seq-badge" style="margin-left:8px;">순차 실행</span></div>
+      <div class="wf-chips">
+        <div class="wf-chip" style="border-color:#7dd3fc;"><span class="wf-chip-icon">🔍</span><span class="wf-chip-name">film-critic</span><span class="wf-chip-detail">기획안 대비 검수 리포트 생성</span></div>
+      </div>
+      <div style="margin-top:6px;"><span class="wf-data-box" style="background:#f0f9ff;border-color:#7dd3fc;color:#075985;">final/review_report.md (100점 채점)</span></div>
+    </div>
+  </div>
+
+  <div class="card-grid card-grid-2" style="margin-top:16px;">
+    <div class="card">
+      <h3>병렬 처리 전략</h3>
+      <p>Phase 1~4는 각 씬/컷이 독립적이므로 <code>parallel()</code>로 최대 병렬화합니다. Claude Code Workflow의 동시 에이전트는 <code>min(16, cpu-2)</code>로 캡 되고, 초과 작업은 큐에서 대기합니다.</p>
+    </div>
+    <div class="card">
+      <h3>Structured Output 활용</h3>
+      <p>Phase 1에서 <code>schema: STORYBOARD_SCHEMA</code> 옵션으로 에이전트 출력을 강제 검증합니다. 워크플로우가 반환값에서 <code>validBoards.flatMap(sb =&gt; sb.cuts)</code>를 통해 타입 안전하게 컷 목록을 추출해 Phase 2에 투입합니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 04 에이전트 상세 ════════════════════ -->
+<section id="agents">
+  <div class="section-header">
+    <div class="section-label">04 — Agent Specifications</div>
+    <h2>에이전트 상세 명세</h2>
+  </div>
+
+  <div class="agent-grid">
+
+    <!-- storyboard-artist -->
+    <div class="agent-card" style="border-top-color:#3b6bff;">
+      <div class="agent-header">
+        <div class="agent-icon" style="background:#eff6ff;border:1px solid #bfdbfe;">📋</div>
+        <div>
+          <div class="agent-name">storyboard-artist</div>
+          <div class="agent-role">기획안 + 컨셉아트 → 스토리보드 JSON 생성</div>
+        </div>
+        <div class="agent-model">Sonnet</div>
+      </div>
+      <div class="agent-section">작업 절차</div>
+      <ul class="logic-list">
+        <li>film_plan.md 파싱 → 캐릭터 외형(갑옷·무기·흉터), 씬 구성, 색감 방향 추출</li>
+        <li>images/ 디렉토리 ls 스캔 → 실제 존재하는 에셋 경로 확보 (없는 경로 제외)</li>
+        <li>color_grades.json 읽어 씬별 sat/bright/contrast/red/blue 수치 확인</li>
+        <li>씬당 4~6컷 구성 (scene 8초 / insert 3~4초 / transition 4~6초)</li>
+        <li>character_refs(실존 경로만), frame_prompt, color_grade를 컷별로 내장</li>
+        <li>storyboard/scene{N:02d}_storyboard.json 저장</li>
+      </ul>
+    </div>
+
+    <!-- frame-artist -->
+    <div class="agent-card" style="border-top-color:#7c3aed;">
+      <div class="agent-header">
+        <div class="agent-icon" style="background:#faf5ff;border:1px solid #e9d5ff;">🎨</div>
+        <div>
+          <div class="agent-name">frame-artist</div>
+          <div class="agent-role">스토리보드 컷 → GPT Image 이미지 생성</div>
+        </div>
+        <div class="agent-model">Haiku</div>
+      </div>
+      <div class="agent-section">작업 절차</div>
+      <ul class="logic-list">
+        <li>storyboard JSON 로드 → cut 목록 순회</li>
+        <li>character_refs 경로 존재 확인 (os.path.exists)</li>
+        <li>참조 있으면 valid_refs[0]를 GPT Image <code>edit()</code>에 전달 → 캐릭터 스타일 힌트 주입</li>
+        <li>참조 없으면 GPT Image <code>generate()</code>로 텍스트 프롬프트만 사용</li>
+        <li>response.data[0].b64_json 디코딩 → PNG 저장 (1536×1024)</li>
+        <li>FFmpeg crop(16:9) + scale(1920:1080:lanczos) → HD 변환 후 저장</li>
+      </ul>
+    </div>
+
+    <!-- img2video -->
+    <div class="agent-card" style="border-top-color:#e53e3e;">
+      <div class="agent-header">
+        <div class="agent-icon" style="background:#fff5f5;border:1px solid #fed7d7;">🎥</div>
+        <div>
+          <div class="agent-name">img2video</div>
+          <div class="agent-role">컷 이미지 → Sora / Higgsfield CLI 영상 변환 (Cinematographer)</div>
+        </div>
+        <div class="agent-model">Haiku</div>
+      </div>
+
+      <div class="agent-section">모델 선택 기준</div>
+      <table style="margin-bottom:12px;">
+        <thead><tr><th>모델</th><th>품질</th><th>길이</th><th>생성 크기</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td>Sora sora-2</td><td>최고</td><td>4/8/12초</td><td>1280×720</td><td>주력 — input_reference로 첫 프레임 고정</td></tr>
+          <tr><td>Higgsfield veo3_1_lite</td><td>높음</td><td>8초</td><td>업로드 ID</td><td>NSFW 필터 주의 (폭력 씬)</td></tr>
+          <tr><td>Higgsfield seedance1_5</td><td>보통</td><td>4초</td><td>업로드 ID</td><td>빠른 테스트용</td></tr>
+        </tbody>
+      </table>
+
+      <div class="agent-section">Sora 처리 흐름 (REST 직접 호출)</div>
+      <ul class="logic-list">
+        <li>PIL로 1920×1080 → <strong>1280×720</strong> 리사이즈 (sora-2 지원 landscape 크기)</li>
+        <li>base64 인코딩 → data:image/png;base64,… data URL 생성</li>
+        <li><code>requests.post()</code> 직접 호출 — SDK 우회 (SDK가 image_url 방식 미지원)</li>
+        <li>payload에 <code>input_reference: &#123;"image_url": data_url&#125;</code>로 첫 프레임 고정</li>
+        <li>/videos/{id} 엔드포인트 10초 간격 폴링 (최대 600초)</li>
+        <li>/videos/{id}/content 스트리밍 다운로드 후 FFmpeg 1920×1080 업스케일</li>
+      </ul>
+
+      <div class="agent-section">Higgsfield CLI 처리 흐름</div>
+      <pre style="font-size:11px;"><span class="cc"># 1. 이미지 업로드 → upload_id 획득</span>
+upload_id=$(<span class="cs">higgsfield upload create</span> scene04.png --json \
+  | python3 -c <span class="cs">"import sys,json; print(json.load(sys.stdin)['id'])"</span>)
+
+<span class="cc"># 2. 영상 생성 Job 제출 → job_id 획득</span>
+job_id=$(<span class="cs">higgsfield generate create</span> veo3_1_lite \
+  --prompt <span class="cs">"..."</span> --image $upload_id --json \
+  | python3 -c <span class="cs">"import sys,json; print(json.load(sys.stdin)[0])"</span>)
+
+<span class="cc"># 3. 완료 대기 (최대 15분)</span>
+<span class="cs">higgsfield generate wait</span> $job_id --timeout 15m --json --quiet</pre>
+    </div>
+
+    <!-- color-grader -->
+    <div class="agent-card" style="border-top-color:#d97706;">
+      <div class="agent-header">
+        <div class="agent-icon" style="background:#fffbeb;border:1px solid #fde68a;">🎞️</div>
+        <div>
+          <div class="agent-name">color-grader</div>
+          <div class="agent-role">씬별 FFmpeg 색보정 적용</div>
+        </div>
+        <div class="agent-model">Haiku</div>
+      </div>
+      <div class="agent-section">FFmpeg 필터 체인</div>
+      <pre style="font-size:11px;"><span class="cc"># eq: 채도·밝기·명암비</span>
+<span class="cc"># colorbalance: R/B 채널 (그림자/미드/하이라이트 3단 분리)</span>
+-vf <span class="cs">"eq=brightness={b}:contrast={c}:saturation={s},
+     colorbalance=rs={r}:bs={bl}:
+                 rm={r*0.5}:bm={bl*0.5}:
+                 rh={r*0.3}:bh={bl*0.3}"</span></pre>
+    </div>
+
+    <!-- video-editor -->
+    <div class="agent-card" style="border-top-color:#10b981;">
+      <div class="agent-header">
+        <div class="agent-icon" style="background:#f0fdf4;border:1px solid #bbf7d0;">✂️</div>
+        <div>
+          <div class="agent-name">video-editor</div>
+          <div class="agent-role">전체 컷 조립 + xfade 트랜지션</div>
+        </div>
+        <div class="agent-model">Sonnet</div>
+      </div>
+      <div class="agent-section">편집 규칙</div>
+      <ul class="logic-list">
+        <li>graded/ 내 파일을 scene-cut 번호 순으로 정렬</li>
+        <li>씬 경계: 0.8초 FFmpeg xfade crossfade (offset = 누적시간 - 0.8)</li>
+        <li>컷 내부: 직접 이어붙임 (빠른 컷 효과)</li>
+        <li>H.264 CRF 18 / yuv420p / -movflags +faststart (QuickTime 필수)</li>
+      </ul>
+    </div>
+
+    <!-- film-critic -->
+    <div class="agent-card" style="border-top-color:#0ea5e9;">
+      <div class="agent-header">
+        <div class="agent-icon" style="background:#f0f9ff;border:1px solid #bae6fd;">🔍</div>
+        <div>
+          <div class="agent-name">film-critic</div>
+          <div class="agent-role">기획안 대비 최종 품질 검수 리포트</div>
+        </div>
+        <div class="agent-model">Sonnet</div>
+      </div>
+      <div class="agent-section">평가 항목 (100점)</div>
+      <table style="font-size:12px;">
+        <thead><tr><th>영역</th><th>배점</th><th>방법</th></tr></thead>
+        <tbody>
+          <tr><td>기술 품질</td><td>25점</td><td>ffprobe 자동 검증</td></tr>
+          <tr><td>색감 아크</td><td>25점</td><td>4구간 채도 범위 확인</td></tr>
+          <tr><td>스토리 전달</td><td>25점</td><td>film_plan.md 씬 대조</td></tr>
+          <tr><td>시각적 완성도</td><td>25점</td><td>종합 평가</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════ 05 데이터 흐름 ════════════════════════ -->
+<section id="dataflow">
+  <div class="section-header">
+    <div class="section-label">05 — Data Flow</div>
+    <h2>데이터 흐름 체인</h2>
+  </div>
+
+  <div class="card" style="padding:24px;">
+    <table>
+      <thead>
+        <tr><th>단계</th><th>산출 형식</th><th>에이전트</th><th>핵심 변환</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>기획 에셋 →</td>
+          <td><code>scene{N}_storyboard.json</code></td>
+          <td>storyboard-artist</td>
+          <td>텍스트 기획안 → 구조화 컷 배열 (Structured Output 강제)</td>
+        </tr>
+        <tr>
+          <td>스토리보드 →</td>
+          <td><code>scene{N}_cut{M}_hd.png</code><br><span style="color:var(--text-dim);font-size:11px;">1920×1080 PNG</span></td>
+          <td>frame-artist</td>
+          <td>character_refs 있으면 GPT Image edit() / 없으면 generate() → FFmpeg crop+scale</td>
+        </tr>
+        <tr>
+          <td>컷 이미지 →</td>
+          <td><code>scene{N}_cut{M}.mp4</code><br><span style="color:var(--text-dim);font-size:11px;">1920×1080 MP4</span></td>
+          <td>img2video</td>
+          <td>
+            <strong>Sora:</strong> PIL 1280×720 리사이즈 → REST 직접 호출 → 폴링 → /content 다운로드 → FFmpeg 업스케일<br>
+            <strong>Higgsfield CLI:</strong> upload create → generate create veo3_1_lite → generate wait → FFmpeg 업스케일
+          </td>
+        </tr>
+        <tr>
+          <td>원본 영상 →</td>
+          <td><code>graded/scene{N}_cut*.mp4</code><br><span style="color:var(--text-dim);font-size:11px;">색보정 적용</span></td>
+          <td>color-grader</td>
+          <td>color_grades.json 파라미터 → FFmpeg eq + colorbalance 필터 적용</td>
+        </tr>
+        <tr>
+          <td>색보정 영상 →</td>
+          <td><code>the_weight_of_honor_v2.mp4</code><br><span style="color:var(--text-dim);font-size:11px;">1920×1080 완성본</span></td>
+          <td>video-editor</td>
+          <td>scene-cut 번호 정렬 → FFmpeg xfade 체인 → H.264/yuv420p/faststart</td>
+        </tr>
+        <tr>
+          <td>완성 영상 →</td>
+          <td><code>review_report.md</code></td>
+          <td>film-critic</td>
+          <td>ffprobe 검증 + 기획안 대조 + 색감 아크 4구간 확인 → 100점 채점</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <h3 style="margin-bottom:16px;">해상도 변환 체인</h3>
+
+    <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#b91c1c;margin-bottom:8px;">🔴 Sora 경로</div>
+    <div class="res-chain" style="margin-bottom:18px;">
+      <div class="res-box">
+        <div class="res-label">GPT Image 생성</div>
+        <div class="res-val">1536×1024</div>
+        <div class="res-note">3:2 비율</div>
+      </div>
+      <div class="res-arrow">→</div>
+      <div class="res-box">
+        <div class="res-label">FFmpeg crop+scale</div>
+        <div class="res-val">1920×1080</div>
+        <div class="res-note">16:9 크롭</div>
+      </div>
+      <div class="res-arrow">→</div>
+      <div class="res-box">
+        <div class="res-label">PIL 리사이즈</div>
+        <div class="res-val">1280×720</div>
+        <div class="res-note">Sora 입력용</div>
+      </div>
+      <div class="res-arrow">→</div>
+      <div class="res-box">
+        <div class="res-label">Sora sora-2 생성</div>
+        <div class="res-val">1280×720</div>
+        <div class="res-note">landscape 지원 크기</div>
+      </div>
+      <div class="res-arrow">→</div>
+      <div class="res-box" style="border-color:#86efac;">
+        <div class="res-label">FFmpeg 업스케일</div>
+        <div class="res-val" style="color:#10b981;">1920×1080</div>
+        <div class="res-note">lanczos · 최종</div>
+      </div>
+    </div>
+
+    <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#92400e;margin-bottom:8px;">🟠 Higgsfield CLI 경로</div>
+    <div class="res-chain">
+      <div class="res-box">
+        <div class="res-label">GPT Image 생성</div>
+        <div class="res-val">1536×1024</div>
+        <div class="res-note">3:2 비율</div>
+      </div>
+      <div class="res-arrow">→</div>
+      <div class="res-box">
+        <div class="res-label">FFmpeg crop+scale</div>
+        <div class="res-val">1920×1080</div>
+        <div class="res-note">16:9 크롭</div>
+      </div>
+      <div class="res-arrow">→</div>
+      <div class="res-box" style="border-color:#fcd34d;">
+        <div class="res-label">higgsfield upload</div>
+        <div class="res-val" style="color:#d97706;font-size:12px;">upload_id</div>
+        <div class="res-note">CLI 업로드</div>
+      </div>
+      <div class="res-arrow">→</div>
+      <div class="res-box" style="border-color:#fcd34d;">
+        <div class="res-label">veo3_1_lite 생성</div>
+        <div class="res-val" style="color:#d97706;font-size:12px;">원본 MP4</div>
+        <div class="res-note">8초 클립</div>
+      </div>
+      <div class="res-arrow">→</div>
+      <div class="res-box" style="border-color:#86efac;">
+        <div class="res-label">FFmpeg 업스케일</div>
+        <div class="res-val" style="color:#10b981;">1920×1080</div>
+        <div class="res-note">lanczos · 최종</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 06 도구 레이어 ════════════════════════ -->
+<section id="tools">
+  <div class="section-header">
+    <div class="section-label">06 — Tool Layer</div>
+    <h2>도구 레이어 구조</h2>
+  </div>
+
+  <div class="card-grid card-grid-2" style="margin-bottom:16px;">
+    <div class="card">
+      <h3>BaseTool 계약</h3>
+      <table style="margin-top:8px;">
+        <tbody>
+          <tr><td>ToolRuntime</td><td>LOCAL / LOCAL_GPU / API / HYBRID</td></tr>
+          <tr><td>check_dependencies()</td><td>cmd: / env: / python: 자동 검증</td></tr>
+          <tr><td>estimate_cost()</td><td>실행 전 USD 비용 견적</td></tr>
+          <tr><td>dry_run()</td><td>부작용 없는 사전 점검</td></tr>
+          <tr><td>idempotency_key()</td><td>SHA256 기반 중복 방지</td></tr>
+          <tr><td>fallback_tools</td><td>실패 시 자동 폴백 체인</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>CostTracker 예산 사이클</h3>
+      <div style="display:flex;align-items:center;gap:8px;margin:10px 0;flex-wrap:wrap;">
+        <div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:6px;padding:8px 12px;text-align:center;flex:1;">
+          <div style="font-weight:700;color:#92400e;font-size:12px;">estimate()</div>
+          <div style="font-size:11px;color:#78350f;margin-top:2px;">비용 견적 기록</div>
+        </div>
+        <div style="color:var(--text-dim);">→</div>
+        <div style="background:#fff1f2;border:1px solid #fecdd3;border-radius:6px;padding:8px 12px;text-align:center;flex:1;">
+          <div style="font-weight:700;color:#be123c;font-size:12px;">reserve()</div>
+          <div style="font-size:11px;color:#9f1239;margin-top:2px;">예산 예약</div>
+        </div>
+        <div style="color:var(--text-dim);">→</div>
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:8px 12px;text-align:center;flex:1;">
+          <div style="font-weight:700;color:#166534;font-size:12px;">reconcile()</div>
+          <div style="font-size:11px;color:#14532d;margin-top:2px;">실제 비용 확정</div>
+        </div>
+      </div>
+      <p style="font-size:12px;margin-bottom:0;">BudgetMode: WARN(경고) / CAP(차단) / OBSERVE(기록만). 신규 유료 툴 첫 사용 시 별도 승인 요구.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:12px;">이 파이프라인에서 사용하는 핵심 툴</h3>
+    <table>
+      <thead><tr><th>파일</th><th>provider</th><th>runtime</th><th>역할</th><th>의존성</th></tr></thead>
+      <tbody>
+        <tr><td colspan="5" style="background:var(--surface2);font-size:11px;font-weight:700;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;">영상 생성</td></tr>
+        <tr><td>sora_video.py</td><td>openai</td><td>API</td><td>이미지→영상 (sora-2, 1280×720)</td><td>OPENAI_API_KEY</td></tr>
+        <tr><td>higgsfield_video.py</td><td>higgsfield</td><td>API</td><td>영상 생성 CLI (veo3_1_lite, seedance1_5)</td><td>HIGGSFIELD_API_KEY</td></tr>
+        <tr><td>openai_image.py</td><td>openai</td><td>API</td><td>컷 이미지 생성 (gpt-image-2)</td><td>OPENAI_API_KEY</td></tr>
+        <tr><td>ltx_video_local.py</td><td>ltx</td><td>LOCAL_GPU</td><td>로컬 영상 생성 (Sora 무료 대안)</td><td>GPU + diffusers</td></tr>
+        <tr><td colspan="5" style="background:var(--surface2);font-size:11px;font-weight:700;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;">색보정</td></tr>
+        <tr><td>color_grade.py</td><td>ffmpeg</td><td>LOCAL</td><td>FFmpeg 색보정 — 프리셋 7종 / .cube LUT / 커스텀 vf</td><td>cmd:ffmpeg</td></tr>
+        <tr><td colspan="5" style="background:var(--surface2);font-size:11px;font-weight:700;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;">편집 & 조립</td></tr>
+        <tr><td>video_stitch.py</td><td>ffmpeg</td><td>LOCAL</td><td>클립 이어붙이기 (concat / crossfade / fade / spatial)</td><td>cmd:ffmpeg, cmd:ffprobe</td></tr>
+        <tr><td>video_compose.py</td><td>ffmpeg</td><td>LOCAL</td><td>FFmpeg / Remotion / HyperFrames 런타임 조립</td><td>cmd:ffmpeg</td></tr>
+        <tr><td colspan="5" style="background:var(--surface2);font-size:11px;font-weight:700;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;">오디오</td></tr>
+        <tr><td>mix_audio.py (script)</td><td>ffmpeg</td><td>LOCAL</td><td>BGM + SFX 타임코드 믹싱 → AAC 합성</td><td>cmd:ffmpeg, cmd:ffprobe</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════ 07 색감 아크 ══════════════════════════ -->
+<section id="colorarc">
+  <div class="section-header">
+    <div class="section-label">07 — Color Arc</div>
+    <h2>색감 아크 설계</h2>
+    <div class="section-desc">색감이 스토리의 감정 곡선과 동기화됩니다. color_grades.json의 파라미터가 스토리보드 JSON에 인라인으로 내장되고, color-grader 에이전트가 씬별로 적용합니다.</div>
+  </div>
+
+  <!-- 색감 시각화 바 -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:var(--shadow);margin-bottom:16px;">
+    <div style="font-size:11px;font-weight:600;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:10px;">채도 (Saturation) 곡선</div>
+    <div class="color-arc-bar">
+      <div class="arc-seg" style="background:#e5e7eb;"><div class="arc-seg-num" style="color:#374151;">01</div><div class="arc-seg-sat" style="color:#6b7280;">10%</div></div>
+      <div class="arc-seg" style="background:#d1d5db;"><div class="arc-seg-num" style="color:#374151;">02</div><div class="arc-seg-sat" style="color:#6b7280;">15%</div></div>
+      <div class="arc-seg" style="background:#dbeafe;"><div class="arc-seg-num" style="color:#1e40af;">03</div><div class="arc-seg-sat" style="color:#3b82f6;">20%</div></div>
+      <div class="arc-seg" style="background:#bfdbfe;"><div class="arc-seg-num" style="color:#1d4ed8;">04</div><div class="arc-seg-sat" style="color:#2563eb;">35%</div></div>
+      <div class="arc-seg" style="background:#93c5fd;"><div class="arc-seg-num" style="color:#1e3a8a;">05-6</div><div class="arc-seg-sat" style="color:#1d4ed8;">45-55%</div></div>
+      <div class="arc-seg" style="background:#fde68a;"><div class="arc-seg-num" style="color:#78350f;">07</div><div class="arc-seg-sat" style="color:#92400e;">60%</div></div>
+      <div class="arc-seg" style="background:#fbbf24;"><div class="arc-seg-num" style="color:#451a03;">08</div><div class="arc-seg-sat" style="color:#78350f;">70%</div></div>
+      <div class="arc-seg" style="background:#f59e0b;"><div class="arc-seg-num" style="color:#1c0a00;">09</div><div class="arc-seg-sat" style="color:#451a03;">80%</div></div>
+      <div class="arc-seg" style="background:#f97316;"><div class="arc-seg-num" style="color:#fff;">10</div><div class="arc-seg-sat" style="color:#ffedd5;">85%</div></div>
+      <div class="arc-seg" style="background:#d1d5db;"><div class="arc-seg-num" style="color:#374151;">11</div><div class="arc-seg-sat" style="color:#6b7280;">25%</div></div>
+      <div class="arc-seg" style="background:#e5e7eb;"><div class="arc-seg-num" style="color:#374151;">12</div><div class="arc-seg-sat" style="color:#6b7280;">15%</div></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted);"><div style="width:12px;height:12px;border-radius:2px;background:#d1d5db;"></div>극도 탈색 (씬01-03, 11-12)</div>
+      <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted);"><div style="width:12px;height:12px;border-radius:2px;background:#93c5fd;"></div>블루-그레이 (씬04-06)</div>
+      <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted);"><div style="width:12px;height:12px;border-radius:2px;background:#fbbf24;"></div>채도 회복 (씬07-08)</div>
+      <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted);"><div style="width:12px;height:12px;border-radius:2px;background:#f97316;"></div>밝고 따뜻함 (씬09-10)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>구간</th><th>씬</th><th>색감</th><th>sat</th><th>서사 의미</th></tr></thead>
+      <tbody>
+        <tr><td>극도 탈색</td><td>01~02</td><td>회색조, 극도 어두움</td><td>0.1~0.2</td><td>전쟁의 황량함</td></tr>
+        <tr><td>탈색·차가움</td><td>03</td><td>차가운 탈색</td><td>0.3~0.4</td><td>카게마사의 냉혹한 기억</td></tr>
+        <tr><td>블루-그레이</td><td>04~06</td><td>차갑고 긴장된 파란 회색</td><td>0.5~0.6</td><td>조우·대치·교전</td></tr>
+        <tr><td>채도 회복</td><td>07~08</td><td>색이 돌아오기 시작</td><td>0.6~0.7</td><td>서로를 인간으로 인식</td></tr>
+        <tr><td>밝고 따뜻함</td><td>09~10</td><td>아침빛, 황금색</td><td>0.8~0.85</td><td>명예의 선택·클라이맥스</td></tr>
+        <tr><td>재탈색</td><td>11~12</td><td>다시 회색으로</td><td>0.2~0.3</td><td>전쟁은 끝나지 않는다 (순환)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════ 08 오디오 파이프라인 ════════════════════ -->
+<section id="audio">
+  <div class="section-header">
+    <div class="section-label">08 — Audio Pipeline</div>
+    <h2>오디오 파이프라인</h2>
+    <div class="section-desc"><code>scripts/mix_audio.py</code> — FFmpeg로 BGM + 씬별 효과음 10개를 ms 단위 타임코드로 배치해 최종 영상에 합성합니다. 보고서에서 누락되어 있던 파트입니다.</div>
+  </div>
+
+  <!-- 구조 개요 -->
+  <div class="card-grid card-grid-3" style="margin-bottom:16px;">
+    <div class="card">
+      <div style="font-size:22px;margin-bottom:8px;">🎵</div>
+      <h3>BGM 트랙</h3>
+      <p style="font-size:13px;">AI 생성 BGM (<code>bgm_ai.mp3</code>)<br>
+      219초로 트림 → 볼륨 0.45 → 마지막 5초 afade out</p>
+    </div>
+    <div class="card">
+      <div style="font-size:22px;margin-bottom:8px;">💥</div>
+      <h3>효과음 10종</h3>
+      <p style="font-size:13px;"><code>sfx/</code> 디렉토리의 MP3 파일<br>
+      씬별 타임코드(ms)에 <code>adelay</code>로 정확히 배치</p>
+    </div>
+    <div class="card">
+      <div style="font-size:22px;margin-bottom:8px;">🎚️</div>
+      <h3>최종 믹스</h3>
+      <p style="font-size:13px;">FFmpeg <code>amix</code>로 전체 합산<br>
+      AAC 192k → 영상에 <code>-c:v copy</code>로 무손실 합성</p>
+    </div>
+  </div>
+
+  <!-- 효과음 타임라인 -->
+  <div class="card" style="margin-bottom:16px;">
+    <h3 style="margin-bottom:16px;">효과음 배치 타임라인</h3>
+
+    <!-- 타임라인 바 -->
+    <div style="position:relative;height:56px;background:var(--surface2);border-radius:8px;margin-bottom:16px;overflow:hidden;">
+      <!-- 씬 구분선 -->
+      <div style="position:absolute;top:0;bottom:0;left:0%;width:1px;background:#d1d5db;"></div>
+      <div style="position:absolute;top:0;bottom:0;left:11.4%;width:1px;background:#e5e7eb;"></div>
+      <div style="position:absolute;top:0;bottom:0;left:17.1%;width:1px;background:#e5e7eb;"></div>
+      <div style="position:absolute;top:0;bottom:0;left:24.7%;width:1px;background:#e5e7eb;"></div>
+      <div style="position:absolute;top:0;bottom:0;left:32.3%;width:1px;background:#e5e7eb;"></div>
+      <div style="position:absolute;top:0;bottom:0;left:38.0%;width:1px;background:#e5e7eb;"></div>
+      <div style="position:absolute;top:0;bottom:0;left:45.5%;width:1px;background:#e5e7eb;"></div>
+      <div style="position:absolute;top:0;bottom:0;left:55.0%;width:1px;background:#e5e7eb;"></div>
+      <div style="position:absolute;top:0;bottom:0;left:62.3%;width:1px;background:#e5e7eb;"></div>
+      <div style="position:absolute;top:0;bottom:0;left:75.3%;width:1px;background:#e5e7eb;"></div>
+      <div style="position:absolute;top:0;bottom:0;left:90.4%;width:1px;background:#e5e7eb;"></div>
+      <div style="position:absolute;top:0;bottom:0;left:96.3%;width:1px;background:#d1d5db;"></div>
+      <!-- BGM 바 -->
+      <div style="position:absolute;top:6px;left:0;right:0;height:10px;background:linear-gradient(90deg,#bfdbfe,#93c5fd,#60a5fa,#93c5fd,#bfdbfe);border-radius:5px;opacity:0.7;"></div>
+      <!-- SFX 이벤트 마커 -->
+      <div style="position:absolute;top:22px;left:0%;transform:translateX(-50%);">
+        <div style="width:8px;height:8px;border-radius:50%;background:#6b7280;border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+        <div style="font-size:8px;color:#6b7280;white-space:nowrap;margin-top:2px;transform:translateX(-30%);">wind</div>
+      </div>
+      <div style="position:absolute;top:22px;left:24.7%;transform:translateX(-50%);">
+        <div style="width:8px;height:8px;border-radius:50%;background:#3b82f6;border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+        <div style="font-size:8px;color:#3b82f6;white-space:nowrap;margin-top:2px;transform:translateX(-30%);">footsteps</div>
+      </div>
+      <div style="position:absolute;top:22px;left:31.0%;transform:translateX(-50%);">
+        <div style="width:8px;height:8px;border-radius:50%;background:#8b5cf6;border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+        <div style="font-size:8px;color:#8b5cf6;white-space:nowrap;margin-top:2px;transform:translateX(-30%);">draw</div>
+      </div>
+      <div style="position:absolute;top:22px;left:38.8%;transform:translateX(-50%);">
+        <div style="width:8px;height:8px;border-radius:50%;background:#ef4444;border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+        <div style="font-size:8px;color:#ef4444;white-space:nowrap;margin-top:2px;transform:translateX(-30%);">clash</div>
+      </div>
+      <div style="position:absolute;top:22px;left:42.0%;transform:translateX(-50%);">
+        <div style="width:8px;height:8px;border-radius:50%;background:#ef4444;border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+        <div style="font-size:8px;color:#ef4444;white-space:nowrap;margin-top:2px;transform:translateX(-30%);">impact</div>
+      </div>
+      <div style="position:absolute;top:22px;left:55.7%;transform:translateX(-50%);">
+        <div style="width:8px;height:8px;border-radius:50%;background:#dc2626;border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+        <div style="font-size:8px;color:#dc2626;white-space:nowrap;margin-top:2px;transform:translateX(-30%);">clash</div>
+      </div>
+      <div style="position:absolute;top:22px;left:59.4%;transform:translateX(-50%);">
+        <div style="width:8px;height:8px;border-radius:50%;background:#dc2626;border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+        <div style="font-size:8px;color:#dc2626;white-space:nowrap;margin-top:2px;transform:translateX(-30%);">impact</div>
+      </div>
+      <div style="position:absolute;top:22px;left:63.5%;transform:translateX(-50%);">
+        <div style="width:8px;height:8px;border-radius:50%;background:#d97706;border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+        <div style="font-size:8px;color:#d97706;white-space:nowrap;margin-top:2px;transform:translateX(-30%);">draw</div>
+      </div>
+      <div style="position:absolute;top:22px;left:90.5%;transform:translateX(-50%);">
+        <div style="width:8px;height:8px;border-radius:50%;background:#0ea5e9;border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+        <div style="font-size:8px;color:#0ea5e9;white-space:nowrap;margin-top:2px;transform:translateX(-30%);">horn</div>
+      </div>
+      <div style="position:absolute;top:22px;left:96.3%;transform:translateX(-50%);">
+        <div style="width:8px;height:8px;border-radius:50%;background:#6b7280;border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+        <div style="font-size:8px;color:#6b7280;white-space:nowrap;margin-top:2px;transform:translateX(-50%);">wind</div>
+      </div>
+      <!-- 씬 레이블 -->
+      <div style="position:absolute;bottom:2px;left:0%;font-size:9px;color:var(--text-dim);">씬01</div>
+      <div style="position:absolute;bottom:2px;left:24.7%;font-size:9px;color:var(--text-dim);">씬04</div>
+      <div style="position:absolute;bottom:2px;left:38%;font-size:9px;color:var(--text-dim);">씬06</div>
+      <div style="position:absolute;bottom:2px;left:55%;font-size:9px;color:var(--text-dim);">씬08</div>
+      <div style="position:absolute;bottom:2px;left:62.3%;font-size:9px;color:var(--text-dim);">씬09</div>
+      <div style="position:absolute;bottom:2px;left:90.4%;font-size:9px;color:var(--text-dim);">씬11</div>
+      <div style="position:absolute;bottom:2px;right:2px;font-size:9px;color:var(--text-dim);">씬12</div>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>효과음</th><th>delay (ms)</th><th>씬</th><th>volume</th><th>역할</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>wind_ambient</td><td>0</td><td>씬01</td><td>0.6</td><td>프롤로그 시작 — 황량한 바람</td></tr>
+        <tr><td>armor_footsteps</td><td>54,100</td><td>씬04</td><td>0.8</td><td>경계의 다리 조우 — 갑옷 발소리</td></tr>
+        <tr><td>sword_draw</td><td>68,000</td><td>씬04→05</td><td>0.9</td><td>검 뽑는 소리</td></tr>
+        <tr><td>sword_clash_heavy</td><td>85,000</td><td>씬06</td><td>1.0</td><td>1차 교전 시작 — 검 충돌</td></tr>
+        <tr><td>battle_impact</td><td>92,000</td><td>씬06</td><td>1.0</td><td>1차 교전 중반 — 타격</td></tr>
+        <tr><td>sword_clash_heavy</td><td>122,000</td><td>씬08</td><td>1.0</td><td>2차 교전 — 검 충돌</td></tr>
+        <tr><td>battle_impact</td><td>130,000</td><td>씬08</td><td>1.0</td><td>2차 교전 중반 — 타격</td></tr>
+        <tr><td>sword_draw</td><td>139,000</td><td>씬09</td><td>0.8</td><td>처형 직전 긴장감</td></tr>
+        <tr><td>war_horn</td><td>198,300</td><td>씬11</td><td>0.9</td><td>전쟁의 부름 — 전쟁 나팔</td></tr>
+        <tr><td>wind_ambient</td><td>210,900</td><td>씬12</td><td>0.5</td><td>에필로그 — 다시 바람</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FFmpeg 필터 구조 -->
+  <div class="card">
+    <h3 style="margin-bottom:12px;">FFmpeg filter_complex 구조</h3>
+    <pre style="font-size:11px;"><span class="cc"># 입력: [0]영상  [1]BGM  [2~11]SFX 10개</span>
+
+<span class="cc"># BGM: 219초 트림 → 볼륨 0.45 → 마지막 5초 페이드아웃</span>
+[1:a]atrim=0:219,asetpts=PTS-STARTPTS,<span class="cs">volume=0.45</span>,
+     <span class="cs">afade=t=out:st=214:d=5</span>[bgm]
+
+<span class="cc"># 각 SFX: ms 단위 adelay 배치 + 개별 볼륨</span>
+[2:a]<span class="cs">adelay=54100|54100</span>,volume=0.8[sfx0]  <span class="cc"># 갑옷 발소리</span>
+[3:a]<span class="cs">adelay=68000|68000</span>,volume=0.9[sfx1]  <span class="cc"># 검 발도</span>
+[4:a]<span class="cs">adelay=85000|85000</span>,volume=1.0[sfx2]  <span class="cc"># 검 충돌</span>
+... <span class="cc">(총 10개)</span>
+
+<span class="cc"># 전체 합산 믹스</span>
+[bgm][sfx0][sfx1]...[sfx9]<span class="cs">amix=inputs=11</span>:duration=first:
+     dropout_transition=2[aout]
+
+<span class="cc"># 영상은 복사, 오디오만 인코딩</span>
+-map 0:v -map [aout] -c:v copy -c:a aac -b:a <span class="cv">192k</span></pre>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">
+      <span style="font-size:11px;background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:3px 8px;border-radius:4px;">BGM 볼륨 0.45 (영상 소리 묻히지 않게)</span>
+      <span style="font-size:11px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;padding:3px 8px;border-radius:4px;">SFX volume 0.6~1.0 (씬 긴장도 반영)</span>
+      <span style="font-size:11px;background:#faf5ff;border:1px solid #e9d5ff;color:#5b21b6;padding:3px 8px;border-radius:4px;">-c:v copy → 영상 무손실 합성</span>
+      <span style="font-size:11px;background:#fffbeb;border:1px solid #fcd34d;color:#92400e;padding:3px 8px;border-radius:4px;">출력: the_weight_of_honor_v4.mp4</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 09 기술 명세 ══════════════════════════ -->
+<section id="techspec">
+  <div class="section-header">
+    <div class="section-label">09 — Technical Specs</div>
+    <h2>기술 명세 &amp; 주의사항</h2>
+  </div>
+
+  <div class="card-grid card-grid-2" style="margin-bottom:16px;">
+    <div class="card">
+      <h3>영상 출력 규격</h3>
+      <table style="margin-top:8px;">
+        <tbody>
+          <tr><td>최종 해상도</td><td>1920×1080 (Full HD)</td></tr>
+          <tr><td>비디오 코덱</td><td>H.264 (libx264)</td></tr>
+          <tr><td>CRF</td><td>18 (고품질)</td></tr>
+          <tr><td>픽셀 포맷</td><td>yuv420p (QuickTime 호환 필수)</td></tr>
+          <tr><td>스트리밍</td><td>-movflags +faststart</td></tr>
+          <tr><td>씬당 길이</td><td>8초 (scene), 3~4초 (insert)</td></tr>
+          <tr><td>트랜지션</td><td>0.8초 xfade crossfade</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>API 규격</h3>
+      <table style="margin-top:8px;">
+        <tbody>
+          <tr><td>Sora 모델</td><td>sora-2</td></tr>
+          <tr><td>Sora 입력 크기</td><td>1280×720 (실제 사용 landscape 크기)</td></tr>
+          <tr><td>Sora 지원 길이</td><td>4초 / 8초 / 12초</td></tr>
+          <tr><td>GPT Image 모델</td><td>gpt-image-2</td></tr>
+          <tr><td>이미지 생성 크기</td><td>1536×1024</td></tr>
+          <tr><td>Higgsfield 동시</td><td>최대 8개 (Ultra 플랜)</td></tr>
+          <tr><td>Sora 폴링</td><td>10초 간격, 최대 600초</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="alert alert-warn">
+    <span class="alert-icon">⚠️</span>
+    <div><strong>Sora SDK 우회:</strong> OpenAI Python SDK의 <code>videos.create()</code>는 <code>input_reference</code>를 항상 multipart/form-data로 전송해 <code>image_url</code>(JSON body) 방식을 지원하지 않습니다. <code>requests.post()</code> REST 직접 호출로 우회합니다. (sora_video.py 주석에 명시)</div>
+  </div>
+
+  <div class="alert alert-info">
+    <span class="alert-icon">ℹ️</span>
+    <div><strong>Silent Runtime Swap 금지 원칙:</strong> video_compose.py에 "Silent runtime swaps are forbidden by governance"가 명시됩니다. 런타임(FFmpeg/Remotion/HyperFrames)은 proposal 단계에 고정되며, 실패 시 자동 대체 없이 structured blocker를 반환해 에이전트에게 재확인을 요청합니다.</div>
+  </div>
+
+  <div class="alert alert-error">
+    <span class="alert-icon">⚠️</span>
+    <div><strong>코드 내 유료 API 잔존:</strong> <code>.env.example</code>에서 FAL, Runway, Higgsfield, ElevenLabs, Suno API 키가 모두 주석("제거됨")으로 남아 있습니다. 하지만 <code>sora_video.py</code>, <code>higgsfield_video.py</code> 등 구현 코드에는 여전히 유료 API 코드가 존재합니다. 실제 실행 시 OPENAI_API_KEY가 없으면 Phase 3이 차단됩니다. 무료 대안: <code>tools/video/ltx_video_local.py</code>, <code>wan_video.py</code>.</div>
+  </div>
+
+  <div class="alert alert-success">
+    <span class="alert-icon">✅</span>
+    <div><strong>씬 전체 목록 (12개):</strong> 씬01 프롤로그(극탈색) → 씬02 에이든 기억 → 씬03 카게마사 기억 → 씬04 경계의 다리 조우 → 씬05 대치 → 씬06 1차 교전 → 씬07 소강·적의 얼굴 → 씬08 2차 교전 → 씬09 처형의 순간 → 씬10 명예의 선택(클라이맥스) → 씬11 전쟁의 부름 → 씬12 에필로그(극탈색)</div>
+  </div>
+
+  <!-- 푸터 -->
+  <div style="margin-top:32px;padding:20px 24px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;text-align:center;">
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">
+      <strong style="color:var(--text);">kwakseungmin-Lab/karts</strong> 파이프라인 분석 보고서
+    </div>
+    <div style="font-size:12px;color:var(--text-dim);">
+      오케스트레이터: Claude Code Workflow &nbsp;·&nbsp;
+      이미지: GPT Image 2 &nbsp;·&nbsp;
+      영상: Sora sora-2 &nbsp;·&nbsp;
+      편집: FFmpeg
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
