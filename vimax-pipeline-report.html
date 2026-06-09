@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ViMax — Idea/Script to Video 파이프라인 보고서</title>
+<style>
+:root {
+  --bg: #f5f6fa;
+  --surface: #ffffff;
+  --surface2: #f0f2f8;
+  --border: #e2e6f0;
+  --border2: #d0d6e8;
+  --blue: #3b6bff;
+  --blue-light: #ebefff;
+  --indigo: #6366f1;
+  --purple: #7c3aed;
+  --purple-light: #ede9fe;
+  --red: #e53e3e;
+  --orange: #dd6b20;
+  --yellow: #d69e2e;
+  --green: #2f855a;
+  --teal: #0891b2;
+  --text: #1a202c;
+  --text-muted: #4a5568;
+  --text-dim: #a0aec0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 32px rgba(0,0,0,0.1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', system-ui, sans-serif;
+  line-height: 1.7; font-size: 14px;
+}
+
+/* ── Hero ──────────────────── */
+.hero {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #312e81 100%);
+  padding: 56px 48px 48px; color: white;
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px; padding: 4px 14px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 18px; color: rgba(255,255,255,0.85);
+}
+.hero h1 { font-size: 42px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 6px; line-height: 1.1; }
+.hero h1 .accent { color: #a5b4fc; }
+.hero-sub { font-size: 16px; opacity: 0.7; margin-bottom: 12px; }
+.hero-desc { font-size: 14px; opacity: 0.65; margin-bottom: 32px; max-width: 640px; line-height: 1.6; }
+.hero-stats {
+  display: flex; gap: 0;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px; overflow: hidden; width: fit-content;
+}
+.stat { padding: 14px 22px; border-right: 1px solid rgba(255,255,255,0.12); text-align: center; }
+.stat:last-child { border-right: none; }
+.stat-value { font-size: 22px; font-weight: 700; line-height: 1; }
+.stat-label { font-size: 11px; opacity: 0.65; margin-top: 3px; white-space: nowrap; }
+.vs-badge {
+  display: inline-block; background: rgba(165,180,252,0.2);
+  border: 1px solid rgba(165,180,252,0.35); border-radius: 6px;
+  padding: 4px 12px; font-size: 12px; color: #c7d2fe; margin-left: 16px; vertical-align: middle;
+}
+
+/* ── Layout ────────────────── */
+.wrapper { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+section { padding: 44px 0; border-bottom: 1px solid var(--border); }
+section:last-child { border-bottom: none; }
+.section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--indigo); text-transform: uppercase; margin-bottom: 6px; }
+h2 { font-size: 24px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 6px; }
+.section-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+h3 { font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+p { color: var(--text-muted); margin-bottom: 10px; }
+
+/* ── Card ──────────────────── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; box-shadow: var(--shadow); }
+.card-grid { display: grid; gap: 14px; }
+.card-grid-2 { grid-template-columns: 1fr 1fr; }
+.card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+.card-grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+/* ── Pipeline Flow ─────────── */
+.pipeline-flow {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 36px 32px; box-shadow: var(--shadow-lg);
+  position: relative; overflow: hidden;
+}
+.pipeline-flow::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, #6366f1, #7c3aed, #a855f7, #ec4899, #f59e0b, #10b981);
+}
+.flow-step { display: grid; grid-template-columns: 56px 1fr; gap: 0; }
+.flow-left { display: flex; flex-direction: column; align-items: center; padding-top: 2px; }
+.flow-num {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 800; color: white;
+  flex-shrink: 0; z-index: 2; box-shadow: var(--shadow-md);
+}
+.flow-connector { width: 2px; flex: 1; min-height: 24px; margin: 4px 0; }
+.flow-right { padding: 0 0 28px 18px; }
+.flow-step:last-child .flow-right { padding-bottom: 0; }
+.flow-card { border: 1px solid; border-radius: 12px; padding: 18px 20px; }
+.flow-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+.flow-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; }
+.flow-title { font-size: 16px; font-weight: 700; color: var(--text); }
+.flow-async { margin-left: auto; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; background: #fffbeb; border: 1px solid #fcd34d; color: #92400e; }
+.flow-seq { margin-left: auto; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; background: #f3f4f6; border: 1px solid #d1d5db; color: #4b5563; }
+.flow-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; }
+.flow-io-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: start; margin-bottom: 10px; }
+.flow-io { border-radius: 8px; padding: 10px 12px; }
+.flow-io-label { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 5px; }
+.flow-io-item { font-size: 12px; color: var(--text-muted); display: flex; gap: 5px; padding: 2px 0; }
+.flow-io-item::before { content: '›'; flex-shrink: 0; }
+.flow-arrow { display: flex; align-items: center; justify-content: center; padding-top: 24px; font-size: 18px; color: var(--text-dim); }
+.flow-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.tag { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 4px; }
+
+/* Step colors */
+.s1 .flow-num { background: linear-gradient(135deg,#6366f1,#4f46e5); }
+.s1 .flow-connector { background: linear-gradient(#e0e7ff,#ede9fe); }
+.s1 .flow-card { background:#f5f3ff; border-color:#c4b5fd; }
+.s1 .flow-badge { background:#e0e7ff; color:#3730a3; }
+.s1 .flow-io { background:white; border:1px solid #c4b5fd; }
+.s1 .flow-io-label.in { color:#6366f1; }
+.s1 .flow-io-label.out { color:#059669; }
+.s1 .tag { background:#e0e7ff; color:#3730a3; }
+
+.s2 .flow-num { background: linear-gradient(135deg,#7c3aed,#6d28d9); }
+.s2 .flow-connector { background: linear-gradient(#ede9fe,#fdf4ff); }
+.s2 .flow-card { background:#faf5ff; border-color:#d8b4fe; }
+.s2 .flow-badge { background:#ede9fe; color:#5b21b6; }
+.s2 .flow-io { background:white; border:1px solid #d8b4fe; }
+.s2 .flow-io-label.in { color:#7c3aed; }
+.s2 .flow-io-label.out { color:#059669; }
+.s2 .tag { background:#ede9fe; color:#5b21b6; }
+
+.s3 .flow-num { background: linear-gradient(135deg,#db2777,#be185d); }
+.s3 .flow-connector { background: linear-gradient(#fce7f3,#fef3c7); }
+.s3 .flow-card { background:#fff0f6; border-color:#fbcfe8; }
+.s3 .flow-badge { background:#fce7f3; color:#9d174d; }
+.s3 .flow-io { background:white; border:1px solid #fbcfe8; }
+.s3 .flow-io-label.in { color:#db2777; }
+.s3 .flow-io-label.out { color:#059669; }
+.s3 .tag { background:#fce7f3; color:#9d174d; }
+
+.s4 .flow-num { background: linear-gradient(135deg,#ea580c,#c2410c); }
+.s4 .flow-connector { background: linear-gradient(#ffedd5,#fef3c7); }
+.s4 .flow-card { background:#fff7ed; border-color:#fed7aa; }
+.s4 .flow-badge { background:#ffedd5; color:#9a3412; }
+.s4 .flow-io { background:white; border:1px solid #fed7aa; }
+.s4 .flow-io-label.in { color:#ea580c; }
+.s4 .flow-io-label.out { color:#059669; }
+.s4 .tag { background:#ffedd5; color:#9a3412; }
+
+.s5 .flow-num { background: linear-gradient(135deg,#0891b2,#0e7490); }
+.s5 .flow-connector { background: linear-gradient(#cffafe,#dcfce7); }
+.s5 .flow-card { background:#f0fdff; border-color:#a5f3fc; }
+.s5 .flow-badge { background:#cffafe; color:#155e75; }
+.s5 .flow-io { background:white; border:1px solid #a5f3fc; }
+.s5 .flow-io-label.in { color:#0891b2; }
+.s5 .flow-io-label.out { color:#059669; }
+.s5 .tag { background:#cffafe; color:#155e75; }
+
+.s6 .flow-num { background: linear-gradient(135deg,#059669,#047857); }
+.s6 .flow-connector { background: linear-gradient(#d1fae5,#d1fae5); }
+.s6 .flow-card { background:#f0fdf4; border-color:#86efac; }
+.s6 .flow-badge { background:#dcfce7; color:#166534; }
+.s6 .flow-io { background:white; border:1px solid #86efac; }
+.s6 .flow-io-label.in { color:#059669; }
+.s6 .flow-io-label.out { color:#059669; }
+.s6 .tag { background:#dcfce7; color:#166534; }
+
+.s7 .flow-num { background: linear-gradient(135deg,#d97706,#b45309); }
+.s7 .flow-connector { background: transparent; }
+.s7 .flow-card { background:#fffdf0; border-color:#fcd34d; }
+.s7 .flow-badge { background:#fef3c7; color:#92400e; }
+.s7 .flow-io { background:white; border:1px solid #fcd34d; }
+.s7 .flow-io-label.in { color:#d97706; }
+.s7 .flow-io-label.out { color:#059669; }
+.s7 .tag { background:#fef3c7; color:#92400e; }
+
+/* ── Agent Cards ───────────── */
+.agent-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.agent-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); border-top: 3px solid; }
+.agent-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.agent-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.agent-name { font-size: 14px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+.agent-role { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.agent-model { margin-left: auto; font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 4px; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); white-space: nowrap; font-family: monospace; }
+.agent-section { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-dim); margin: 12px 0 6px; }
+.logic-list { list-style: none; counter-reset: logic; }
+.logic-list li { counter-increment: logic; display: flex; gap: 8px; padding: 5px 0; font-size: 13px; color: var(--text-muted); border-bottom: 1px solid var(--border); align-items: flex-start; }
+.logic-list li:last-child { border-bottom: none; }
+.logic-list li::before { content: counter(logic); width: 18px; height: 18px; border-radius: 50%; background: #e0e7ff; color: #4338ca; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+
+/* ── Provider Matrix ───────── */
+.provider-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.provider-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; box-shadow: var(--shadow); border-top: 3px solid; }
+.provider-name { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.provider-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 12px; border-bottom: 1px solid var(--border); }
+.provider-row:last-child { border-bottom: none; }
+.provider-label { color: var(--text-dim); font-size: 11px; }
+.provider-val { color: var(--text-muted); font-family: monospace; font-size: 11px; }
+
+/* ── Camera Tree ───────────── */
+.camera-tree-demo {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
+  padding: 20px; font-family: monospace; font-size: 12px;
+}
+.ct-row { display: flex; align-items: flex-start; gap: 8px; padding: 4px 0; }
+.ct-node { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; display: flex; flex-direction: column; gap: 2px; }
+.ct-node-title { font-weight: 700; font-size: 12px; }
+.ct-node-shots { font-size: 10px; color: var(--text-muted); }
+.ct-arrow { color: var(--text-dim); padding-top: 10px; }
+.ct-child { margin-left: 32px; }
+
+/* ── Code ──────────────────── */
+pre { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-size: 12px; line-height: 1.7; margin: 10px 0; font-family: 'JetBrains Mono', 'Fira Code', monospace; color: #e2e8f0; }
+.ck { color: #93c5fd; } .cs { color: #86efac; } .cc { color: #64748b; } .cv { color: #fde68a; } .cn { color: #c4b5fd; }
+
+/* ── Table ─────────────────── */
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: var(--surface2); color: var(--text-muted); font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 9px 12px; text-align: left; border-bottom: 2px solid var(--border); }
+td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--text-muted); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--surface2); }
+td:first-child { color: var(--text); font-weight: 500; }
+
+/* ── Alert ─────────────────── */
+.alert { border-radius: 8px; padding: 12px 16px; margin: 10px 0; font-size: 13px; display: flex; gap: 10px; align-items: flex-start; }
+.alert-icon { flex-shrink: 0; }
+.alert-info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+.alert-warn { background: #fffbeb; border: 1px solid #fcd34d; color: #92400e; }
+.alert-success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+
+/* ── Tree ──────────────────── */
+.tree { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); line-height: 1.9; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; }
+.tree .dir { color: var(--indigo); font-weight: 600; }
+.tree .cmt { color: var(--text-dim); }
+
+/* ── TOC ───────────────────── */
+.toc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 22px; box-shadow: var(--shadow); }
+.toc-title { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; }
+.toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.toc-grid a { color: var(--text-muted); text-decoration: none; font-size: 13px; padding: 4px 0; display: flex; align-items: center; gap: 8px; transition: color 0.15s; }
+.toc-grid a:hover { color: var(--indigo); }
+.toc-grid a span { color: var(--text-dim); font-size: 11px; font-family: monospace; }
+
+/* ── Async Flow ────────────── */
+.async-lanes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+.async-lane { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+.async-lane-title { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; }
+.async-task { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; margin-bottom: 6px; font-size: 12px; display: flex; align-items: center; gap: 8px; }
+.async-task:last-child { margin-bottom: 0; }
+.async-wait { font-size: 10px; color: var(--text-dim); background: var(--surface2); border: 1px dashed var(--border2); border-radius: 4px; padding: 2px 6px; }
+
+@media (max-width: 800px) {
+  .wrapper { padding: 0 20px; }
+  .hero { padding: 36px 20px; }
+  .hero h1 { font-size: 28px; }
+  .card-grid-2, .card-grid-3, .card-grid-4, .agent-grid, .provider-grid { grid-template-columns: 1fr; }
+  .flow-io-row { grid-template-columns: 1fr; }
+  .flow-arrow { display: none; }
+}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">● karts / vimax-sora 브랜치 — 파이프라인 분석 보고서</div>
+    <h1>ViMax <span class="accent">Idea → Video</span></h1>
+    <div class="hero-sub">범용 AI 영상 자동 제작 프레임워크</div>
+    <div class="hero-desc">
+      아이디어 한 줄 또는 스크립트를 입력하면 LLM·이미지 생성기·영상 생성기가 협력해
+      완성 영상을 자동 출력합니다. Python asyncio 기반 비동기 파이프라인으로,
+      YAML 설정 파일 교체만으로 OpenAI / Google / MiniMax 등 다양한 프로바이더를 전환할 수 있습니다.
+      <span class="vs-badge">main 브랜치의 단편영화 파이프라인과 별도 시스템</span>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-value">2</div><div class="stat-label">엔트리포인트</div></div>
+      <div class="stat"><div class="stat-value">6</div><div class="stat-label">파이프라인 단계</div></div>
+      <div class="stat"><div class="stat-value">7</div><div class="stat-label">에이전트 클래스</div></div>
+      <div class="stat"><div class="stat-value">4</div><div class="stat-label">프로바이더 프리셋</div></div>
+      <div class="stat"><div class="stat-value">asyncio</div><div class="stat-label">실행 방식</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrapper">
+
+<!-- ═══ 목차 ════════════════════════════════════ -->
+<section>
+  <div class="toc">
+    <div class="toc-title">목차</div>
+    <div class="toc-grid">
+      <a href="#overview"><span>01</span> 시스템 개요 & 구조</a>
+      <a href="#entrypoints"><span>02</span> 두 가지 엔트리포인트</a>
+      <a href="#pipeline"><span>03</span> 파이프라인 전체 흐름</a>
+      <a href="#cameratree"><span>04</span> Camera Tree — 핵심 개념</a>
+      <a href="#agents"><span>05</span> 에이전트 상세 명세</a>
+      <a href="#providers"><span>06</span> 프로바이더 매트릭스</a>
+      <a href="#async"><span>07</span> 비동기 실행 구조</a>
+      <a href="#techspec"><span>08</span> 기술 명세 & 주의사항</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 01 개요 ══════════════════════════════════ -->
+<section id="overview">
+  <div class="section-label">01 — System Overview</div>
+  <h2>시스템 개요 & 구조</h2>
+  <div class="section-desc">ViMax는 main 브랜치의 단편영화 전용 파이프라인과 달리, 어떤 아이디어나 스크립트든 영상으로 변환하는 범용 프레임워크입니다.</div>
+
+  <div class="card-grid card-grid-3" style="margin-bottom:20px;">
+    <div class="card">
+      <div style="font-size:24px;margin-bottom:8px;">🧠</div>
+      <h3>LLM 오케스트레이션</h3>
+      <p style="font-size:13px;">LangChain <code>init_chat_model</code>으로 ChatModel을 추상화합니다. GPT-4o, Gemini Flash, MiniMax M3 등 어떤 모델도 YAML 한 줄로 교체할 수 있습니다.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:24px;margin-bottom:8px;">⚡</div>
+      <h3>Python asyncio</h3>
+      <p style="font-size:13px;">Claude Code Workflow가 아닌 Python asyncio 기반입니다. <code>asyncio.gather()</code>로 카메라별 프레임 생성과 샷별 영상 생성을 동시에 실행합니다.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:24px;margin-bottom:8px;">🔧</div>
+      <h3>Config-Driven</h3>
+      <p style="font-size:13px;">YAML 설정 파일이 LLM·이미지 생성기·영상 생성기를 결정합니다. <code>RenderBackend.from_config()</code>가 <code>class_path</code>로 동적 인스턴스화합니다.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <h3 style="margin-bottom:12px;">파일 구조</h3>
+    <div class="tree">
+<span class="dir">karts/</span>  (vimax-sora 브랜치)
+├── main_idea2video.py           <span class="cmt"># 엔트리포인트 1: 아이디어 → 영상</span>
+├── main_script2video.py         <span class="cmt"># 엔트리포인트 2: 스크립트 → 영상</span>
+│
+├── <span class="dir">pipelines/</span>
+│   ├── idea2video_pipeline.py   <span class="cmt"># Idea2VideoPipeline (Script2Video 내포)</span>
+│   ├── script2video_pipeline.py <span class="cmt"># Script2VideoPipeline (핵심 로직)</span>
+│   └── novel2movie_pipeline.py  <span class="cmt"># TODO — 미구현</span>
+│
+├── <span class="dir">agents/</span>                      <span class="cmt"># LLM 기반 에이전트 클래스</span>
+│   ├── screenwriter.py          <span class="cmt"># 아이디어 → 스토리/스크립트</span>
+│   ├── character_extractor.py   <span class="cmt"># 스크립트 → 캐릭터 목록</span>
+│   ├── character_portraits_generator.py
+│   ├── storyboard_artist.py     <span class="cmt"># 스크립트 → 샷 설명 목록</span>
+│   ├── camera_image_generator.py<span class="cmt"># 카메라 트리 + 프레임 생성</span>
+│   ├── reference_image_selector.py
+│   └── best_image_selector.py
+│
+├── <span class="dir">tools/</span>
+│   ├── render_backend.py        <span class="cmt"># YAML → 이미지/영상 생성기 팩토리</span>
+│   ├── image_generator_gptimage_openai_api.py
+│   ├── image_generator_nanobanana_google_api.py
+│   ├── video_generator_sora_openai_api.py
+│   ├── video_generator_veo_google_api.py
+│   ├── video_generator_omni_yunwu_api.py
+│   └── ...
+│
+├── <span class="dir">configs/</span>                     <span class="cmt"># 프로바이더 조합 YAML 프리셋</span>
+│   ├── idea2video_sora.yaml     <span class="cmt"># GPT-4o + GPT Image + Sora</span>
+│   ├── idea2video.yaml          <span class="cmt"># Gemini Flash + NanaBanana + Veo</span>
+│   ├── idea2video_minimax.yaml  <span class="cmt"># MiniMax M3 + NanaBanana + Veo</span>
+│   └── idea2video_omni_yunwu.yaml
+│
+└── <span class="dir">interfaces/</span>                  <span class="cmt"># Pydantic 데이터 모델</span>
+    ├── shot_description.py      <span class="cmt"># ShotDescription, ShotBriefDescription</span>
+    ├── camera.py                <span class="cmt"># Camera (idx, parent, active_shot_idxs)</span>
+    ├── character.py             <span class="cmt"># CharacterInScene</span>
+    └── ...
+    </div>
+  </div>
+
+  <div class="alert alert-info">
+    <span class="alert-icon">ℹ️</span>
+    <div><strong>main 브랜치와의 차이:</strong> main 브랜치는 "명예의 무게" 단편영화 한 편을 위한 고정 파이프라인이고, vimax-sora 브랜치는 어떤 내용이든 넣으면 영상이 나오는 범용 프레임워크입니다. 에이전트 정의 방식도 다릅니다 — main은 Claude Code `.claude/agents/` 마크다운, vimax-sora는 Python 클래스입니다.</div>
+  </div>
+</section>
+
+<!-- ═══ 02 엔트리포인트 ══════════════════════════ -->
+<section id="entrypoints">
+  <div class="section-label">02 — Entry Points</div>
+  <h2>두 가지 엔트리포인트</h2>
+  <div class="section-desc">입력 형태에 따라 두 파이프라인 중 하나를 선택합니다.</div>
+
+  <div class="card-grid card-grid-2">
+    <div class="card" style="border-top: 3px solid #6366f1;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="font-size:28px;">💡</div>
+        <div>
+          <div style="font-size:16px;font-weight:700;">Idea2Video</div>
+          <div style="font-size:12px;color:var(--text-muted);">main_idea2video.py</div>
+        </div>
+        <div style="margin-left:auto;background:#e0e7ff;border:1px solid #c4b5fd;border-radius:6px;padding:4px 10px;font-size:11px;color:#3730a3;font-weight:600;">idea → 스크립트 → 영상</div>
+      </div>
+      <p style="font-size:13px;">아이디어(자연어 한 문단)를 입력하면 Screenwriter 에이전트가 먼저 스크립트를 생성하고, 이후 Script2Video 파이프라인으로 위임합니다.</p>
+      <pre style="font-size:11px;margin-top:10px;"><span class="cc"># 사용 예시</span>
+idea = <span class="cs">"""
+A fit woman exercises in a gym
+with a beautiful beach view outside.
+"""</span>
+user_requirement = <span class="cs">"For adults, max 3 scenes"</span>
+style = <span class="cs">"Realistic, warm feel"</span>
+
+pipeline = Idea2VideoPipeline.<span class="cn">init_from_config</span>(
+    config_path=<span class="cs">"configs/idea2video_sora.yaml"</span>)
+<span class="ck">await</span> pipeline(idea=idea,
+              user_requirement=user_requirement,
+              style=style)</pre>
+    </div>
+
+    <div class="card" style="border-top: 3px solid #7c3aed;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="font-size:28px;">📝</div>
+        <div>
+          <div style="font-size:16px;font-weight:700;">Script2Video</div>
+          <div style="font-size:12px;color:var(--text-muted);">main_script2video.py</div>
+        </div>
+        <div style="margin-left:auto;background:#ede9fe;border:1px solid #d8b4fe;border-radius:6px;padding:4px 10px;font-size:11px;color:#5b21b6;font-weight:600;">스크립트 → 영상</div>
+      </div>
+      <p style="font-size:13px;">영화 스크립트 형식(INT./EXT. 씬 헤더, 대사, 액션 설명)을 직접 입력합니다. Screenwriter 단계가 없으므로 더 빠릅니다.</p>
+      <pre style="font-size:11px;margin-top:10px;"><span class="cc"># 사용 예시</span>
+script = <span class="cs">"""
+EXT. SCHOOL GYM - DAY
+John (18, male) practices basketball.
+Jane: Good job, John!
+John: Yes! (ball swishes through)
+"""</span>
+style = <span class="cs">"Anime Style"</span>
+
+pipeline = Script2VideoPipeline.<span class="cn">init_from_config</span>(
+    config_path=<span class="cs">"configs/script2video_sora.yaml"</span>)
+<span class="ck">await</span> pipeline(script=script,
+              user_requirement=...,
+              style=style)</pre>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <h3 style="margin-bottom:10px;">목표 영상 길이 자동 계산</h3>
+    <p style="font-size:13px;margin-bottom:8px;">config에 <code>target_duration_minutes</code>를 설정하면, 파이프라인이 필요한 샷 수를 자동 계산해 LLM 프롬프트에 주입합니다.</p>
+    <pre style="font-size:11px;"><span class="cc"># 예: target_duration_minutes=7, shot_duration_seconds=8</span>
+required_shots = math.ceil(<span class="cv">7</span> * <span class="cv">60</span> / <span class="cv">8</span>)  <span class="cc"># = 53샷</span>
+
+hint = <span class="cs">f"The final video must be approximately 7 minutes long. "</span>
+       <span class="cs">f"Generate enough scenes and shots to reach roughly 53 total shots."</span></pre>
+  </div>
+</section>
+
+<!-- ═══ 03 파이프라인 흐름 ════════════════════════ -->
+<section id="pipeline">
+  <div class="section-label">03 — Pipeline Flow</div>
+  <h2>파이프라인 전체 흐름</h2>
+  <div class="section-desc">Script2VideoPipeline의 7단계 흐름입니다. Idea2Video는 앞에 Screenwriter 단계가 추가되고, 이후 동일한 흐름을 따릅니다.</div>
+
+  <div class="pipeline-flow">
+
+    <!-- Step 0: Screenwriter (idea2video only) -->
+    <div class="flow-step s1">
+      <div class="flow-left">
+        <div class="flow-num">0</div>
+        <div class="flow-connector"></div>
+      </div>
+      <div class="flow-right">
+        <div class="flow-card">
+          <div class="flow-header">
+            <div class="flow-badge">Idea2Video Only</div>
+            <div class="flow-title">스크립트 생성 (Screenwriter)</div>
+            <div class="flow-seq">아이디어 입력 시만 실행</div>
+          </div>
+          <div class="flow-desc">Screenwriter 에이전트가 자연어 아이디어를 영화 스크립트로 확장합니다. 3막 구조, 캐릭터 동기, 씬별 분위기를 LLM이 생성합니다.</div>
+          <div class="flow-io-row">
+            <div class="flow-io">
+              <div class="flow-io-label in">INPUT</div>
+              <div class="flow-io-item">idea (자유 형식 자연어)</div>
+              <div class="flow-io-item">user_requirement, style</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-io">
+              <div class="flow-io-label out">OUTPUT</div>
+              <div class="flow-io-item">screenplay (씬 헤더·대사·액션)</div>
+              <div class="flow-io-item">Story Title, Characters 포함</div>
+            </div>
+          </div>
+          <div class="flow-tags">
+            <span class="tag" style="background:#e0e7ff;color:#3730a3;">에이전트: Screenwriter</span>
+            <span class="tag" style="background:#f3f4f6;color:#374151;">LangChain ChatModel</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 1: Character Extraction -->
+    <div class="flow-step s2">
+      <div class="flow-left">
+        <div class="flow-num">1</div>
+        <div class="flow-connector"></div>
+      </div>
+      <div class="flow-right">
+        <div class="flow-card">
+          <div class="flow-header">
+            <div class="flow-badge">Character</div>
+            <div class="flow-title">캐릭터 추출 (CharacterExtractor)</div>
+            <div class="flow-seq">순차</div>
+          </div>
+          <div class="flow-desc">스크립트에서 등장인물을 추출하고, 이름·외형(static) ·상태(dynamic)를 구조화합니다. 결과는 <code>characters.json</code>에 캐시되어 재실행 시 재사용됩니다.</div>
+          <div class="flow-io-row">
+            <div class="flow-io">
+              <div class="flow-io-label in">INPUT</div>
+              <div class="flow-io-item">script (전체 스크립트 텍스트)</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-io">
+              <div class="flow-io-label out">OUTPUT</div>
+              <div class="flow-io-item">List[CharacterInScene]</div>
+              <div class="flow-io-item">identifier, static_features, dynamic_features</div>
+              <div class="flow-io-item">캐시: working_dir/characters.json</div>
+            </div>
+          </div>
+          <div class="flow-tags">
+            <span class="tag" style="background:#ede9fe;color:#5b21b6;">에이전트: CharacterExtractor</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Character Portraits -->
+    <div class="flow-step s3">
+      <div class="flow-left">
+        <div class="flow-num">2</div>
+        <div class="flow-connector"></div>
+      </div>
+      <div class="flow-right">
+        <div class="flow-card">
+          <div class="flow-header">
+            <div class="flow-badge">Portrait</div>
+            <div class="flow-title">캐릭터 초상화 생성 (CharacterPortraitsGenerator)</div>
+            <div class="flow-async">⚡ async 병렬</div>
+          </div>
+          <div class="flow-desc">각 캐릭터의 정면·측면·후면 3장을 이미지 생성기로 만듭니다. 이후 모든 프레임 생성 시 이 초상화를 참조 이미지로 주입해 캐릭터 일관성을 유지합니다.</div>
+          <div class="flow-io-row">
+            <div class="flow-io">
+              <div class="flow-io-label in">INPUT</div>
+              <div class="flow-io-item">List[CharacterInScene]</div>
+              <div class="flow-io-item">style 문자열</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-io">
+              <div class="flow-io-label out">OUTPUT</div>
+              <div class="flow-io-item">character_portraits_registry.json</div>
+              <div class="flow-io-item">캐릭터별 front/side/back PNG</div>
+              <div class="flow-io-item">{"Alice": {"front": {path, desc}, "side": ..., "back": ...}}</div>
+            </div>
+          </div>
+          <div class="flow-tags">
+            <span class="tag" style="background:#fce7f3;color:#9d174d;">에이전트: CharacterPortraitsGenerator</span>
+            <span class="tag" style="background:#fce7f3;color:#9d174d;">이미지 생성기 사용</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Storyboard -->
+    <div class="flow-step s4">
+      <div class="flow-left">
+        <div class="flow-num">3</div>
+        <div class="flow-connector"></div>
+      </div>
+      <div class="flow-right">
+        <div class="flow-card">
+          <div class="flow-header">
+            <div class="flow-badge">Storyboard</div>
+            <div class="flow-title">스토리보드 설계 + 샷 설명 분해 (StoryboardArtist)</div>
+            <div class="flow-seq">순차 → 비동기 분해</div>
+          </div>
+          <div class="flow-desc">
+            두 단계로 구성됩니다. <strong>①</strong> 스크립트 전체를 읽어 샷 번호·카메라 구도·대사·카메라 idx를 포함한 <code>ShotBriefDescription</code> 목록 생성.
+            <strong>②</strong> 각 샷을 비동기로 분해해 시각 묘사(ff_desc/lf_desc), 모션 묘사, 오디오 묘사, variation_type을 담은 <code>ShotDescription</code> 생성.
+          </div>
+          <div class="flow-io-row">
+            <div class="flow-io">
+              <div class="flow-io-label in">INPUT</div>
+              <div class="flow-io-item">script, characters, user_requirement</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-io">
+              <div class="flow-io-label out">OUTPUT</div>
+              <div class="flow-io-item">List[ShotDescription] (샷별 세부 묘사)</div>
+              <div class="flow-io-item">ff_desc (첫 프레임), lf_desc (마지막 프레임)</div>
+              <div class="flow-io-item">motion_desc, audio_desc, variation_type</div>
+              <div class="flow-io-item">캐시: working_dir/shots/{idx}/shot_description.json</div>
+            </div>
+          </div>
+          <div class="flow-tags">
+            <span class="tag" style="background:#ffedd5;color:#9a3412;">에이전트: StoryboardArtist</span>
+            <span class="tag" style="background:#ffedd5;color:#9a3412;">variation_type: none/medium/large</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Camera Tree -->
+    <div class="flow-step s5">
+      <div class="flow-left">
+        <div class="flow-num">4</div>
+        <div class="flow-connector"></div>
+      </div>
+      <div class="flow-right">
+        <div class="flow-card">
+          <div class="flow-header">
+            <div class="flow-badge">Camera Tree</div>
+            <div class="flow-title">카메라 트리 구성 (CameraImageGenerator)</div>
+            <div class="flow-seq">순차</div>
+          </div>
+          <div class="flow-desc">
+            샷들을 카메라 위치 기준으로 그룹화하고, <strong>부모-자식 관계</strong>를 설정합니다.
+            와이드 샷이 미디엄 샷의 부모, 미디엄 샷이 클로즈업의 부모가 되는 계층 구조입니다.
+            부모 카메라의 시점이 자식 카메라의 첫 프레임 생성에 활용됩니다.
+          </div>
+          <div class="flow-io-row">
+            <div class="flow-io">
+              <div class="flow-io-label in">INPUT</div>
+              <div class="flow-io-item">List[ShotDescription] (cam_idx 포함)</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-io">
+              <div class="flow-io-label out">OUTPUT</div>
+              <div class="flow-io-item">List[Camera] (카메라 트리)</div>
+              <div class="flow-io-item">idx, active_shot_idxs, parent_cam_idx</div>
+              <div class="flow-io-item">parent_shot_idx, missing_info</div>
+              <div class="flow-io-item">캐시: working_dir/camera_tree.json</div>
+            </div>
+          </div>
+          <div class="flow-tags">
+            <span class="tag" style="background:#cffafe;color:#155e75;">에이전트: CameraImageGenerator</span>
+            <span class="tag" style="background:#cffafe;color:#155e75;">LLM이 포함 관계 분석</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5: Parallel Generation -->
+    <div class="flow-step s6">
+      <div class="flow-left">
+        <div class="flow-num">5</div>
+        <div class="flow-connector"></div>
+      </div>
+      <div class="flow-right">
+        <div class="flow-card">
+          <div class="flow-header">
+            <div class="flow-badge">Generation</div>
+            <div class="flow-title">프레임 + 영상 병렬 생성</div>
+            <div class="flow-async">⚡ asyncio.gather 병렬</div>
+          </div>
+          <div class="flow-desc">
+            두 종류의 태스크가 <code>asyncio.gather()</code>로 동시 실행됩니다.
+            <strong>프레임 태스크</strong>(카메라별)는 asyncio.Event로 부모→자식 순서를 보장하며,
+            <strong>영상 태스크</strong>(샷별)는 해당 샷의 프레임이 완성될 때까지 Event를 기다렸다가 생성합니다.
+          </div>
+          <div class="async-lanes">
+            <div class="async-lane">
+              <div class="async-lane-title">🖼️ 프레임 태스크 (카메라별)</div>
+              <div class="async-task" style="border-color:#a5f3fc;background:#f0fdff;">
+                <span>📹 camera_0 (parent)</span>
+                <span class="async-wait">transition video 생성</span>
+              </div>
+              <div style="font-size:10px;text-align:center;color:var(--text-dim);margin:4px 0;">↓ Event set</div>
+              <div class="async-task" style="border-color:#86efac;background:#f0fdf4;margin-left:20px;">
+                <span>📹 camera_1 (child)</span>
+                <span class="async-wait">부모 Event 대기</span>
+              </div>
+              <div class="async-task" style="border-color:#86efac;background:#f0fdf4;margin-left:20px;">
+                <span>📹 camera_2 (child)</span>
+                <span class="async-wait">부모 Event 대기</span>
+              </div>
+            </div>
+            <div class="async-lane">
+              <div class="async-lane-title">🎬 영상 태스크 (샷별)</div>
+              <div class="async-task" style="border-color:#d8b4fe;background:#faf5ff;">
+                <span>🎥 shot_0 video</span>
+                <span class="async-wait">first_frame Event 대기</span>
+              </div>
+              <div class="async-task" style="border-color:#d8b4fe;background:#faf5ff;">
+                <span>🎥 shot_1 video</span>
+                <span class="async-wait">first_frame + last_frame 대기</span>
+              </div>
+              <div class="async-task" style="border-color:#d8b4fe;background:#faf5ff;">
+                <span>🎥 shot_2 video</span>
+                <span class="async-wait">first_frame Event 대기</span>
+              </div>
+            </div>
+          </div>
+          <div class="flow-tags" style="margin-top:10px;">
+            <span class="tag" style="background:#dcfce7;color:#166534;">에이전트: CameraImageGenerator</span>
+            <span class="tag" style="background:#dcfce7;color:#166534;">이미지 생성기 + 영상 생성기</span>
+            <span class="tag" style="background:#fef3c7;color:#92400e;">variation_type에 따라 last_frame 생성 여부 결정</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 6: Concat + Upscale -->
+    <div class="flow-step s7">
+      <div class="flow-left">
+        <div class="flow-num">6</div>
+      </div>
+      <div class="flow-right">
+        <div class="flow-card">
+          <div class="flow-header">
+            <div class="flow-badge">Final</div>
+            <div class="flow-title">편집 & 업스케일 (MoviePy + FFmpeg)</div>
+            <div class="flow-seq">순차</div>
+          </div>
+          <div class="flow-desc">MoviePy로 모든 샷 영상을 순서대로 이어붙이고, FFmpeg lanczos 필터로 1920×1080 업스케일합니다.</div>
+          <div class="flow-io-row">
+            <div class="flow-io">
+              <div class="flow-io-label in">INPUT</div>
+              <div class="flow-io-item">working_dir/shots/{idx}/video.mp4 목록</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-io">
+              <div class="flow-io-label out">OUTPUT</div>
+              <div class="flow-io-item">working_dir/final_video.mp4</div>
+              <div class="flow-io-item">1920×1080, H.264, yuv420p</div>
+            </div>
+          </div>
+          <div class="flow-tags">
+            <span class="tag" style="background:#fef3c7;color:#92400e;">MoviePy concatenate_videoclips</span>
+            <span class="tag" style="background:#fef3c7;color:#92400e;">FFmpeg upscale_inplace</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ 04 Camera Tree ═══════════════════════════ -->
+<section id="cameratree">
+  <div class="section-label">04 — Camera Tree</div>
+  <h2>Camera Tree — 핵심 개념</h2>
+  <div class="section-desc">ViMax의 가장 독창적인 설계입니다. 씬에 등장하는 카메라 포지션들의 부모-자식 관계를 모델링해, 프레임 생성 시 시각적 일관성을 보장합니다.</div>
+
+  <div class="card-grid card-grid-2" style="margin-bottom:16px;">
+    <div class="card">
+      <h3 style="margin-bottom:12px;">왜 카메라 트리가 필요한가</h3>
+      <p style="font-size:13px;">같은 씬에 와이드샷·미디엄샷·클로즈업이 모두 있을 때, 각각 독립적으로 이미지를 생성하면 배경·캐릭터 위치·조명이 달라집니다. 카메라 트리는 부모 카메라의 시점에서 트랜지션 영상을 먼저 생성한 뒤 마지막 프레임을 추출해, 자식 카메라의 첫 프레임 생성 시 참조 이미지로 사용합니다.</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:12px;">트리 구성 규칙</h3>
+      <ul class="logic-list">
+        <li>샷 크기 기준: 와이드 → 미디엄 → 클로즈업 방향으로 부모-자식 설정</li>
+        <li>인접 우선: parent_shot_idx는 자식 카메라 첫 샷과 시간상 가장 가까운 샷</li>
+        <li>단일 루트: 부모 없는 카메라는 반드시 1개 (트리 구조 보장)</li>
+        <li>와이드→클로즈업 직접 연결 금지 (중간 미디엄샷 필수)</li>
+        <li>순환 참조 금지, 인덱스 낮은 쪽이 부모</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 트리 예시 -->
+  <div class="card" style="margin-bottom:16px;">
+    <h3 style="margin-bottom:14px;">구조 예시</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:10px;">스크립트 씬</div>
+        <pre style="font-size:11px;">Shot 0: Wide shot — Alice & Bob
+       walking toward each other
+Shot 1: Close-up — Alice's face
+       (surprise → delight)
+Shot 2: Wide shot — Alice & Bob
+       hug each other</pre>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:10px;">카메라 트리</div>
+        <div class="camera-tree-demo">
+          <div class="ct-row">
+            <div class="ct-node" style="border-color:#a5f3fc;">
+              <div class="ct-node-title" style="color:#0891b2;">📹 Camera 0 (root)</div>
+              <div class="ct-node-shots">shots: [0, 2] — Wide Shot</div>
+            </div>
+          </div>
+          <div style="margin-left:20px;color:var(--text-dim);font-size:12px;padding:2px 0;">└─ 자식 카메라</div>
+          <div class="ct-row" style="margin-left:32px;">
+            <div class="ct-node" style="border-color:#d8b4fe;">
+              <div class="ct-node-title" style="color:#7c3aed;">📹 Camera 1 (child)</div>
+              <div class="ct-node-shots">shots: [1] — Close-up</div>
+              <div class="ct-node-shots" style="color:#be185d;">parent_shot_idx: 0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:12px;">자식 카메라 첫 프레임 생성 흐름</h3>
+    <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
+      <div style="background:#f0fdff;border:1px solid #a5f3fc;border-radius:8px;padding:10px 14px;min-width:140px;text-align:center;flex:1;">
+        <div style="font-size:11px;color:#0891b2;font-weight:600;margin-bottom:4px;">① 부모 first_frame</div>
+        <div style="font-size:12px;color:var(--text-muted);">parent Event 대기</div>
+      </div>
+      <div style="color:var(--text-dim);font-size:18px;padding-top:20px;">→</div>
+      <div style="background:#faf5ff;border:1px solid #d8b4fe;border-radius:8px;padding:10px 14px;min-width:140px;text-align:center;flex:1;">
+        <div style="font-size:11px;color:#7c3aed;font-weight:600;margin-bottom:4px;">② transition video 생성</div>
+        <div style="font-size:12px;color:var(--text-muted);">영상 생성기: 부모 구도→자식 구도</div>
+      </div>
+      <div style="color:var(--text-dim);font-size:18px;padding-top:20px;">→</div>
+      <div style="background:#fff0f6;border:1px solid #fbcfe8;border-radius:8px;padding:10px 14px;min-width:140px;text-align:center;flex:1;">
+        <div style="font-size:11px;color:#be185d;font-weight:600;margin-bottom:4px;">③ 마지막 프레임 추출</div>
+        <div style="font-size:12px;color:var(--text-muted);">scenedetect로 프레임 추출</div>
+      </div>
+      <div style="color:var(--text-dim);font-size:18px;padding-top:20px;">→</div>
+      <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:10px 14px;min-width:140px;text-align:center;flex:1;">
+        <div style="font-size:11px;color:#059669;font-weight:600;margin-bottom:4px;">④ 자식 first_frame 생성</div>
+        <div style="font-size:12px;color:var(--text-muted);">추출 프레임 + 캐릭터 초상화 참조</div>
+      </div>
+    </div>
+    <div class="alert alert-info" style="margin:0;">
+      <span class="alert-icon">ℹ️</span>
+      <div><code>missing_info</code> 필드: 자식 카메라가 부모보다 클로즈업되어 잃는 정보(예: "Character B의 상반신")를 기록합니다. 이미지 생성 프롬프트에 "잃은 요소를 캐릭터 초상화로 교체하라"는 지시가 추가됩니다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 05 에이전트 ═══════════════════════════════ -->
+<section id="agents">
+  <div class="section-label">05 — Agent Specifications</div>
+  <h2>에이전트 상세 명세</h2>
+  <div class="section-desc">모든 에이전트는 Python 클래스입니다. LangChain ChatModel + Pydantic output parser 조합으로 구조화 출력을 강제합니다.</div>
+
+  <div class="agent-grid">
+
+    <div class="agent-card" style="border-top-color:#6366f1;">
+      <div class="agent-header">
+        <div class="agent-icon" style="background:#e0e7ff;border:1px solid #c4b5fd;">✍️</div>
+        <div><div class="agent-name">Screenwriter</div><div class="agent-role">아이디어 → 스토리 → 스크립트 (Idea2Video 전용)</div></div>
+        <div class="agent-model">ChatModel</div>
+      </div>
+      <div class="agent-section">핵심 로직</div>
+      <ul class="logic-list">
+        <li>아이디어를 3막 구조(발단-전개-결말)로 확장, 장르·관객층 명시</li>
+        <li>씬 수가 지정되면 균등 분배, 없으면 자연스럽게 흐름 설계</li>
+        <li>Show, Don't Tell 원칙: 감정은 행동·대사로 표현</li>
+        <li>target_duration_minutes 기반 샷 수 힌트를 요구사항에 자동 주입</li>
+      </ul>
+    </div>
+
+    <div class="agent-card" style="border-top-color:#7c3aed;">
+      <div class="agent-header">
+        <div class="agent-icon" style="background:#ede9fe;border:1px solid #d8b4fe;">👤</div>
+        <div><div class="agent-name">CharacterExtractor</div><div class="agent-role">스크립트 → 캐릭터 목록 구조화</div></div>
+        <div class="agent-model">ChatModel</div>
+      </div>
+      <div class="agent-section">출력 구조</div>
+      <pre style="font-size:11px;">CharacterInScene:
+  idx: int
+  identifier_in_scene: str  <span class="cc"># 씬 내 고유 이름</span>
+  static_features: str      <span class="cc"># 고정 외형 (키, 머리색 등)</span>
+  dynamic_features: str     <span class="cc"># 씬별 상태 (의상, 감정 등)</span></pre>
+    </div>
+
+    <div class="agent-card" style="border-top-color:#db2777;">
+      <div class="agent-header">
+        <div class="agent-icon" style="background:#fce7f3;border:1px solid #fbcfe8;">🖼️</div>
+        <div><div class="agent-name">CharacterPortraitsGenerator</div><div class="agent-role">캐릭터 3방향 초상화 생성</div></div>
+        <div class="agent-model">ImageGenerator</div>
+      </div>
+      <div class="agent-section">생성 순서 (이미지 생성기 호출)</div>
+      <ul class="logic-list">
+        <li>front_portrait: 전면 풀바디 + 흰 배경 생성 (텍스트 프롬프트)</li>
+        <li>side_portrait: 전면 초상화 참조 → 측면 생성 (이미지 edit)</li>
+        <li>back_portrait: 전면 참조 → 후면 생성 (얼굴 표시 금지)</li>
+        <li>결과를 registry.json에 캐시 → 이후 모든 프레임 생성 시 참조</li>
+      </ul>
+    </div>
+
+    <div class="agent-card" style="border-top-color:#ea580c;">
+      <div class="agent-header">
+        <div class="agent-icon" style="background:#ffedd5;border:1px solid #fed7aa;">🎬</div>
+        <div><div class="agent-name">StoryboardArtist</div><div class="agent-role">스크립트 → 샷 설명 (2단계)</div></div>
+        <div class="agent-model">ChatModel</div>
+      </div>
+      <div class="agent-section">ShotDescription 핵심 필드</div>
+      <pre style="font-size:11px;">ShotDescription:
+  idx: int              <span class="cc"># 샷 번호</span>
+  cam_idx: int          <span class="cc"># 카메라 인덱스</span>
+  ff_desc: str          <span class="cc"># 첫 프레임 시각 묘사</span>
+  lf_desc: str          <span class="cc"># 마지막 프레임 (변화 있을 때)</span>
+  motion_desc: str      <span class="cc"># 카메라/피사체 움직임</span>
+  audio_desc: str       <span class="cc"># 사운드 묘사</span>
+  variation_type:       <span class="cc"># none/medium/large</span>
+  ff_vis_char_idxs: []  <span class="cc"># 첫 프레임 등장 캐릭터</span>
+  lf_vis_char_idxs: []  <span class="cc"># 마지막 프레임 등장 캐릭터</span></pre>
+    </div>
+
+    <div class="agent-card" style="border-top-color:#0891b2;">
+      <div class="agent-header">
+        <div class="agent-icon" style="background:#cffafe;border:1px solid #a5f3fc;">📹</div>
+        <div><div class="agent-name">CameraImageGenerator</div><div class="agent-role">카메라 트리 구성 + 프레임 생성</div></div>
+        <div class="agent-model">ChatModel + ImageGen + VideoGen</div>
+      </div>
+      <div class="agent-section">세부 역할</div>
+      <ul class="logic-list">
+        <li>construct_camera_tree: LLM이 샷 묘사 비교 → 포함 관계 분석 → 트리 JSON 반환</li>
+        <li>generate_transition_video: 부모→자식 카메라 전환 영상 생성</li>
+        <li>get_new_camera_image: scenedetect + ContentDetector로 마지막 프레임 추출</li>
+        <li>priority_tasks(우선): 다른 카메라의 부모가 되는 샷 먼저 완료</li>
+        <li>normal_tasks: 이후 나머지 프레임 병렬 생성</li>
+      </ul>
+    </div>
+
+    <div class="agent-card" style="border-top-color:#059669;">
+      <div class="agent-header">
+        <div class="agent-icon" style="background:#dcfce7;border:1px solid #86efac;">🔍</div>
+        <div><div class="agent-name">ReferenceImageSelector</div><div class="agent-role">사용 가능한 참조 이미지 중 최적 선택</div></div>
+        <div class="agent-model">ChatModel</div>
+      </div>
+      <div class="agent-section">핵심 로직</div>
+      <ul class="logic-list">
+        <li>available_image_path_and_text_pairs 목록을 LLM에 전달</li>
+        <li>프레임 설명과 가장 관련있는 이미지 조합 선택</li>
+        <li>이미지별 주입 지시 텍스트 생성 (prefix_prompt 형성)</li>
+        <li>최종 프롬프트 = prefix_prompt + frame_desc 조합</li>
+        <li>결과 캐시: {shot_idx}/{frame_type}_selector_output.json</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ 06 프로바이더 매트릭스 ═══════════════════ -->
+<section id="providers">
+  <div class="section-label">06 — Provider Matrix</div>
+  <h2>프로바이더 매트릭스</h2>
+  <div class="section-desc">YAML 설정 파일을 교체하는 것만으로 LLM·이미지·영상 생성기를 전환합니다. <code>RenderBackend.from_config()</code>가 <code>class_path</code>로 동적 인스턴스화합니다.</div>
+
+  <div class="provider-grid" style="margin-bottom:16px;">
+    <div class="provider-card" style="border-top-color:#6366f1;">
+      <div class="provider-name" style="color:#4f46e5;">🔵 OpenAI (Sora)</div>
+      <div style="font-size:10px;color:var(--text-dim);margin-bottom:8px;">idea2video_sora.yaml</div>
+      <div class="provider-row"><span class="provider-label">LLM</span><span class="provider-val">gpt-4o</span></div>
+      <div class="provider-row"><span class="provider-label">이미지</span><span class="provider-val">gpt-image-1</span></div>
+      <div class="provider-row"><span class="provider-label">영상</span><span class="provider-val">sora-2</span></div>
+      <div class="provider-row"><span class="provider-label">RPM</span><span class="provider-val">500 / 2 / 2</span></div>
+      <div class="provider-row"><span class="provider-label">API키</span><span class="provider-val">OPENAI_API_KEY</span></div>
+    </div>
+    <div class="provider-card" style="border-top-color:#059669;">
+      <div class="provider-name" style="color:#047857;">🟢 Google (Veo)</div>
+      <div style="font-size:10px;color:var(--text-dim);margin-bottom:8px;">idea2video.yaml</div>
+      <div class="provider-row"><span class="provider-label">LLM</span><span class="provider-val">gemini-2.5-flash-lite</span></div>
+      <div class="provider-row"><span class="provider-label">이미지</span><span class="provider-val">NanoBanana Google</span></div>
+      <div class="provider-row"><span class="provider-label">영상</span><span class="provider-val">Veo (Google API)</span></div>
+      <div class="provider-row"><span class="provider-label">라우팅</span><span class="provider-val">OpenRouter</span></div>
+      <div class="provider-row"><span class="provider-label">API키</span><span class="provider-val">GOOGLE_API_KEY</span></div>
+    </div>
+    <div class="provider-card" style="border-top-color:#db2777;">
+      <div class="provider-name" style="color:#be185d;">🔴 MiniMax + Veo</div>
+      <div style="font-size:10px;color:var(--text-dim);margin-bottom:8px;">idea2video_minimax.yaml</div>
+      <div class="provider-row"><span class="provider-label">LLM</span><span class="provider-val">MiniMax-M3</span></div>
+      <div class="provider-row"><span class="provider-label">이미지</span><span class="provider-val">NanoBanana Google</span></div>
+      <div class="provider-row"><span class="provider-label">영상</span><span class="provider-val">Veo (Google API)</span></div>
+      <div class="provider-row"><span class="provider-label">API키</span><span class="provider-val">MINIMAX_API_KEY</span></div>
+    </div>
+    <div class="provider-card" style="border-top-color:#ea580c;">
+      <div class="provider-name" style="color:#c2410c;">🟠 Yunwu (Omni)</div>
+      <div style="font-size:10px;color:var(--text-dim);margin-bottom:8px;">idea2video_omni_yunwu.yaml</div>
+      <div class="provider-row"><span class="provider-label">LLM</span><span class="provider-val">gemini-2.5-flash-lite</span></div>
+      <div class="provider-row"><span class="provider-label">이미지</span><span class="provider-val">NanoBanana Yunwu</span></div>
+      <div class="provider-row"><span class="provider-label">영상</span><span class="provider-val">Omni Yunwu (omni-flash)</span></div>
+      <div class="provider-row"><span class="provider-label">라우팅</span><span class="provider-val">OpenRouter</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:12px;">RenderBackend 팩토리 패턴</h3>
+    <pre style="font-size:11px;"><span class="cc"># YAML에서 class_path로 동적 인스턴스화</span>
+<span class="ck">def</span> <span class="cn">from_config</span>(config):
+    img_cfg = config[<span class="cs">"image_generator"</span>]   <span class="cc"># class_path + init_args</span>
+    vid_cfg = config[<span class="cs">"video_generator"</span>]   <span class="cc"># class_path + init_args</span>
+
+    <span class="cc"># RateLimiter 생성 (RPM + RPD)</span>
+    img_rl = RateLimiter(max_requests_per_minute=img_cfg[<span class="cs">"max_requests_per_minute"</span>], ...)
+    vid_rl = RateLimiter(max_requests_per_minute=vid_cfg[<span class="cs">"max_requests_per_minute"</span>], ...)
+
+    <span class="cc"># class_path → 동적 import + 인스턴스화</span>
+    module_path, cls_name = img_cfg[<span class="cs">"class_path"</span>].rsplit(<span class="cs">"."</span>, <span class="cv">1</span>)
+    cls = getattr(importlib.import_module(module_path), cls_name)
+    image_gen = cls(**init_args, rate_limiter=img_rl)
+
+    <span class="ck">return</span> RenderBackend(image_generator=image_gen, video_generator=video_gen)</pre>
+  </div>
+</section>
+
+<!-- ═══ 07 비동기 실행 구조 ═══════════════════════ -->
+<section id="async">
+  <div class="section-label">07 — Async Architecture</div>
+  <h2>비동기 실행 구조</h2>
+  <div class="section-desc">asyncio.Event를 활용해 카메라 트리의 의존 관계를 지키면서 최대한 병렬로 실행합니다.</div>
+
+  <div class="card-grid card-grid-2" style="margin-bottom:16px;">
+    <div class="card">
+      <h3>Event 기반 동기화</h3>
+      <p style="font-size:13px;">각 샷에 대해 <code>frame_events[shot_idx]["first_frame"]</code>과 <code>"last_frame"</code> Event가 생성됩니다. 프레임 생성 완료 시 <code>event.set()</code>, 영상 생성 태스크는 <code>await event.wait()</code>로 대기합니다.</p>
+      <pre style="font-size:11px;"><span class="cc"># 영상 생성: 프레임 완성 대기 후 실행</span>
+<span class="ck">await</span> self.frame_events[shot_idx][<span class="cs">"first_frame"</span>].wait()
+<span class="ck">if</span> variation_type <span class="ck">in</span> [<span class="cs">"medium"</span>, <span class="cs">"large"</span>]:
+    <span class="ck">await</span> self.frame_events[shot_idx][<span class="cs">"last_frame"</span>].wait()
+video = <span class="ck">await</span> video_generator.generate_single_video(...)</pre>
+    </div>
+    <div class="card">
+      <h3>priority_tasks vs normal_tasks</h3>
+      <p style="font-size:13px;">다른 카메라의 부모 샷(<code>priority_shot_idxs</code>)은 먼저 처리됩니다. 부모 카메라의 first_frame이 완성되어야 자식 카메라의 transition video 생성이 시작될 수 있기 때문입니다.</p>
+      <pre style="font-size:11px;"><span class="ck">await</span> asyncio.gather(*priority_tasks)  <span class="cc"># 부모 샷 먼저</span>
+<span class="ck">await</span> asyncio.gather(*normal_tasks)    <span class="cc"># 나머지 병렬</span></pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:12px;">캐시 전략 — 재실행 최적화</h3>
+    <table>
+      <thead><tr><th>캐시 파일</th><th>경로</th><th>재사용 시점</th></tr></thead>
+      <tbody>
+        <tr><td>characters.json</td><td>working_dir/</td><td>캐릭터 추출 완료 후</td></tr>
+        <tr><td>character_portraits_registry.json</td><td>working_dir/</td><td>초상화 생성 완료 후</td></tr>
+        <tr><td>storyboard.json</td><td>working_dir/</td><td>스토리보드 설계 완료 후</td></tr>
+        <tr><td>camera_tree.json</td><td>working_dir/</td><td>카메라 트리 구성 완료 후</td></tr>
+        <tr><td>shot_description.json</td><td>working_dir/shots/{idx}/</td><td>샷 설명 분해 완료 후</td></tr>
+        <tr><td>first_frame.png / last_frame.png</td><td>working_dir/shots/{idx}/</td><td>프레임 생성 완료 후</td></tr>
+        <tr><td>video.mp4</td><td>working_dir/shots/{idx}/</td><td>영상 생성 완료 후</td></tr>
+      </tbody>
+    </table>
+    <div class="alert alert-success" style="margin-top:12px;">
+      <span class="alert-icon">✅</span>
+      <div>모든 중간 산출물이 캐시되므로 일부 샷 생성 실패 시 그 샷만 재실행합니다. <code>os.path.exists()</code> 체크 후 존재하면 🚀 스킵 메시지를 출력하고 재사용합니다.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <h3 style="margin-bottom:12px;">영상 생성 실패 시 Fallback</h3>
+    <p style="font-size:13px;margin-bottom:8px;">영상 생성기 호출이 실패하면 조용히 스킵하지 않고, FFmpeg still-image fallback으로 첫 프레임을 8초 정지 영상으로 변환합니다.</p>
+    <pre style="font-size:11px;"><span class="ck">except</span> Exception <span class="ck">as</span> e:
+    print(<span class="cs">f"⚠️ Shot {shot_idx} failed — still-image fallback."</span>)
+    subprocess.run([
+        <span class="cs">"ffmpeg"</span>, <span class="cs">"-y"</span>, <span class="cs">"-loop"</span>, <span class="cs">"1"</span>, <span class="cs">"-i"</span>, frame_paths[<span class="cv">0</span>],
+        <span class="cs">"-t"</span>, <span class="cs">"8"</span>,
+        <span class="cs">"-vf"</span>, <span class="cs">"scale=1280:720:flags=lanczos,format=yuv420p"</span>,
+        <span class="cs">"-c:v"</span>, <span class="cs">"libx264"</span>, <span class="cs">"-preset"</span>, <span class="cs">"fast"</span>, <span class="cs">"-crf"</span>, <span class="cs">"23"</span>,
+        <span class="cs">"-movflags"</span>, <span class="cs">"+faststart"</span>, video_path
+    ], check=<span class="ck">True</span>)</pre>
+  </div>
+</section>
+
+<!-- ═══ 08 기술 명세 ════════════════════════════ -->
+<section id="techspec">
+  <div class="section-label">08 — Technical Specs</div>
+  <h2>기술 명세 & 주의사항</h2>
+
+  <div class="card-grid card-grid-2" style="margin-bottom:16px;">
+    <div class="card">
+      <h3>영상 출력 규격</h3>
+      <table style="margin-top:8px;">
+        <tbody>
+          <tr><td>최종 해상도</td><td>1920×1080 (upscale_inplace)</td></tr>
+          <tr><td>샷별 생성 크기</td><td>1280×720 (FFmpeg fallback)</td></tr>
+          <tr><td>이미지 생성 크기</td><td>1600×900 (GPT Image)</td></tr>
+          <tr><td>샷 길이</td><td>8초 (기본, YAML 설정 가능)</td></tr>
+          <tr><td>편집</td><td>MoviePy concatenate_videoclips</td></tr>
+          <tr><td>업스케일</td><td>FFmpeg lanczos</td></tr>
+          <tr><td>코덱</td><td>H.264 libx264, yuv420p, faststart</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Rate Limiter</h3>
+      <table style="margin-top:8px;">
+        <tbody>
+          <tr><td>GPT-4o (LLM)</td><td>500 RPM / 10,000 RPD</td></tr>
+          <tr><td>GPT Image 1</td><td>5 RPM / 200 RPD</td></tr>
+          <tr><td>Sora sora-2</td><td>2 RPM / 20 RPD</td></tr>
+          <tr><td>Veo (Google)</td><td>2 RPM / 10 RPD</td></tr>
+          <tr><td>NanoBanana</td><td>10 RPM / 500 RPD</td></tr>
+          <tr><td>Gemini Flash (LLM)</td><td>500 RPM / 2,000 RPD</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="alert alert-warn">
+    <span class="alert-icon">⚠️</span>
+    <div><strong>Novel2Movie 미구현:</strong> <code>pipelines/novel2movie_pipeline.py</code>에 <code># TODO: NOT IMPLEMENTED YET</code>가 명시됩니다. 소설 텍스트를 청크로 분할 → 압축 → 이벤트 추출 → 씬 추출 → Script2Video 위임하는 구조까지 설계는 완료되어 있지만 실제 로직은 비어 있습니다.</div>
+  </div>
+
+  <div class="alert alert-info">
+    <span class="alert-icon">ℹ️</span>
+    <div><strong>LangChain 의존성:</strong> 에이전트 클래스들이 모두 <code>from langchain.chat_models import init_chat_model</code>과 <code>PydanticOutputParser</code>를 사용합니다. LLM 교체가 자유로운 대신 LangChain 버전 호환성에 주의가 필요합니다.</div>
+  </div>
+
+  <!-- 푸터 -->
+  <div style="margin-top:32px;padding:20px 24px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;text-align:center;">
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">
+      <strong style="color:var(--text);">kwakseungmin-Lab/karts</strong> — vimax-sora 브랜치 파이프라인 분석 보고서
+    </div>
+    <div style="font-size:12px;color:var(--text-dim);">
+      프레임워크: ViMax &nbsp;·&nbsp; 실행: Python asyncio &nbsp;·&nbsp; LLM: LangChain &nbsp;·&nbsp; 편집: MoviePy + FFmpeg
+    </div>
+  </div>
+</section>
+
+</div>
+<script>
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
