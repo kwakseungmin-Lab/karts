@@ -1,7 +1,0 @@
-file '/Users/ksm2761/karts/short-film-project/final/graded/scene09_cut01.mp4'
-file '/Users/ksm2761/karts/short-film-project/final/graded/scene09_cut02.mp4'
-file '/Users/ksm2761/karts/short-film-project/final/graded/scene09_cut03.mp4'
-file '/Users/ksm2761/karts/short-film-project/final/graded/scene09_cut04.mp4'
-file '/Users/ksm2761/karts/short-film-project/final/graded/scene09_cut05.mp4'
-file '/Users/ksm2761/karts/short-film-project/final/graded/scene09_cut06.mp4'
-file '/Users/ksm2761/karts/short-film-project/final/graded/scene09_cut07.mp4'
