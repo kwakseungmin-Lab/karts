@@ -155,25 +155,71 @@
 
 ---
 
-### 씬 07 — 전쟁의 확산 (대규모 전투)
-> 시간대: 1:22~1:52 | 등장인물: **바이킹 + 전군** | 모드: `images.edit` (sheet_viking 레퍼런스)
+### 씬 07a — 바이킹 vs 사무라이 (첫 교전)
+> 시간대: 1:22~1:30 | 등장인물: **바이킹, 사무라이** | 모드: `images.edit` (sheet_viking 레퍼런스)
 
 **스토리보드 이미지 (gpt-image-2)**
 
-![scene07](../reference/storyboard_v2/scene07_hd.png)
-
-**원본 트레일러 프레임**
-
-![ref07](../reference/analysis_frames/f0120s.jpg)
+![scene07a](../reference/storyboard_v2/scene07a_hd.png)
 
 **캐릭터 레퍼런스**
 
 ![viking](../reference/characters/sheet_viking.png)
 
 **프롬프트**
-> Place THIS EXACT viking warrior character into a massive battle scene, he is in the foreground running forward as part of a huge army charge, hundreds of armored warriors behind him — knights in plate armor, samurai in lamellar armor, vikings with axes — all charging across an open rocky hillside battlefield in daylight, faction banners (a cross banner, a chrysanthemum banner, a skull banner) visible above the armies, dust clouds rising from hundreds of running feet, ruined stone walls on the hillside, natural hazy morning light, epic cinematic scale of a massive three-faction battle, photorealistic, For Honor E3 2016 large battle cinematic style, 16:9
+> Place THIS EXACT viking warrior character in an intense one-on-one duel, the viking is on the LEFT swinging his axe TOWARD the opponent on the RIGHT, the opponent on the RIGHT is a samurai in horizontal-banded lamellar armor deflecting with his naginata polearm, the two warriors are FIGHTING EACH OTHER — they are ENEMIES, not allies, rocky wasteland ground, dead trees, grey overcast sky, dramatic side lighting, dust kicked up from their feet, cinematic medium shot capturing the clash, desaturated tones with motion blur on the weapons, photorealistic, For Honor E3 2016 combat cinematic style, 16:9
 
-**Sora 모션**: 수백 명의 군대를 따라가는 빠른 스위핑 팬. 규모감이 압도적으로 드러남
+**Sora 모션**: 두 전사 충돌 순간 슬로우모션 → 정상 속도. 카메라가 충돌 지점 주위를 선회
+
+---
+
+### 씬 07b — 기사 vs 바이킹 (근접 충돌)
+> 시간대: 1:30~1:38 | 등장인물: **기사, 바이킹** | 모드: `images.edit` (sheet_knight 레퍼런스)
+
+**스토리보드 이미지 (gpt-image-2)**
+
+![scene07b](../reference/storyboard_v2/scene07b_hd.png)
+
+**캐릭터 레퍼런스**
+
+![knight](../reference/characters/sheet_knight.png)
+
+**프롬프트**
+> Place THIS EXACT knight warrior character in an intense one-on-one combat, the knight is on the RIGHT raising his longsword to strike DOWNWARD at the opponent, the opponent on the LEFT is a massive shirtless tattooed viking warrior blocking with his round wooden shield while counter-attacking with his axe, the two warriors are FIGHTING EACH OTHER as mortal enemies, rocky battlefield ground with ruins in background, dramatic low angle shot, the knight's dark steel armor vs the viking's raw fur and muscle, desaturated grey tones, cinematic impact moment, photorealistic, For Honor E3 2016 combat cinematic style, 16:9
+
+**Sora 모션**: 로우앵글에서 기사의 검이 내려치는 임팩트 순간. 방패 충격 효과
+
+---
+
+### 씬 07c — 바이킹 혼전 (양면 협공)
+> 시간대: 1:38~1:45 | 등장인물: **바이킹, 기사, 사무라이** | 모드: `images.edit` (sheet_viking 레퍼런스)
+
+**스토리보드 이미지 (gpt-image-2)**
+
+![scene07c](../reference/storyboard_v2/scene07c_hd.png)
+
+**캐릭터 레퍼런스**
+
+![viking](../reference/characters/sheet_viking.png)
+
+**프롬프트**
+> Place THIS EXACT viking warrior character in the CENTER of a chaotic three-way battle, the viking is fighting SIMULTANEOUSLY against enemies on BOTH SIDES — a knight in dark plate armor attacks him from the LEFT, a samurai in lamellar armor attacks him from the RIGHT, in the BACKGROUND hundreds of warriors from all three factions are fighting EACH OTHER in total chaotic melee — knights vs samurai, vikings vs knights, samurai vs vikings, faction banners of all three sides visible among the chaos, smoke and dust, fire in distant background, ALL THREE FACTIONS ARE ENEMIES fighting each other, photorealistic, For Honor E3 2016 large battle cinematic style, 16:9
+
+**Sora 모션**: 바이킹 중심으로 360도 회전하며 양쪽 적이 모두 보임. 배경 전투 카오스
+
+---
+
+### 씬 07d — 전장 와이드 (세 진영 난전)
+> 시간대: 1:45~1:52 | 등장인물: 전군 | 모드: `images.generate`
+
+**스토리보드 이미지 (gpt-image-2)**
+
+![scene07d](../reference/storyboard_v2/scene07d_hd.png)
+
+**프롬프트**
+> Cinematic wide battle shot, a chaotic three-way medieval battle where THREE FACTIONS ARE FIGHTING EACH OTHER simultaneously — LEFT side: dark steel armored knights clashing AGAINST samurai warriors, RIGHT side: fur-clad viking warriors fighting AGAINST knights, CENTER: samurai warriors battling AGAINST vikings, each faction fights the other two — total three-way war, faction banners visible: cross banner (knights), chrysanthemum banner (samurai), skull banner (vikings) — all on OPPOSING sides, dramatic battlefield chaos, dust and fire, rocky hillside terrain, cinematic wide shot showing the full scale of mutual combat, photorealistic, For Honor E3 2016 battle cinematic style, 16:9
+
+**Sora 모션**: 스위핑 와이드 팬으로 전장 전체를 훑음. 세 진영 깃발이 각각 반대편에서 보임
 
 ---
 
