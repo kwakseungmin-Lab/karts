@@ -7,5 +7,6 @@ outputs/
 *.mov
 !short-film-project/final/videos/*.mp4
 !short-film-project/final/*.mp4
+!short-film-project/final/forhonor_v3/*.mp4
 .claude/settings.local.json
 CLAUDE.local.md
